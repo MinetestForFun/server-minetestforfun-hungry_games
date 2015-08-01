@@ -10,7 +10,6 @@
 -- [regis-food] Cigerette (-4)
 -- =====================================
 
-print ("Food: Loading mainframe: [Master]")
 
 ----------------------Load Files-----------------------------
 dofile(minetest.get_modpath("food").."/support.lua")
@@ -92,5 +91,3 @@ minetest.register_craft({
 
 	}
 })
-
-print("Food: Mainframe loaded")

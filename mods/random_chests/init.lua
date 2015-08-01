@@ -121,9 +121,9 @@ function random_chests.refill(i)
 		if chests[i] then
 			local n = env:get_node(chests[i]).name
 			if (not n:match("default:chest")) and n ~= "ignore" then
-				print("chest missing! found:")
-				print(env:get_node(chests[i]).name)
-				print("instead")
+				minetest.log("action", "chest missing! found:")
+				minetest.log("action", env:get_node(chests[i]).name)
+				minetest.log("action", "instead")
 				table.remove(chests,i)
 			else
 				fill_chest(chests[i])
@@ -137,7 +137,7 @@ function random_chests.refill(i)
 	end
 	filling = false
 	random_chests.save()
-	print("finished filling chests")
+	minetest.log("action", "finished filling chests")
 end
 
 function random_chests.save()
@@ -153,7 +153,7 @@ end
 --Refill chests
 function random_chests.setrefill(mode, interval)
 	if mode ~= "database" and interval < 100 then
-		print("random_chests: WARNING! You have made the chest refill rate very high!")
+		minetest.log("action", "random_chests: WARNING! You have made the chest refill rate very high!")
 	end
 	if mode == "abm" then
 		minetest.register_abm({
@@ -222,7 +222,6 @@ minetest.register_on_generated(function(minp, maxp, seed)
 	
 					if ground then
 						fill_chest({x=pos.x,y=ground+1,z=pos.z})
-						--print("spawn near "..pos.x.." "..pos.z)
 					end
 				end
 			end	

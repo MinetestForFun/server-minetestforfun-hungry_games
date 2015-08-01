@@ -8,7 +8,7 @@
 -- [support]
 -- ======================================
 
-print "Food [Support] - Initialising"
+minetest.log("action", "Food [Support] - Initialising")
 
 --NODE_IMPLEMENT() Gets an item from another mod softly
 -- modname: the name of the mod that the item will be got from
@@ -30,8 +30,8 @@ end
 
 
 
-print "Food [Support] - Vegetables and Fruit"
-print "Food [Support] -  > Bread and Flour"
+minetest.log("action", "Food [Support] - Vegetables and Fruit")
+minetest.log("action", "Food [Support] -  > Bread and Flour")
 
 node_implement("farming","farming:flour","food:flour",function()
 node_implement("plantlib","plantlib:wheat","food:wheat",function()
@@ -88,7 +88,7 @@ end)
 
 
 
-print "Food [Support] -  > Strawberry"
+minetest.log("action", "Food [Support] -  > Strawberry")
 
 node_implement("farming_plus","farming_plus:strawberry_item","food:strawberry",function()
 node_implement("plantlib","plantlib:strawberry","food:strawberry",function()
@@ -100,7 +100,7 @@ minetest.register_craftitem("food:strawberry", {
 end)
 end)
 
-print "Food [Support] -  > Carrot"
+minetest.log("action", "Food [Support] -  > Carrot")
 
 node_implement("farming_plus","farming_plus:carrot_item","food:carrot",function()
 node_implement("docfarming","docfarming:carrot","food:carrot",function()
@@ -115,7 +115,7 @@ end)
 end)
 
 
-print "Food [Support] -  > Rhubarb"
+minetest.log("action", "Food [Support] -  > Rhubarb")
 node_implement("farming_plus","farming_plus:rhubarb_item","food:rhubarb",function()
 minetest.register_craftitem("food:rhubarb", {
 	description = "Rhubarb",
@@ -123,7 +123,7 @@ minetest.register_craftitem("food:rhubarb", {
 })
 end)
 
-print "Food [Support] -  > Cocoa Bean"
+minetest.log("action", "Food [Support] -  > Cocoa Bean")
 node_implement("farming_plus","farming_plus:cocoa_bean","food:cocoa",function()
 minetest.register_craftitem("food:cocoa", {
 	description = "Cocoa Bean",
@@ -132,7 +132,7 @@ minetest.register_craftitem("food:cocoa", {
 end)
 
 
-print "Food [Support] -  > Banana"
+minetest.log("action", "Food [Support] -  > Banana")
 node_implement("farming_plus","farming_plus:banana","food:banana",function()
 minetest.register_node("food:banana", {
 	description = "Banana",
@@ -149,7 +149,7 @@ minetest.register_node("food:banana", {
 })
 end)
 
-print "Food [Support] -  > Tomato"
+minetest.log("action", "Food [Support] -  > Tomato")
 node_implement("farming_plus","farming_plus:tomato_item","food:tomato",function()
 node_implement("plantlib","plantlib:tomato","food:tomato",function()
 minetest.register_craftitem("food:tomato", {
@@ -160,7 +160,7 @@ minetest.register_craftitem("food:tomato", {
 end)
 end)
 
-print "Food [Support] -  > Potato"
+minetest.log("action", "Food [Support] -  > Potato")
 node_implement("docfarming","docfarming:potato","food:potato",function()
 minetest.register_craftitem("food:potato", {
 	description = "Potato",
@@ -176,7 +176,7 @@ minetest.register_craftitem("food:potato_baked", {
 })
 end)
 
-print "Food [Support] -  > Coffee"
+minetest.log("action", "Food [Support] -  > Coffee")
 node_implement("plantlib","plantlib:coffee","food:coffeebean",function()
 minetest.register_craftitem("food:coffeebean",{
 	description = "Raw Coffee Bean",
@@ -194,9 +194,9 @@ minetest.register_craft({
 })
 end)
 
-print "Food [Support] - Meats and Animal Produce"
+minetest.log("action", "Food [Support] - Meats and Animal Produce")
 
-print "Food [Support] -  > Raw Meat"
+minetest.log("action", "Food [Support] -  > Raw Meat")
 node_implement("mobs","mobs:meat_raw","food:meat_raw",function()
 node_implement("animalmaterials","animalmaterials:meat_raw","food:meat_raw",function()
 minetest.register_craftitem("food:meat_raw", {
@@ -209,7 +209,7 @@ minetest.register_craftitem("food:meat_raw", {
 end)
 end)
 
-print "Food [Support] -  > Meat"
+minetest.log("action", "Food [Support] -  > Meat")
 node_implement("mobs","mobs:meat","food:meat",function()
 minetest.register_craftitem("food:meat", {
 	description = "Venison",
@@ -236,7 +236,7 @@ end)
 end)
 
 
-print "Food [Support] -  > Egg"
+minetest.log("action", "Food [Support] -  > Egg")
 node_implement("animalmaterials","animalmaterials:egg","food:egg",function()
  minetest.register_craftitem("food:egg", {
 	description = "Egg",
@@ -245,7 +245,7 @@ node_implement("animalmaterials","animalmaterials:egg","food:egg",function()
 })
 end)
 
-print "Food [Support] -  > Milk"
+minetest.log("action", "Food [Support] -  > Milk")
 node_implement("animalmaterials","animalmaterials:milk","food:milk",function()
 node_implement("my_mobs","my_mobs:milk_glass_cup","food:milk",function()
   minetest.register_craftitem("food:milk", {
@@ -258,7 +258,7 @@ node_implement("my_mobs","my_mobs:milk_glass_cup","food:milk",function()
 end)
 end)
 
-print "Food [Support] - Vessels and Cutlery"
+minetest.log("action", "Food [Support] - Vessels and Cutlery")
 
 node_implement("vessels","vessels:drinking_glass","food:cup",function()
 node_implement("animalmaterials","animalmaterials:glass","food:cup",function()

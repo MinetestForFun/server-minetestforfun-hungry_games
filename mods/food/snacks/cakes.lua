@@ -12,7 +12,6 @@
 -- [regis-food] Carrot Cake
 -- [craft] Chocolate Cake
 -- =====================================
-print("Food [Master] - Loading Cakes")
 
 --------------------------Cakes-------------------------
 minetest.register_craftitem("food:cakemix_plain",{

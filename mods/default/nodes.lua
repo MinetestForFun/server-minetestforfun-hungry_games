@@ -649,7 +649,6 @@ minetest.register_node("default:sign_wall", {
 		meta:set_string("infotext", "\"\"")
 	end,
 	on_receive_fields = function(pos, formname, fields, sender)
-		--print("Sign at "..minetest.pos_to_string(pos).." got "..dump(fields))
 		local meta = minetest.get_meta(pos)
 		fields.text = fields.text or ""
 		minetest.log("action", (sender:get_player_name() or "").." wrote \""..fields.text..
@@ -1015,8 +1014,6 @@ minetest.register_abm({
 					inv:add_item("dst", cooked.item)
 					-- take stuff from "src" list
 					inv:set_stack("src", 1, aftercooked.items[1])
-				else
-					--print("Could not insert '"..cooked.item:to_string().."'")
 				end
 				meta:set_string("src_time", 0)
 			end

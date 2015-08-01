@@ -11,7 +11,6 @@
 -- [craft] Cactus Juice
 -- =====================================
 
-print ("Food [Master] - Loading Juices")
 
 --------------------------Apple Juice--------------------------
 minetest.register_craftitem("food:apple_juice", {

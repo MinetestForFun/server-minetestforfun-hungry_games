@@ -13,8 +13,6 @@ local dirs2 = {15, 8, 17, 6, 15}
 local dirs3 = {14, 11, 16, 5, 14}
 
 function stairsplus:register_6dfacedir_conversion(modname, material)
-	--print("Register stairsplus 6d facedir conversion")
-	--print('ABM for '..modname..' "'..material..'"')
 
 	local objects_list1 = {
 		modname.. ":slab_" ..material.. "_inverted",
@@ -71,8 +69,6 @@ function stairsplus:register_6dfacedir_conversion(modname, material)
 			dest_object = string.gsub(dest_object, "_right_half", "_half")
 		end
 
-		--print("    +---> convert " ..object)
-		--print("    |     to " ..dest_object)
 
 		minetest.register_abm({
 			nodenames = {object},
@@ -114,8 +110,6 @@ function stairsplus:register_6dfacedir_conversion(modname, material)
 			dest_object = string.gsub(dest_object, "_wall", "")
 		end
 
-		--print("    +---> convert " ..object)
-		--print("    |     to " ..dest_object)
 
 		minetest.register_abm({
 			nodenames = {object},

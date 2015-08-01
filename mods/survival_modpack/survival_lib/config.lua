@@ -33,7 +33,7 @@ local function load_config ( )
         if (f) then
             do_load_config(f);
             f:close();
-            print("survival_lib: Loaded config from `"..file.."'");
+            minetest.log("action", "survival_lib: Loaded config from `"..file.."'");
         end
     end
 

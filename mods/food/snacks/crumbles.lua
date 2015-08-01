@@ -8,7 +8,6 @@
 -- [regis-food] Rhubarb Crumble
 -- =====================================
 
-print "Food [Master] - Loading Crumbles"
 --Crumbles
 minetest.register_craftitem("food:crumble_rhubarb", {
 	description = "Rhubarb Crumble",

@@ -327,7 +327,7 @@ local start_game = function()
 			end
 		end, gameSequenceNumber)
 	end
-	print("filling chests...")
+	minetest.log("action", "filling chests...")
 	random_chests.refill()
 	--Find out how many spots there are to spawn
 	local nspots = get_spots()

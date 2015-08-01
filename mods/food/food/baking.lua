@@ -14,7 +14,6 @@
 -- [craft] Bun Dough
 -- =====================================
 
-print "Food [Master] - Loading Bread"
 -- doughs
 if not minetest.get_modpath("farming") then
 
@@ -41,7 +40,6 @@ minetest.register_craftitem("food:bread_slice", {
 
 
 
-print "Food [Master] - Loading Buns"
 minetest.register_craftitem("food:bun_mix", {
 	description = "Bun Mix",
 	inventory_image = "food_bun_mix.png",

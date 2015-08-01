@@ -8,7 +8,6 @@
 -- 
 -- =====================================
 
-print "Food [Master] - Loading Soups and Stews"
 
 ----------------------Tomato-----------------------------
 minetest.register_craftitem("food:soup_tomato", {

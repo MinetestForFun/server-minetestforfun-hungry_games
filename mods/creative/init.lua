@@ -20,9 +20,9 @@ minetest.after(0, function()
 		on_put = function(inv, listname, index, stack, player)
 		end,
 		on_take = function(inv, listname, index, stack, player)
-			print(player:get_player_name().." takes item from creative inventory; listname="..dump(listname)..", index="..dump(index)..", stack="..dump(stack))
+			minetest.log("action", player:get_player_name().." takes item from creative inventory; listname="..dump(listname)..", index="..dump(index)..", stack="..dump(stack))
 			if stack then
-				print("stack:get_name()="..dump(stack:get_name())..", stack:get_count()="..dump(stack:get_count()))
+				minetest.log("action", "stack:get_name()="..dump(stack:get_name())..", stack:get_count()="..dump(stack:get_count()))
 			end
 		end,
 	})
@@ -39,7 +39,7 @@ minetest.after(0, function()
 		inv:add_item("main", ItemStack(itemstring.." 99"))
 	end
 	creative_inventory.creative_inventory_size = #creative_list
-	print("creative inventory size: "..dump(creative_inventory.creative_inventory_size))
+	minetest.log("action", "creative inventory size: "..dump(creative_inventory.creative_inventory_size))
 end)
 
 -- Create the trash field

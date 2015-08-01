@@ -17,7 +17,6 @@ local function check_moved()
       local kicked
       if last_pos[plname] then
          local d = vector.distance(last_pos[plname], pos)
-         --print("Player: "..plname..", Dist: "..d)
          if d < MINDIST then
             time_afk[plname] = (time_afk[plname] or 0) + INTERVAL
             if time_afk[plname] >= TIMEOUT then
