@@ -64,7 +64,11 @@ end
 function spawning.spawn(player, place)
 	if type(player) == "table" then place = player[2] player = player[1] end
 	local spawn = registered_spawns[place]
-	local pos = spawn.pos
+	local pos = {
+		x = tonumber(spawn.pos.x),
+		y = tonumber(spawn.pos.y),
+		z = tonumber(spawn.pos.z)
+	}
 	if spawn then
 		player:setpos(pos)
 	end
