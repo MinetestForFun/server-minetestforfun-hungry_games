@@ -305,12 +305,6 @@ minetest.register_craft({
 	cooktime = 10,
 })
 
-minetest.register_craft({
-	type = "shapeless",
-	output = "dye:black",
-	recipe = {"default:scorched_stuff"},
-})
-
 carbone_mobs:register_mob("carbone_mobs:oerkki", {
 	type = "monster",
 	hp_max = 35,
