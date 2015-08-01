@@ -213,19 +213,3 @@ minetest.register_craftitem("snow:sled", {
 	end,
 })
 
-minetest.register_craft({
-	output = "snow:sled",
-	recipe = {
-		{"", "", ""},
-		{"group:stick", "", ""},
-		{"group:wood", "group:wood", "group:wood"},
-	},
-})
-minetest.register_craft({
-	output = "snow:sled",
-	recipe = {
-		{"", "", ""},
-		{"", "", "group:stick"},
-		{"group:wood", "group:wood", "group:wood"},
-	},
-})

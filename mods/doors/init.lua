@@ -258,15 +258,6 @@ doors:register_door("doors:door_wood", {
 	tiles_top = {"door_wood_a.png", "door_brown.png"},
 })
 
-minetest.register_craft({
-	output = "doors:door_wood",
-	recipe = {
-		{"group:wood", "group:wood"},
-		{"group:wood", "group:wood"},
-		{"group:wood", "group:wood"}
-	}
-})
-
 doors:register_door("doors:door_steel", {
 	description = "Steel Door",
 	inventory_image = "door_steel.png",
@@ -274,15 +265,6 @@ doors:register_door("doors:door_steel", {
 	tiles_bottom = {"door_steel_b.png", "door_grey.png"},
 	tiles_top = {"door_steel_a.png", "door_grey.png"},
 	only_placer_can_open = true,
-})
-
-minetest.register_craft({
-	output = "doors:door_steel",
-	recipe = {
-		{"default:steel_ingot", "default:steel_ingot"},
-		{"default:steel_ingot", "default:steel_ingot"},
-		{"default:steel_ingot", "default:steel_ingot"}
-	}
 })
 
 minetest.register_alias("doors:door_wood_a_c", "doors:door_wood_t_1")

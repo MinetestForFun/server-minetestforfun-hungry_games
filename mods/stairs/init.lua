@@ -59,24 +59,6 @@ function stairs.register_stair(subname, recipeitem, groups, images, description,
 		groups = {slabs_replace=1},
 	})
 
-	minetest.register_craft({
-		output = 'stairs:stair_' .. subname .. ' 4',
-		recipe = {
-			{recipeitem, "", ""},
-			{recipeitem, recipeitem, ""},
-			{recipeitem, recipeitem, recipeitem},
-		},
-	})
-
-	-- Flipped recipe for the silly minecrafters
-	minetest.register_craft({
-		output = 'stairs:stair_' .. subname .. ' 4',
-		recipe = {
-			{"", "", recipeitem},
-			{"", recipeitem, recipeitem},
-			{recipeitem, recipeitem, recipeitem},
-		},
-	})
 end
 
 -- Node will be called stairs:slab_<subname>
@@ -181,12 +163,6 @@ function stairs.register_slab(subname, recipeitem, groups, images, description, 
 		groups = {slabs_replace=1},
 	})
 
-	minetest.register_craft({
-		output = 'stairs:slab_' .. subname .. ' 6',
-		recipe = {
-			{recipeitem, recipeitem, recipeitem},
-		},
-	})
 end
 
 -- Replace old "upside_down" nodes with new param2 versions

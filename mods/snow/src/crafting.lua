@@ -55,13 +55,6 @@ recipe for each one.
 ~ LazyJ
 --]]
 
-minetest.register_craft({
-	type = "cooking",
-	cooktime = 12,
-	output = "default:ice",
-	recipe = "group:cooks_into_ice",
-})
-
 
 
 
@@ -72,13 +65,6 @@ minetest.register_craft({
 -- Let's make moss craftable so players can more easily create mossycobble and
 -- gives another useful purpose to pine needles. ~ LazyJ
 
-minetest.register_craft({
-    output = 'snow:moss',
-    recipe = {
-        {'snow:needles', 'snow:needles'},
-        {'snow:needles', 'snow:needles'},
-    },
-})
 
 
 --[[
@@ -93,95 +79,6 @@ of snowblocks (and then use them to water-grief by melting the snow blocks).
 
 --]]
 
-minetest.register_craft({
-	type = "shapeless",
-	output = 'default:snowblock 2',
-	recipe = {
-		'snow:snow_cobble',
-		'snow:snow_cobble'
-		}
-})
-
-
-
---[[minetest.register_craft({
-	type = "shapeless",
-	output = 'default:snowblock 3',
-	recipe = {
-		'default:snowblock',
-		'default:snowblock'
-		}
-})]]
-
-
-
-minetest.register_craft({
-    output = 'snow:snow_brick',
-    recipe = {
-        {'default:snowblock', 'default:snowblock'},
-        {'default:snowblock', 'default:snowblock'}
-    }
-})
-
---Craft icy snow.
-minetest.register_craft({
-	type = "shapeless",
-	output = 'snow:snow_cobble 6',
-	recipe = {
-		'default:snow',
-		'default:snow',
-		'default:snow',
-		'default:snow',
-		'default:snow',
-		'default:snow',
-		'default:ice',
-		'default:ice',
-		'default:ice'
-		}
-})
-
-
-minetest.register_craft({
-	type = "shapeless",
-	output = 'snow:snow_cobble 4',
-	recipe = {
-		'default:snow',
-		'default:snow',
-		'default:snow',
-		'default:snow',
-		'default:ice',
-		'default:ice'
-		}
-})
-
-minetest.register_craft({
-	type = "shapeless",
-	output = 'snow:snow_cobble 2',
-	recipe = {
-		'default:snow',
-		'default:snow',
-		'default:ice'
-		}
-})
-
-minetest.register_craft({
-	type = "shapeless",
-	output = 'snow:snow_cobble',
-	recipe = {
-		'default:snow',
-		'default:ice'
-		}
-})
-
-
--- Why not recycle snow_bricks back into snowblocks? ~ LazyJ
-minetest.register_craft({
-    output = 'default:snowblock 4',
-    recipe = {
-        {'snow:snow_brick'}
-    }
-})
-
 
 
 -- Recycle basic, half-block, slabs back into full blocks
@@ -191,21 +88,6 @@ local recycle_default_slabs = {
 	"ice",
 	"snowblock",
 }
-
-for _, name in pairs(recycle_default_slabs) do
-	local subname_default = name
-
-	-- This craft is for default snowblocks and default ice.
-	-- 1 crafting recipe handles 2, default blocks. ~ LazyJ
-	minetest.register_craft({
-		type = "shapeless",
-		output = "default:"..subname_default,
-		recipe = {
-			"snow:slab_"..subname_default,
-			"snow:slab_"..subname_default,
-		}
-	})
-end
 
 
 
@@ -218,17 +100,3 @@ local recycle_snowmod_slabs = {
 	"snow_cobble",
 }
 
-for _, name in pairs(recycle_snowmod_slabs) do
-	local subname_snowmod = name
-
-	-- This craft is for the Snow mod's full-sized blocks.
-	-- 1 crafting recipe handles 2, or more, Snow mod blocks. ~ LazyJ
-	minetest.register_craft({
-		type = "shapeless",
-		output = "snow:"..subname_snowmod,
-		recipe = {
-			"snow:slab_"..subname_snowmod,
-			"snow:slab_"..subname_snowmod,
-		}
-	})
-end
