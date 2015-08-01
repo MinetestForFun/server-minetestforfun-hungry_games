@@ -43,9 +43,9 @@ end
 function spawning.set_spawn(place, pos)
 	local spawn = registered_spawns[place]
 	if not spawn then spawning.register_spawn(place, {}) end
-	
+
 	registered_spawns[place].pos = pos
-	
+
 	--Save spawns.
 	spawning.save_spawns()
 end
@@ -68,8 +68,8 @@ function spawning.spawn(player, place)
 	if spawn then
 		player:setpos(pos)
 	end
-	for i,v in pairs(minetest.env:find_nodes_in_area({x=pos.x-20,y=pos.y-20,z=pos.z-20}, {x=pos.x+20,y=pos.y+20,z=pos.z+20}, "default:lava_source")) do
-		minetest.env:remove_node(v)
+	for i,v in pairs(minetest.find_nodes_in_area({x=pos.x-20,y=pos.y-20,z=pos.z-20}, {x=pos.x+20,y=pos.y+20,z=pos.z+20}, "default:lava_source")) do
+		minetest.remove_node(v)
 	end
 end
 
@@ -77,14 +77,14 @@ function spawning.register_spawn(name, spawndef)
 	local pos
 	--Save spawnpoint position if it is already assigned.
 	if registered_spawns[name] then pos = registered_spawns[name].pos end
-	
+
 	-- Apply defaults and add to registered_* table.
 	setmetatable(spawndef, {__index = spawning.spawndef_default})
 	registered_spawns[name] = spawndef
-	
+
 	--Restore position if it was already assigned.
 	if pos then registered_spawns[name].pos = pos end
-	
+
 	--Save spawns.
 	spawning.save_spawns()
 end

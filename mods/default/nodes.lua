@@ -64,7 +64,7 @@ minetest.register_node("default:stone_with_gold", {
 	drop = "default:gold_lump",
 	sounds = default.node_sound_stone_defaults(),
 })
-	
+
 minetest.register_node("default:stone_with_diamond", {
 	description = "Diamond Ore",
 	tiles = {"default_stone.png^default_mineral_diamond.png"},
@@ -658,7 +658,7 @@ minetest.register_node("default:sign_wall", {
 	end,
 })
 
-default.chest_formspec = 
+default.chest_formspec =
 	"size[8,9]"..
 	default.inventory_background..
 	default.inventory_listcolors..
@@ -996,13 +996,13 @@ minetest.register_abm({
 		local srclist = inv:get_list("src")
 		local cooked = nil
 		local aftercooked
-		
+
 		if srclist then
 			cooked, aftercooked = minetest.get_craft_result({method = "cooking", width = 1, items = srclist})
 		end
-		
+
 		local was_active = false
-		
+
 		if meta:get_float("fuel_time") < meta:get_float("fuel_totaltime") then
 			was_active = true
 			meta:set_float("fuel_time", meta:get_float("fuel_time") + 1)
@@ -1018,7 +1018,7 @@ minetest.register_abm({
 				meta:set_string("src_time", 0)
 			end
 		end
-		
+
 		if meta:get_float("fuel_time") < meta:get_float("fuel_totaltime") then
 			local percent = math.floor(meta:get_float("fuel_time") /
 					meta:get_float("fuel_totaltime") * 100)
@@ -1033,7 +1033,7 @@ minetest.register_abm({
 		local cooked = nil
 		local fuellist = inv:get_list("fuel")
 		local srclist = inv:get_list("src")
-		
+
 		if srclist then
 			cooked = minetest.get_craft_result({method = "cooking", width = 1, items = srclist})
 		end
@@ -1059,7 +1059,7 @@ minetest.register_abm({
 
 		meta:set_string("fuel_totaltime", fuel.time)
 		meta:set_string("fuel_time", 0)
-		
+
 		inv:set_stack("fuel", 1, afterfuel.items[1])
 	end,
 })

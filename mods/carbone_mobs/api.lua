@@ -33,7 +33,7 @@ function carbone_mobs:register_mob(name, def)
 		animation = def.animation,
 		follow = def.follow,
 		jump = def.jump or true,
-		
+
 		timer = 0,
 		env_damage_timer = 0, -- only if state = "attack"
 		attack = {player = nil, dist = nil},
@@ -42,7 +42,7 @@ function carbone_mobs:register_mob(name, def)
 		old_y = nil,
 		lifetimer = 600,
 		tamed = false,
-		
+
 		set_velocity = function(self, v)
 			local yaw = self.object:getyaw()
 			if self.drawtype == "side" then
@@ -52,12 +52,12 @@ function carbone_mobs:register_mob(name, def)
 			local z = math.cos(yaw) * v
 			self.object:setvelocity({x =x, y = self.object:getvelocity().y, z =z})
 		end,
-		
+
 		get_velocity = function(self)
 			local v = self.object:getvelocity()
 			return (v.x^ 2 + v.z^ 2) ^ (0.5)
 		end,
-		
+
 		set_animation = function(self, type)
 			if not self.animation then
 				return
@@ -115,10 +115,10 @@ function carbone_mobs:register_mob(name, def)
 				end
 			end
 		end,
-		
+
 		on_step = function(self, dtime)
 
-			
+
 			self.lifetimer = self.lifetimer - dtime
 			if self.lifetimer <= 0 and not self.tamed then
 				local player_count = 0
@@ -135,7 +135,7 @@ function carbone_mobs:register_mob(name, def)
 					return
 				end
 			end
-			
+
 			if self.object:getvelocity().y > 0.1 then
 				local yaw = self.object:getyaw()
 				if self.drawtype == "side" then
@@ -155,7 +155,7 @@ function carbone_mobs:register_mob(name, def)
 					self.object:setacceleration({x = 0, y = -14.5, z = 0})
 				end
 			end
-			
+
 			--[[
 			if self.disable_fall_damage and self.object:getvelocity().y == 0 then
 				if not self.old_y then
@@ -175,21 +175,21 @@ function carbone_mobs:register_mob(name, def)
 				end
 			end
 			--]]
-			
+
 			self.timer = self.timer + dtime
 			if self.state ~= "attack" then
 				if self.timer < 0.9 then return end
 				self.timer = 0
 			end
-			
+
 --			if self.sounds and self.sounds.random and math.random(1, 100) <= 1 then
 --				minetest.sound_play(self.sounds.random, {object = self.object})
 --			end
-			
+
 			local do_env_damage = function(self)
 				local pos = self.object:getpos()
 				local n = minetest.get_node(pos)
-				
+
 				if self.light_damage and self.light_damage ~= 0
 					and pos.y > 0
 					and minetest.get_node_light(pos)
@@ -204,7 +204,7 @@ function carbone_mobs:register_mob(name, def)
 						self.object:remove()
 					end
 				end
-				
+
 				if self.water_damage and self.water_damage ~= 0 and
 					minetest.get_item_group(n.name, "water") ~= 0
 				then
@@ -215,7 +215,7 @@ function carbone_mobs:register_mob(name, def)
 						self.object:remove()
 					end
 				end
-				
+
 				if self.lava_damage and self.lava_damage ~= 0 and
 					minetest.get_item_group(n.name, "lava") ~= 0
 				then
@@ -227,7 +227,7 @@ function carbone_mobs:register_mob(name, def)
 					end
 				end
 			end
-			
+
 			self.env_damage_timer = self.env_damage_timer + dtime
 			if self.state == "attack" and self.env_damage_timer > 0.9 then
 				self.env_damage_timer = 0
@@ -235,7 +235,7 @@ function carbone_mobs:register_mob(name, def)
 			elseif self.state ~= "attack" then
 				do_env_damage(self)
 			end
-			
+
 			if self.type == "monster" then
 				for _,player in pairs(minetest.get_connected_players()) do
 					local s = self.object:getpos()
@@ -247,7 +247,7 @@ function carbone_mobs:register_mob(name, def)
 					end
 				end
 			end
-			
+
 			if self.follow ~= "" and not self.following then
 				for _,player in pairs(minetest.get_connected_players()) do
 					local s = self.object:getpos()
@@ -258,7 +258,7 @@ function carbone_mobs:register_mob(name, def)
 					end
 				end
 			end
-			
+
 			if self.following and self.following:is_player() then
 				if self.following:get_wielded_item():get_name() ~= self.follow then
 					self.following = nil
@@ -301,7 +301,7 @@ function carbone_mobs:register_mob(name, def)
 					end
 				end
 			end
-			
+
 			if self.state == "stand" then
 				if math.random(1, 4) == 1 then
 					self.object:setyaw(self.object:getyaw()+((math.random(0,360)- 14.50)/180*math.pi))
@@ -348,7 +348,7 @@ function carbone_mobs:register_mob(name, def)
 				else
 					self.attack.dist = dist
 				end
-				
+
 				local vec = {x = p.x -s.x, y = p.y -s.y, z = p.z -s.z}
 				local yaw = math.atan(vec.z/vec.x)+math.pi/2
 				if self.drawtype == "side" then
@@ -403,7 +403,7 @@ function carbone_mobs:register_mob(name, def)
 				else
 					self.attack.dist = dist
 				end
-				
+
 				local vec = {x = p.x -s.x, y = p.y -s.y, z = p.z -s.z}
 				local yaw = math.atan(vec.z/vec.x)+math.pi/2
 				if self.drawtype == "side" then
@@ -414,16 +414,16 @@ function carbone_mobs:register_mob(name, def)
 				end
 				self.object:setyaw(yaw)
 				self.set_velocity(self, 0)
-				
+
 				if self.timer > self.shoot_interval and math.random(1, 100) <= 60 then
 					self.timer = 0
-					
+
 					self:set_animation("punch")
-					
+
 					if self.sounds and self.sounds.attack then
 						minetest.sound_play(self.sounds.attack, {object = self.object})
 					end
-					
+
 					local p = self.object:getpos()
 					p.y = p.y + (self.collisionbox[2]+self.collisionbox[5])/2
 					local obj = minetest.add_entity(p, self.arrow)
@@ -437,7 +437,7 @@ function carbone_mobs:register_mob(name, def)
 				end
 			end
 		end,
-		
+
 		on_activate = function(self, staticdata, dtime_s)
 			self.object:set_armor_groups({fleshy = self.armor})
 			self.object:setacceleration({x = 0, y = -14.5, z = 0})
@@ -461,7 +461,7 @@ function carbone_mobs:register_mob(name, def)
 				self.object:remove()
 			end
 		end,
-		
+
 		get_staticdata = function(self)
 			local tmp = {
 				lifetimer = self.lifetimer,
@@ -469,7 +469,7 @@ function carbone_mobs:register_mob(name, def)
 			}
 			return minetest.serialize(tmp)
 		end,
-		
+
 		on_punch = function(self, hitter)
 		local hp = self.object:get_hp()
 		if hp >= 1 then
@@ -493,7 +493,7 @@ function carbone_mobs:register_mob(name, def)
 				end
 			end
 		end,
-		
+
 	})
 end
 
@@ -535,7 +535,7 @@ function carbone_mobs:register_arrow(name, def)
 		velocity = def.velocity,
 		hit_player = def.hit_player,
 		hit_node = def.hit_node,
-		
+
 		on_step = function(self, dtime)
 			local pos = self.object:getpos()
 			if minetest.registered_nodes[minetest.get_node(self.object:getpos()).name].walkable then

@@ -99,14 +99,14 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 		if start_i >= creative_inventory.creative_inventory_size then
 			start_i = start_i - 4*6
 		end
-		
+
 		if start_i < 0 or start_i >= creative_inventory.creative_inventory_size then
 			start_i = 0
 		end
 
 		inventory_plus.set_inventory_formspec(player, get_formspec(player, start_i, start_i / (6*4) + 1))
 	end
-	
+
 	if fields.hg_prev then
 		start_i = start_i - 4*6
 		setformspec()
@@ -115,16 +115,16 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 		start_i = start_i + 4*6
 		setformspec()
 	end
-	
+
 	if inventory_plus.is_called(fields, "hgmaker", player) then
 		setformspec()
 	end
-	
+
 end)
 
 
 if minetest.setting_getbool("creative_mode") then
-	
+
 	minetest.register_item(":", {
 		type = "none",
 		wield_image = "wieldhand.png",
@@ -141,7 +141,7 @@ if minetest.setting_getbool("creative_mode") then
 			}
 		}
 	})
-	
+
 	function minetest.handle_node_drops(pos, drops, digger)
 		if not digger or not digger:is_player() then
 			return
@@ -156,5 +156,5 @@ if minetest.setting_getbool("creative_mode") then
 			end
 		end
 	end
-	
+
 end

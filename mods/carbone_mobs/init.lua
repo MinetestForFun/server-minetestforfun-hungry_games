@@ -51,7 +51,7 @@ minetest.register_craftitem("carbone_mobs:dirt_monster", {
 	inventory_image = "mobs_dirt_monster.png",
 	wield_scale = {x = 1.25, y = 1.25, z = 2.5},
 	groups = {not_in_creative_inventory = 1},
-	
+
 	on_place = function(itemstack, placer, pointed_thing)
 		if pointed_thing.above then
 			minetest.add_entity(pointed_thing.above, "carbone_mobs:dirt_monster")
@@ -108,7 +108,7 @@ minetest.register_craftitem("carbone_mobs:stone_monster", {
 	inventory_image = "mobs_stone_monster.png",
 	wield_scale = {x = 1.25, y = 1.25, z = 2.5},
 	groups = {not_in_creative_inventory = 1},
-	
+
 	on_place = function(itemstack, placer, pointed_thing)
 		if pointed_thing.above then
 			minetest.add_entity(pointed_thing.above, "carbone_mobs:stone_monster")
@@ -166,7 +166,7 @@ minetest.register_craftitem("carbone_mobs:sand_monster", {
 	inventory_image = "mobs_sand_monster.png",
 	wield_scale = {x = 1.25, y = 1.25, z = 2.5},
 	groups = {not_in_creative_inventory = 1},
-	
+
 	on_place = function(itemstack, placer, pointed_thing)
 		if pointed_thing.above then
 			minetest.add_entity(pointed_thing.above, "carbone_mobs:sand_monster")
@@ -216,7 +216,7 @@ minetest.register_craftitem("carbone_mobs:sheep", {
 	inventory_image = "mobs_sheep.png",
 	wield_scale = {x = 1.25, y = 1.25, z = 2.5},
 	groups = {not_in_creative_inventory = 1},
-	
+
 	on_place = function(itemstack, placer, pointed_thing)
 		if pointed_thing.above then
 			minetest.add_entity(pointed_thing.above, "carbone_mobs:sheep")
@@ -274,7 +274,7 @@ minetest.register_craftitem("carbone_mobs:rat", {
 	inventory_image = "mobs_rat_inventory.png",
 	wield_scale = {x = 1.25, y = 1.25, z = 2.5},
 	groups = {not_in_creative_inventory = 1},
-	
+
 	on_place = function(itemstack, placer, pointed_thing)
 		if pointed_thing.above then
 			minetest.add_entity(pointed_thing.above, "carbone_mobs:rat")
@@ -284,7 +284,7 @@ minetest.register_craftitem("carbone_mobs:rat", {
 		return itemstack
 	end,
 })
-	
+
 minetest.register_craftitem("carbone_mobs:rat_cooked", {
 	description = "Cooked Rat",
 	inventory_image = "mobs_cooked_rat.png",
@@ -358,7 +358,7 @@ minetest.register_craftitem("carbone_mobs:oerkki", {
 	inventory_image = "mobs_oerkki.png",
 	wield_scale = {x = 1.25, y = 1.25, z = 2.5},
 	groups = {not_in_creative_inventory = 1},
-	
+
 	on_place = function(itemstack, placer, pointed_thing)
 		if pointed_thing.above then
 			minetest.add_entity(pointed_thing.above, "carbone_mobs:oerkki")
@@ -421,7 +421,7 @@ minetest.register_craftitem("carbone_mobs:tree_monster", {
 	inventory_image = "mobs_tree_monster.png",
 	wield_scale = {x = 1.25, y = 1.25, z = 2.5},
 	groups = {not_in_creative_inventory = 1},
-	
+
 	on_place = function(itemstack, placer, pointed_thing)
 		if pointed_thing.above then
 			minetest.add_entity(pointed_thing.above, "carbone_mobs:tree_monster")
@@ -474,7 +474,7 @@ minetest.register_craftitem("carbone_mobs:trooper", {
 	inventory_image = "player.png",
 	wield_scale = {x = 1.25, y = 1.25, z = 2.5},
 	groups = {not_in_creative_inventory = 1},
-	
+
 	on_place = function(itemstack, placer, pointed_thing)
 		if pointed_thing.above then
 			pointed_thing.above.y = pointed_thing.above.y + 0.5
@@ -537,7 +537,7 @@ minetest.register_craftitem("carbone_mobs:dungeon_master", {
 	inventory_image = "mobs_dungeon_master.png",
 	wield_scale = {x = 1.25, y = 1.25, z = 2.5},
 	groups = {not_in_creative_inventory = 1},
-	
+
 	on_place = function(itemstack, placer, pointed_thing)
 		if pointed_thing.above then
 			minetest.add_entity(pointed_thing.above, "carbone_mobs:dungeon_master")
@@ -658,7 +658,7 @@ minetest.register_craftitem("carbone_mobs:rhino", {
 	inventory_image = "mobs_rhino.png",
 	wield_scale = {x = 1.25, y = 1.25, z = 2.5},
 	groups = {not_in_creative_inventory = 1},
-	
+
 	on_place = function(itemstack, placer, pointed_thing)
 		if pointed_thing.above then
 			minetest.add_entity(pointed_thing.above, "carbone_mobs:rhino")
@@ -710,20 +710,20 @@ if not minetest.setting_getbool("creative_mode") then -- Disable all mob spawnin
 	if minetest.setting_getbool("spawn_friendly_mobs") ~= false then -- “If nil or true then”
 		local rn = {"default:stone", "default:leaves", "default:jungleleaves", "default:cactus"}
 		local sn = {"default:dirt_with_grass"}
-		
+
 		carbone_mobs:register_spawn("carbone_mobs:rat", "two rats",                    rn, 16, -1, 7500, 6, 100)
 		carbone_mobs:register_spawn("carbone_mobs:sheep", "a sheep",                   sn, 16, 8, 20000, 2, 100)
 	end
 	if minetest.setting_getbool("spawn_hostile_mobs") ~= false then -- “If nil or true then”
 		local mn = {"default:stone", "default:desert_stone", "default:cobble", "default:mossycobble"}
-		
+
 		carbone_mobs:register_spawn("carbone_mobs:dirt_monster", "a dirt monster",     mn, 1, -1, 15000, 6, 0)
 		carbone_mobs:register_spawn("carbone_mobs:stone_monster", "a stone monster",   mn, 1, -1, 15000, 4, 0)
 		carbone_mobs:register_spawn("carbone_mobs:sand_monster", "a sand monster",     mn, 1, -1, 15000, 4, 0)
 		carbone_mobs:register_spawn("carbone_mobs:oerkki", "an oerkki",                mn, 1, -1, 20000, 4, 0)
 		carbone_mobs:register_spawn("carbone_mobs:tree_monster", "a tree monster",     mn, 1, -1, 25000, 2, 0)
 		carbone_mobs:register_spawn("carbone_mobs:trooper", "a trooper",               mn, 1, -1, 25000, 2, 0)
-		
+
 		carbone_mobs:register_spawn("carbone_mobs:dungeon_master", "a dungeon master", mn, 1, -1, 25000, 2, -50)
 		carbone_mobs:register_spawn("carbone_mobs:rhino", "a rhino",                   mn, 1, -1, 25000, 2, 0)
 	end

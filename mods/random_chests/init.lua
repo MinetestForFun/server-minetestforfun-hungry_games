@@ -22,9 +22,9 @@ end
 local fill_chest = function(pos)
 	if filling == false then
 		--Notify players if a chest was at pos is empty and has been refilled.
-		local oldnode = minetest.env:get_node(pos)
+		local oldnode = minetest.get_node(pos)
 		if oldnode.name == "default:chest" then
-			local oldinv = minetest.env:get_meta(pos):get_inventory()
+			local oldinv = minetest.get_meta(pos):get_inventory()
 			if oldinv:is_empty("main") then
 				minetest.chat_send_all("A chest has been refilled!")
 			end
@@ -41,15 +41,15 @@ local fill_chest = function(pos)
 			end
 		end
 	end
-	minetest.env:add_node(pos,{name='default:chest', inv=invcontent})	
-	local meta = minetest.env:get_meta(pos)
+	minetest.add_node(pos,{name='default:chest', inv=invcontent})
+	local meta = minetest.get_meta(pos)
 	local inv = meta:get_inventory()
 	for _,itemstring in ipairs(invcontent) do
 		inv:add_item('main', itemstring)
 	end
 	--Restart nodetimer
 	if chests_nodetimer then
-		local timer = minetest.env:get_node_timer(pos)
+		local timer = minetest.get_node_timer(pos)
 		timer:start(chests_interval)
 	end
 end
@@ -114,15 +114,14 @@ end
 
 function random_chests.refill(i)
 	filling = true
-	local env = minetest.env
 	if i == nil then i = 1 end
 	local s = i
 	while i <= table.getn(chests) do
 		if chests[i] then
-			local n = env:get_node(chests[i]).name
+			local n = minetest.get_node(chests[i]).name
 			if (not n:match("default:chest")) and n ~= "ignore" then
 				minetest.log("action", "chest missing! found:")
-				minetest.log("action", env:get_node(chests[i]).name)
+				minetest.log("action", minetest.get_node(chests[i]).name)
 				minetest.log("action", "instead")
 				table.remove(chests,i)
 			else
@@ -171,9 +170,9 @@ function random_chests.setrefill(mode, interval)
 		end
 		chest.on_timer = fill_chest
 		chest.on_construct = function(pos)
-			local timer = minetest.env:get_node_timer(pos)
+			local timer = minetest.get_node_timer(pos)
 			timer:start(interval)
-			local meta = minetest.env:get_meta(pos)
+			local meta = minetest.get_meta(pos)
 			meta:set_string("formspec", default.chest_formspec)
 			meta:set_string("infotext", "Chest")
 			local inv = meta:get_inventory()
@@ -191,8 +190,8 @@ function random_chests.setrefill(mode, interval)
 				table.insert(chests,pos)
 				random_chests.save()
 			end
-			
-			local meta = minetest.env:get_meta(pos)
+
+			local meta = minetest.get_meta(pos)
 			meta:set_string("formspec", default.chest_formspec)
 			meta:set_string("infotext", "Chest")
 			local inv = meta:get_inventory()
@@ -210,21 +209,20 @@ minetest.register_on_generated(function(minp, maxp, seed)
 			for i=1, chest_rarity do
 				local pos = {x=math.random(minp.x,maxp.x),z=math.random(minp.z,maxp.z), y=minp.y}
 				if chests_boundary == 0 or CheckCollision(pos.x,pos.z,1,1, -chests_boundary,-chests_boundary,chests_boundary*2,chests_boundary*2) then
-					local env = minetest.env
 					 -- Find ground level (0...15)
 					local ground = nil
 					for y=maxp.y,minp.y+1,-1 do
-						if env:get_node({x=pos.x,y=y,z=pos.z}).name ~= "air" and env:get_node({x=pos.x,y=y,z=pos.z}).name ~= "default:water_source" and env:get_node({x=pos.x,y=y,z=pos.z}).name ~= "snow:snow" then
+						if minetest.get_node({x=pos.x,y=y,z=pos.z}).name ~= "air" and minetest.get_node({x=pos.x,y=y,z=pos.z}).name ~= "default:water_source" and minetest.get_node({x=pos.x,y=y,z=pos.z}).name ~= "snow:snow" then
 							ground = y
 							break
 						end
 					end
-	
+
 					if ground then
 						fill_chest({x=pos.x,y=ground+1,z=pos.z})
 					end
 				end
-			end	
+			end
 		end
 	end
 end)

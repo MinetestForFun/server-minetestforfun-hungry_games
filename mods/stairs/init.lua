@@ -138,7 +138,7 @@ function stairs.register_slab(subname, recipeitem, groups, images, description, 
 				end
 				return itemstack
 			end
-			
+
 			-- Upside down slabs
 			if p0.y-1 == p1.y then
 				-- Turn into full block if pointing at a existing slab

@@ -75,7 +75,7 @@ local known_foods_special_sounds = {
     ["food:milk"] = "survival_hunger_sip";
     ["food:chocolate_milk"] = "survival_hunger_sip";
     ["food:hotchoco"] = "survival_hunger_sip";
-    ["food:ms_chocolate"] = "survival_hunger_sip"; 
+    ["food:ms_chocolate"] = "survival_hunger_sip";
     ["animalmaterials:milk"] = "survival_hunger_sip";
 };
 

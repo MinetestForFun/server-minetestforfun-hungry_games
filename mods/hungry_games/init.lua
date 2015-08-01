@@ -13,7 +13,7 @@ dofile(minetest.get_modpath("hungry_games").."/engine.lua")
 glass_arena.set_size(400)
 
 --Set texture of the arena. [SAFE]
-glass_arena.set_texture("default_glass.png") 
+glass_arena.set_texture("default_glass.png")
 
 --Set which blocks to replace with wall (remove table brackets "{}" for all blocks).
 glass_arena.replace({
@@ -28,7 +28,7 @@ glass_arena.replace({
 	"default:tree",
 	"snow:snow",
 	"default:snow"
-}) 
+})
 
 -----------------------------------
 -----Hungry Games configuration----
@@ -55,7 +55,7 @@ hungry_games.vote_countdown = 120
 
 --Set what players can dig, should be modifyed along with glass_arena.replace
 -- (See Above Section)
---Values "none" (can't dig), "restricted" (only dig with hand), "normal" (normal minetest). 
+--Values "none" (can't dig), "restricted" (only dig with hand), "normal" (normal minetest).
 hungry_games.dig_mode = "none"
 
 -----------------------------------
@@ -64,11 +64,11 @@ hungry_games.dig_mode = "none"
 --Set spawn points. [SAFE]
 --NOTE: is overiden by hg_admin commands and save file.
 spawning.register_spawn("spawn",{
-	mode = "static", 
+	mode = "static",
 	pos = {x=0,y=0,z=0},
 })
 spawning.register_spawn("lobby",{
-	mode = "static", 
+	mode = "static",
 	pos = {x=0,y=0,z=0},
 })
 
@@ -105,7 +105,7 @@ random_chests.setrefill("database", 5)
 
 --Register a new item that can be spawned in random chests. [SAFE]
 --eg chest_item('default:torch', 4, 6) #has a 1 in 4 chance of spawning up to 6 torches.
---the last item is a group number/word which means if an item of that group number has already 
+--the last item is a group number/word which means if an item of that group number has already
 --been spawned then don't add any more of those group types to the chest.
 --items
 chest_item('default:apple', 4, 5)

@@ -42,7 +42,7 @@ local craft_ingreds = {
 	steel = "default:steel_ingot",
 	bronze = "default:bronze_ingot",
 	diamond = "default:diamond",
-}	
+}
 
 if rawget(_G, "has_moreores") then
 	craft_ingreds.mithril = "moreores:mithril_ingot"

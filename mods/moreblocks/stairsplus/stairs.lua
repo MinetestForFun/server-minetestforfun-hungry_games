@@ -124,7 +124,7 @@ function stairsplus:register_stair(modname, subname, recipeitem, fields)
 	minetest.register_alias("stairs:stair_" .. subname, modname .. ":stair_" .. subname)
 
 	-- Some saw-less recipes:
-	
+
 	minetest.register_craft({
 		output = modname .. ":stair_" .. subname .. " 8",
 		recipe = {
@@ -142,67 +142,67 @@ function stairsplus:register_stair(modname, subname, recipeitem, fields)
 			{recipeitem, recipeitem, recipeitem},
 		},
 	})
-	
+
 	minetest.register_craft({
 		type = "shapeless",
 		output = modname .. ":stair_" .. subname,
 		recipe = {modname .. ":panel_" .. subname, modname .. ":slab_" .. subname},
 	})
-	
+
 	minetest.register_craft({
 		type = "shapeless",
 		output = modname .. ":stair_" .. subname,
 		recipe = {modname .. ":panel_" .. subname, modname .. ":panel_" .. subname, modname .. ":panel_" .. subname},
 	})
-	
+
 	minetest.register_craft({
 		type = "shapeless",
 		output = modname .. ":stair_" .. subname .. "_outer",
 		recipe = {modname .. ":micro_" .. subname, modname .. ":slab_" .. subname},
 	})
-	
+
 	minetest.register_craft({
 		type = "shapeless",
 		output = modname .. ":stair_" .. subname .. "_half",
 		recipe = {modname .. ":micro_" .. subname, modname .. ":micro_" .. subname, modname .. ":micro_" .. subname},
 	})
-	
+
 	minetest.register_craft({
 		type = "shapeless",
 		output = modname .. ":stair_" .. subname .. "_half",
 		recipe = {modname .. ":panel_" .. subname, modname .. ":micro_" .. subname},
 	})
-	
+
 	minetest.register_craft({
 		type = "shapeless",
 		output = modname .. ":stair_" .. subname .. "_right_half",
 		recipe = {modname .. ":stair_" .. subname .. "_half"},
 	})
-	
+
 	minetest.register_craft({
 		type = "shapeless",
 		output = modname .. ":stair_" .. subname,
 		recipe = {modname .. ":micro_" .. subname, modname .. ":micro_" .. subname, modname .. ":micro_" .. subname, modname .. ":micro_" .. subname, modname .. ":micro_" .. subname, modname .. ":micro_" .. subname},
 	})
-	
+
 	minetest.register_craft({
 		type = "shapeless",
 		output = modname .. ":stair_" .. subname .. "_inner",
 		recipe = {modname .. ":micro_" .. subname, modname .. ":micro_" .. subname, modname .. ":micro_" .. subname, modname .. ":micro_" .. subname, modname .. ":micro_" .. subname, modname .. ":micro_" .. subname, modname .. ":micro_" .. subname},
 	})
-	
+
 	minetest.register_craft({
 		type = "shapeless",
 		output = modname .. ":stair_" .. subname .. "_outer",
 		recipe = {modname .. ":micro_" .. subname, modname .. ":micro_" .. subname, modname .. ":micro_" .. subname, modname .. ":micro_" .. subname, modname .. ":micro_" .. subname},
 	})
-	
+
 	minetest.register_craft({
 		type = "shapeless",
 		output = modname .. ":stair_" .. subname,
 		recipe = {modname .. ":panel_" .. subname, modname .. ":panel_" .. subname, modname .. ":panel_" .. subname},
 	})
-	
+
 	minetest.register_craft({ -- See mirrored variation of the recipe below.
 		output = modname .. ":stair_" .. subname .. "_alt",
 		recipe = {
@@ -210,7 +210,7 @@ function stairsplus:register_stair(modname, subname, recipeitem, fields)
 			{""                            , modname .. ":panel_" .. subname},
 		},
 	})
-	
+
 	minetest.register_craft({ -- Mirrored variation of the recipe above.
 		output = modname .. ":stair_" .. subname .. "_alt",
 		recipe = {

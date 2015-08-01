@@ -22,7 +22,7 @@ function default.grow_tree(data, a, pos, is_apple_tree, seed)
         y = y+th-1 -- (x, y, z) is now last piece of trunk
         local leaves_a = VoxelArea:new{MinEdge={x=-2, y=-1, z=-2}, MaxEdge={x=2, y=2, z=2}}
         local leaves_buffer = {}
-        
+
         -- Force leaves near the trunk
         local d = 1
         for xi = -d, d do
@@ -32,14 +32,14 @@ function default.grow_tree(data, a, pos, is_apple_tree, seed)
         end
         end
         end
-        
+
         -- Add leaves randomly
         for iii = 1, 8 do
                 local d = 1
                 local xx = pr:next(leaves_a.MinEdge.x, leaves_a.MaxEdge.x - d)
                 local yy = pr:next(leaves_a.MinEdge.y, leaves_a.MaxEdge.y - d)
                 local zz = pr:next(leaves_a.MinEdge.z, leaves_a.MaxEdge.z - d)
-                
+
                 for xi = 0, d do
                 for yi = 0, d do
                 for zi = 0, d do
@@ -48,7 +48,7 @@ function default.grow_tree(data, a, pos, is_apple_tree, seed)
                 end
                 end
         end
-        
+
         -- Add the leaves
         for xi = leaves_a.MinEdge.x, leaves_a.MaxEdge.x do
         for yi = leaves_a.MinEdge.y, leaves_a.MaxEdge.y do
@@ -94,7 +94,7 @@ function default.grow_jungletree(data, a, pos, seed)
                 end
         end
         end
-        
+
         local th = pr:next(8, 12)
         for yy = y, y+th-1 do
                 local vi = a:index(x, yy, z)
@@ -105,7 +105,7 @@ function default.grow_jungletree(data, a, pos, seed)
         y = y+th-1 -- (x, y, z) is now last piece of trunk
         local leaves_a = VoxelArea:new{MinEdge={x=-3, y=-2, z=-3}, MaxEdge={x=3, y=2, z=3}}
         local leaves_buffer = {}
-        
+
         -- Force leaves near the trunk
         local d = 1
         for xi = -d, d do
@@ -115,14 +115,14 @@ function default.grow_jungletree(data, a, pos, seed)
         end
         end
         end
-        
+
         -- Add leaves randomly
         for iii = 1, 30 do
                 local d = 1
                 local xx = pr:next(leaves_a.MinEdge.x, leaves_a.MaxEdge.x - d)
                 local yy = pr:next(leaves_a.MinEdge.y, leaves_a.MaxEdge.y - d)
                 local zz = pr:next(leaves_a.MinEdge.z, leaves_a.MaxEdge.z - d)
-                
+
                 for xi = 0, d do
                 for yi = 0, d do
                 for zi = 0, d do
@@ -131,7 +131,7 @@ function default.grow_jungletree(data, a, pos, seed)
                 end
                 end
         end
-        
+
         -- Add the leaves
         for xi = leaves_a.MinEdge.x, leaves_a.MaxEdge.x do
         for yi = leaves_a.MinEdge.y, leaves_a.MaxEdge.y do

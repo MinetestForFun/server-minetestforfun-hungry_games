@@ -117,7 +117,7 @@ minetest.register_abm({
 		if is_soil == 0 then
 			return
 		end
-		
+
 		minetest.log("action", "A sapling grows into a tree at "..minetest.pos_to_string(pos))
 		local vm = minetest.get_voxel_manip()
 		local minp, maxp = vm:read_from_map({x=pos.x-16, y=pos.y, z=pos.z-16}, {x=pos.x+16, y=pos.y+16, z=pos.z+16})
@@ -140,7 +140,7 @@ minetest.register_abm({
 		if is_soil == 0 then
 			return
 		end
-		
+
 		minetest.log("action", "A jungle sapling grows into a tree at "..minetest.pos_to_string(pos))
 		local vm = minetest.get_voxel_manip()
 		local minp, maxp = vm:read_from_map({x=pos.x-16, y=pos.y-1, z=pos.z-16}, {x=pos.x+16, y=pos.y+16, z=pos.z+16})

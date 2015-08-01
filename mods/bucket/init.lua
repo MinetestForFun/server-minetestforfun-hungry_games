@@ -44,7 +44,7 @@ function bucket.register_liquid(source, flowing, itemname, inventory_image, name
 				if pointed_thing.type ~= "node" then
 					return
 				end
-				
+
 				-- Call on_rightclick if the pointed node defines it
 				if user and not user:get_player_control().sneak then
 					local n = minetest.get_node(pointed_thing.under)
