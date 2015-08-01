@@ -44,7 +44,7 @@ local craft_ingreds = {
 	diamond = "default:diamond",
 }	
 
-if has_moreores then
+if rawget(_G, "has_moreores") then
 	craft_ingreds.mithril = "moreores:mithril_ingot"
 end
 

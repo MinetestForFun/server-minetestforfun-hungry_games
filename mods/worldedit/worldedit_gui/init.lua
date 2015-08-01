@@ -67,7 +67,7 @@ local get_formspec = function(name, identifier)
 end
 
 --implement worldedit.show_page(name, page) in different ways depending on the available APIs
-if unified_inventory then --unified inventory installed
+if minetest.get_modpath("unified_inventory") then --unified inventory installed
 	local old_func = worldedit.register_gui_function
 	worldedit.register_gui_function = function(identifier, options)
 		old_func(identifier, options)

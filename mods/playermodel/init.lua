@@ -1,4 +1,4 @@
-if default == nil then
+if not rawget(_G, "default") then
 	default = {}
 end
 
