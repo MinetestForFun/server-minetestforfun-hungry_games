@@ -28,6 +28,158 @@ survival.disable()
 
 hb.register_hudbar("votes", 0xFFFFFF, "Votes", { bar = "hungry_games_votebar.png", icon = "hungry_games_voteicon.png" }, 0, 0, false)
 
+
+local victorise = {}
+victorise.players_ranking_file = minetest.get_worldpath() .. "/players_rankings.txt"
+victorise.players_victory = {}
+victorise.formspec = ""
+
+function victorise.load_players_victory()
+	local file = io.open(victorise.players_ranking_file, "r")
+	if file then
+		local t = minetest.deserialize(file:read("*all"))
+		file:close()
+		if t and type(t) == "table" then
+			return t
+		end
+	end
+	return {["nb_games"] = {}, ["nb_wins"] = {}, ["nb_lost"] = {}, ["nb_quit"] = {} }
+end
+victorise.players_victory = victorise.load_players_victory()
+
+
+function victorise.save_players_victory()
+	local input, err = io.open(victorise.players_ranking_file, "w")
+	if input then
+		input:write(minetest.serialize(victorise.players_victory))
+		input:close()
+	else
+		minetest.log("error", "open(" .. players_victory_file .. ", 'w') failed: " .. err)
+	end
+end
+
+
+function victorise.inc(name, key)
+	victorise.players_victory[key][name] = (victorise.players_victory[key][name] or 0 ) + 1
+end
+
+
+function victorise.spairs(t, order)
+    -- collect the keys
+    local keys = {}
+    for k in pairs(t) do keys[#keys+1] = k end
+    -- if order function given, sort by it by passing the table and keys a, b,
+    -- otherwise just sort the keys
+    if order then
+        table.sort(keys, function(a,b) return order(t, a, b) end)
+    else
+        table.sort(keys)
+    end
+    -- return the iterator function
+    local i = 0
+    return function()
+        i = i + 1
+        if keys[i] then
+            return keys[i], t[keys[i]]
+        end
+    end
+end
+
+
+function victorise.get_players_info(name)
+	local t = {["nb_games"] = 0, ["nb_wins"] = 0, ["nb_lost"] = 0, ["nb_quit"] = 0 }
+	if victorise.players_victory["nb_games"][name] then
+		t["nb_games"] = victorise.players_victory["nb_games"][name]
+	end
+
+	if victorise.players_victory["nb_wins"][name] then
+		t["nb_wins"] = victorise.players_victory["nb_wins"][name]
+	end
+
+	if victorise.players_victory["nb_lost"][name] then
+		t["nb_lost"] = victorise.players_victory["nb_lost"][name]
+	end
+	if victorise.players_victory["nb_quit"][name] then
+		t["nb_quit"] = victorise.players_victory["nb_quit"][name]
+	end
+	return t
+end
+
+function victorise.set_formspec()
+	local players_ranks = {}
+	if victorise.players_victory["nb_wins"] ~= nil then
+		local i = 1
+		-- this uses an custom sorting function ordering by score descending
+		for k,v in victorise.spairs(victorise.players_victory["nb_wins"], function(t,a,b) return t[b] < t[a] end) do
+			players_ranks[i] = k
+			i=i+1
+			if #players_ranks >= 10 then
+				break
+			end
+		end
+	end
+	local formspec = {"size[8,10]label[2.5,0;".."Hunger Games Rankings".."]"}
+	if players_ranks ~= nil then
+		local Y = 1.2
+		table.insert(formspec, "label[0,0.5;Rank]") --rank
+		table.insert(formspec, "label[1.2,0.5;Name]") --name
+		table.insert(formspec, "label[4.1,0.5;Games]") --nbgames
+		table.insert(formspec, "label[5.2,0.5;Wins]") --nbwins
+		table.insert(formspec, "label[6.3,0.5;Lost]") --nblost
+		table.insert(formspec, "label[7.4,0.5;Quit]") --nbquit
+		for i ,name in pairs(players_ranks) do
+			local info = victorise.get_players_info(name)
+			table.insert(formspec, "label[0,"..Y..";"..tostring(i).."]") -- rank
+			table.insert(formspec, "label[1.2,"..Y..";"..tostring(name).."]") -- playername
+			table.insert(formspec, "label[4.1,"..Y..";"..tostring(info["nb_games"]).."]") -- nbgames
+			table.insert(formspec, "label[5.2,"..Y..";"..tostring(info["nb_wins"]).."]") -- nbwins
+			table.insert(formspec, "label[6.3,"..Y..";"..tostring(info["nb_lost"]).."]") -- nblost
+			table.insert(formspec, "label[7.4,"..Y..";"..tostring(info["nb_quit"]).."]") -- nbquit
+			Y = Y + 0.6
+		end
+	else
+		table.insert(formspec, "label[3,1;rankings empty]")
+	end
+	table.insert(formspec, "button_exit[3.5,9.5;1.2,1;close;".."Close".."]")
+	return table.concat(formspec)
+end
+
+function victorise.update_formspec()
+	victorise.formspec = victorise.set_formspec()
+end
+
+
+function victorise.get_formspec()
+	if victorise.formspec == "" then
+		victorise.formspec = victorise.set_formspec()
+	end
+	return victorise.formspec
+end
+
+
+function victorise.show_result()
+	victorise.update_formspec()
+	minetest.after(3, function()
+		local formspec = victorise.get_formspec()
+		for _,player in pairs(minetest.get_connected_players()) do
+			local player_name = player:get_player_name()
+			if player_name ~= nil then
+				minetest.show_formspec(player_name, "hungry:rankings", formspec)
+			end
+		end
+	end)
+end
+
+minetest.register_chatcommand("ranks", {
+	params = "",
+	description = "display players rankings",
+	privs = {},
+	func = function(name)
+		minetest.show_formspec(name, "hungry:rankings", victorise.get_formspec())
+	end,
+})
+
+
 local update_timer_hud = function(text)
 	local players = minetest.get_connected_players()
 	for i=1,#players do
@@ -168,6 +320,8 @@ local stop_game = function()
 	survival.disable()
 	minetest.setting_set("enable_damage", "false")
 	unset_timer()
+	victorise.save_players_victory()
+	victorise.show_result()
 end
 
 local check_win = function()
@@ -180,6 +334,7 @@ local check_win = function()
 			local winnerName
 			for playerName,_ in pairs(currGame) do
 				local winnerName = playerName
+				victorise.inc(playerName, "nb_wins")
 				minetest.chat_send_player(winnerName, "You won!")
 				minetest.chat_send_all("The Hungry Games are now over, " .. winnerName .. " was the winner.")
 				minetest.sound_play("hungry_games_victory")
@@ -260,6 +415,7 @@ local start_game_now = function(input)
 	for i,player in ipairs(contestants) do
 		local name = player:get_player_name()
 		if minetest.get_player_by_name(name) then
+			victorise.inc(name, "nb_games")
 			currGame[name] = true
 			local privs = minetest.get_player_privs(name)
 			privs.fast = nil
@@ -444,6 +600,7 @@ minetest.register_on_dieplayer(function(player)
 
 	if ingame and currGame[playerName] and count ~= 1 then
 		minetest.chat_send_all(playerName .. " has died! Players left: " .. tostring(count))
+		victorise.inc(playerName, "nb_lost")
 	end
 
 	drop_player_items(playerName)
@@ -514,6 +671,9 @@ end)
 minetest.register_on_leaveplayer(function(player)
 	local name = player:get_player_name()
 	drop_player_items(player:get_player_name())
+	if currGame[name] then
+		victorise.inc(name, "nb_quit")
+	end
 	currGame[name] = nil
 	timer_hudids[name] = nil
    	local privs = minetest.get_player_privs(name)
