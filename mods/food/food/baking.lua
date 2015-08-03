@@ -15,7 +15,7 @@
 -- =====================================
 
 -- Bread from the farming mod
-minetest.register_craftitem("farming:bread", {
+minetest.register_craftitem(":farming:bread", {
 	description = "Bread",
 	inventory_image = "farming_bread.png",
 	on_use = minetest.item_eat(4),
