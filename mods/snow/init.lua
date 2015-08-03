@@ -64,7 +64,7 @@ dofile(minetest.get_modpath("snow").."/src/util.lua")
 -- That means "nodes.lua", where the saplings are controlled, has to come after "util.lua". ~ LazyJ
 dofile(minetest.get_modpath("snow").."/src/nodes.lua")
 dofile(minetest.get_modpath("snow").."/src/mapgen.lua")
-dofile(minetest.get_modpath("snow").."/src/sled.lua")
+-- dofile(minetest.get_modpath("snow").."/src/sled.lua")
 dofile(minetest.get_modpath("snow").."/src/falling_snow.lua")
 
 
