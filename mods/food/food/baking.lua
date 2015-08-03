@@ -14,6 +14,13 @@
 -- [craft] Bun Dough
 -- =====================================
 
+-- Bread from the farming mod
+minetest.register_craftitem("farming:bread", {
+	description = "Bread",
+	inventory_image = "farming_bread.png",
+	on_use = minetest.item_eat(4),
+})
+
 -- doughs
 minetest.register_craft({
 	output = '"food:bread_slice" 10',
@@ -27,8 +34,6 @@ minetest.register_craftitem("food:bread_slice", {
 	inventory_image = "food_bread_slice.png",
 	on_use = minetest.item_eat(2),
 })
-
-
 
 
 minetest.register_craftitem("food:bun_mix", {
