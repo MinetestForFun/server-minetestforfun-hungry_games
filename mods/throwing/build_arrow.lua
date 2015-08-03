@@ -49,7 +49,7 @@ THROWING_ARROW_ENTITY.on_step = function(self, dtime)
 		local objs = minetest.get_objects_inside_radius({x=pos.x,y=pos.y,z=pos.z}, 1)
 		for k, obj in pairs(objs) do
 			if obj:get_luaentity() ~= nil then
-				if obj:get_luaentity().name ~= "throwing:arrow_build_entity" and obj:get_luaentity().name ~= "__builtin:item" then
+				if obj:get_luaentity().name ~= "throwing:arrow_build_entity" and obj:get_luaentity().name ~= "__builtin:item" and obj:get_luaentity().name ~= "gauges:hp_bar" then
 					if self.node ~= "" then
 						minetest.set_node(self.lastpos, {name=self.node})
 					end
@@ -60,6 +60,7 @@ THROWING_ARROW_ENTITY.on_step = function(self, dtime)
 					minetest.set_node(self.lastpos, {name=self.node})
 				end
 				self.object:remove()
+				return
 			end
 		end
 	end
@@ -70,6 +71,7 @@ THROWING_ARROW_ENTITY.on_step = function(self, dtime)
 				minetest.set_node(self.lastpos, {name=self.node})
 			end
 			self.object:remove()
+			return
 		end
 	end
 	self.lastpos={x=pos.x, y=pos.y, z=pos.z}

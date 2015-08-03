@@ -49,12 +49,13 @@ THROWING_ARROW_ENTITY.on_step = function(self, dtime)
 		local objs = minetest.get_objects_inside_radius({x=pos.x,y=pos.y,z=pos.z}, 2)
 		for k, obj in pairs(objs) do
 			if obj:get_luaentity() ~= nil then
-				if obj:get_luaentity().name ~= "throwing:arrow_teleport_entity" and obj:get_luaentity().name ~= "__builtin:item" then
+				if obj:get_luaentity().name ~= "throwing:arrow_teleport_entity" and obj:get_luaentity().name ~= "__builtin:item" and obj:get_luaentity().name ~= "gauges:hp_bar" then
 					if self.player ~= "" then
 						self.player:setpos(pos)
 						self.player:get_inventory():add_item("main", ItemStack("throwing:arrow_teleport"))
 					end
 					self.object:remove()
+					return
 				end
 			else
 				if self.player ~= "" then
@@ -62,6 +63,7 @@ THROWING_ARROW_ENTITY.on_step = function(self, dtime)
 					self.player:get_inventory():add_item("main", ItemStack("throwing:arrow_teleport"))
 				end
 				self.object:remove()
+				return
 			end
 		end
 	end

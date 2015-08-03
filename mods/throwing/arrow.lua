@@ -48,7 +48,7 @@ THROWING_ARROW_ENTITY.on_step = function(self, dtime)
 		local objs = minetest.get_objects_inside_radius({x=pos.x,y=pos.y,z=pos.z}, 2)
 		for k, obj in pairs(objs) do
 			if obj:get_luaentity() ~= nil then
-				if obj:get_luaentity().name ~= "throwing:arrow_entity" and obj:get_luaentity().name ~= "__builtin:item" then
+				if obj:get_luaentity().name ~= "throwing:arrow_entity" and obj:get_luaentity().name ~= "__builtin:item" and obj:get_luaentity().name ~= "gauges:hp_bar" then
 					local damage = 0
 					if minetest.setting_getbool("enable_pvp") then
 						damage = 3
@@ -58,17 +58,22 @@ THROWING_ARROW_ENTITY.on_step = function(self, dtime)
 						damage_groups={fleshy=damage},
 					}, nil)
 					self.object:remove()
+					return
 				end
 			else
-				local damage = 0
-				if minetest.setting_getbool("enable_pvp") then
-					damage = 3
+				local objpos = obj:getpos()
+				if (pos.x - objpos.x < 0.5 and pos.x - objpos.x > -0.5) and (pos.z - objpos.z < 0.5 and pos.z - objpos.z > -0.5) then
+					local damage = 0
+					if minetest.setting_getbool("enable_pvp") then
+						damage = 3
+					end
+					obj:punch(self.object, 1.0, {
+						full_punch_interval=1.0,
+						damage_groups={fleshy=damage},
+					}, nil)
 				end
-				obj:punch(self.object, 1.0, {
-					full_punch_interval=1.0,
-					damage_groups={fleshy=damage},
-				}, nil)
 				self.object:remove()
+				return
 			end
 		end
 	end
