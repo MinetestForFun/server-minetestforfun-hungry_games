@@ -31,19 +31,6 @@ if input then
 	io.close(input)
 end
 
-
-
-	local input, err = io.open(fishing_setting.file_settings, "w")
-	if input then
-		input:write(minetest.serialize(fishing_setting.settings))
-		input:close()
-	else
-		minetest.log("error", "open(" .. fishing_setting.file_settings .. ", 'w') failed: " .. err)
-	end
-end
-
-
-
 function spawning.save_spawns()
 	local output, err = io.open(filepath..".spawns", "w")
 	if output then
