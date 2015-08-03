@@ -14,18 +14,10 @@
 ----------------------Load Files-----------------------------
 dofile(minetest.get_modpath("food").."/support.lua")
 
-dofile(minetest.get_modpath("food").."/dairy.lua")
-dofile(minetest.get_modpath("food").."/food/meats.lua")
-dofile(minetest.get_modpath("food").."/food/sandwich.lua")
+--dofile(minetest.get_modpath("food").."/food/meats.lua") Nothing yet
 dofile(minetest.get_modpath("food").."/food/baking.lua")
-dofile(minetest.get_modpath("food").."/food/soup.lua")
-
-dofile(minetest.get_modpath("food").."/snacks/crumbles.lua")
-dofile(minetest.get_modpath("food").."/snacks/cakes.lua")
-dofile(minetest.get_modpath("food").."/snacks/tarts.lua")
 
 dofile(minetest.get_modpath("food").."/drinks/juice.lua")
-dofile(minetest.get_modpath("food").."/drinks/hot.lua")
 
 
 
@@ -73,21 +65,6 @@ minetest.register_craft({
 	output = '"food:sugar" 20',
 	recipe = {
 		{'"default:papyrus"'},
-
-	}
-})
-
-----------------------------Cigerete----------------------------
-minetest.register_craftitem("food:cigarette", {
-	description = "Cigarette",
-	inventory_image = "food_cigar.png",
-	on_use = minetest.item_eat(-4),
-})
-
-minetest.register_craft({
-	output = '"food:cigarette" 1',
-	recipe = {
-		{'"default:dry_shrub"','"default:dry_shrub"','"default:dry_shrub"'},
 
 	}
 })

@@ -15,15 +15,6 @@
 -- =====================================
 
 -- doughs
-if not minetest.get_modpath("farming") then
-
-else
-minetest.register_craftitem(":farming:cake_mix", {
-	description = "Dough",
-	inventory_image = "farming_cake_mix.png",
-})
-end
-
 minetest.register_craft({
 	output = '"food:bread_slice" 10',
 	recipe = {
