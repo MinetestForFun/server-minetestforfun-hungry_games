@@ -17,3 +17,4 @@ load_mod_playertools = true
 load_mod_maptools = true
 load_mod_moreblocks = true
 load_mod_player_inactive = true
+load_mod_signs_lib = true
