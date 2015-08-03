@@ -31,12 +31,29 @@ if input then
 	io.close(input)
 end
 
-function spawning.save_spawns()
-	local output = io.open(filepath..".spawns", "w")
-	for i,v in pairs(registered_spawns) do
-		output:write(i.." "..v.pos.x.." "..v.pos.y.." "..v.pos.z.."\n")
+
+
+	local input, err = io.open(fishing_setting.file_settings, "w")
+	if input then
+		input:write(minetest.serialize(fishing_setting.settings))
+		input:close()
+	else
+		minetest.log("error", "open(" .. fishing_setting.file_settings .. ", 'w') failed: " .. err)
 	end
-	io.close(output)
+end
+
+
+
+function spawning.save_spawns()
+	local output, err = io.open(filepath..".spawns", "w")
+	if output then
+		for i,v in pairs(registered_spawns) do
+			output:write(i.." "..v.pos.x.." "..v.pos.y.." "..v.pos.z.."\n")
+		end
+		io.close(output)
+	else
+		minetest.log("error", "open(" .. filepath..".spawns, 'w') failed: " .. err)	
+	end
 end
 
 --Set spawn pos
