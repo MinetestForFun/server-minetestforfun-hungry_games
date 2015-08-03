@@ -3,7 +3,7 @@ local registered_spawns = {}
 local filepath = minetest.get_worldpath()..'/spawning'
 
 --Load spawns
-local input = io.open(filepath..".spawns", "r")
+local input,err = io.open(filepath..".spawns", "r")
 if input then
     while true do
         local nodename = input:read("*l")
@@ -29,6 +29,8 @@ if input then
 		}
 	end
 	io.close(input)
+else
+	minetest.log("error", "open(" .. filepath..".spawns, 'r') failed: " .. err)
 end
 
 function spawning.save_spawns()
@@ -66,7 +68,11 @@ function spawning.is_spawn(place)
 end
 
 function spawning.spawn(player, place)
-	if type(player) == "table" then place = player[2] player = player[1] end
+	if type(player) == "table" then
+		place = player[2]
+		player = player[1]
+	end
+	
 	local spawn = registered_spawns[place]
 	local pos = {
 		x = tonumber(spawn.pos.x),
