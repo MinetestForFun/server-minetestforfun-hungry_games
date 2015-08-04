@@ -18,32 +18,9 @@ minetest.register_craftitem("food:apple_juice", {
 	inventory_image = "food_juice_apple.png",
 	on_use = minetest.item_eat(2)
 })
-
-minetest.register_craft({
-	output = '"food:apple_juice" 4',
-	recipe = {
-		{"","",""},
-		{"","default:apple",""},
-		{"","food:cup",""},
-	}
-})
-
-
-
-
-
 ----------------------cactus juice----------------------------
 minetest.register_craftitem("food:cactus_juice", {
 	description = "Cactuz Juice",
 	inventory_image = "food_juice_cactus.png",
 	on_use = minetest.item_eat(2),
-})
-
-minetest.register_craft({
-	output = '"food:cactus_juice" 4',
-	recipe = {
-		{'""','""','""'},
-		{'""','"default:cactus"','""'},
-		{'""','"food:cup"','""'},
-	}
 })

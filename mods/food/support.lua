@@ -29,11 +29,6 @@ node_implement("farming","farming:bread","food:bread",function()
 end)
 
 
-node_implement("vessels","vessels:drinking_glass","food:drinking_glass",function()
-end)
-
-
-
 
 
 

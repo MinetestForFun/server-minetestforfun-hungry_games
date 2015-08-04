@@ -17,8 +17,5 @@ wieldview.transform = {
 	["screwdriver:screwdriver2"]="R270",
 	["screwdriver:screwdriver3"]="R270",
 	["screwdriver:screwdriver4"]="R270",
-	["vessels:glass_bottle"]="R270",
-	["vessels:drinking_glass"]="R270",
-	["vessels:steel_bottle"]="R270",
 }
 
