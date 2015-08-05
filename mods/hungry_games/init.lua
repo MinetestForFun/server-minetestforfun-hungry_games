@@ -3,6 +3,9 @@
 	You should edit this BEFORE generation of hungry_games worlds.
 	Feilds Marked with [SAFE] are safe to edit if you already have worlds generated.
 ]]--
+
+ranked = {}
+dofile(minetest.get_modpath("hungry_games").."/ranked.lua")
 dofile(minetest.get_modpath("hungry_games").."/engine.lua")
 
 
