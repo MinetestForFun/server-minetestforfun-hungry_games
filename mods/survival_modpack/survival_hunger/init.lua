@@ -23,7 +23,6 @@ local known_foods = {
     "default:apple",
 
     -- PilzAdam's farming[_plus] --
-    "farming:bread",
     "farming:pumpkin_bread",
     "farming_plus:orange_item",
     "farming_plus:tomato_item",
@@ -37,7 +36,7 @@ local known_foods = {
     "food:bun", "food:sw_meat", "food:sw_cheese", "food:cake",
     "food:cake_chocolate", "food:cake_carrot", "food:crumble_rhubarb",
     "food:banana_split", "food:bread", "food:strawberry", "food:carrot",
-    "food:banana", "food:meat_raw", "food:milk",
+    "food:banana", "food:meat_raw", "food:milk", "food:bread",
     -- These will be better for thirst
     --"food:apple_juice", "food:cactus_juice",
 

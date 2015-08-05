@@ -1,5 +1,6 @@
 -- String from farming mod
-minetest.register_craftitem(":farming:string", {
+minetest.register_craftitem("throwing:string", {
 	description = "String",
-	inventory_image = "farming_string.png",
+	inventory_image = "throwing_string.png",
 })
+minetest.register_alias("farming:string", "throwing:string")

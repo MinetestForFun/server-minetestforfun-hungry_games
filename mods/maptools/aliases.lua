@@ -94,3 +94,6 @@ minetest.register_alias("fullgrass", "maptools:fullgrass")
 minetest.register_alias("fullgrass_u", "maptools:fullgrass")
 minetest.register_alias("mossycobble_u", "maptools:mossycobble")
 minetest.register_alias("mossy_cobble_u", "maptools:mossycobble")
+
+minetest.register_alias("farming:soil_wet", "maptools:soil_wet")
+minetest.register_alias("farming:desert_sand_soil_wet", "maptools:desert_sand_soil_wet")

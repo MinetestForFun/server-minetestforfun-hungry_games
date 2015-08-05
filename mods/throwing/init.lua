@@ -46,9 +46,9 @@ minetest.register_tool("throwing:bow_wood", {
 minetest.register_craft({
 	output = 'throwing:bow_wood',
 	recipe = {
-		{'farming:string', 'default:wood', ''},
-		{'farming:string', '', 'default:wood'},
-		{'farming:string', 'default:wood', ''},
+		{'throwing:string', 'default:wood', ''},
+		{'throwing:string', '', 'default:wood'},
+		{'throwing:string', 'default:wood', ''},
 	}
 })
 
@@ -69,9 +69,9 @@ minetest.register_tool("throwing:bow_stone", {
 minetest.register_craft({
 	output = 'throwing:bow_stone',
 	recipe = {
-		{'farming:string', 'default:cobble', ''},
-		{'farming:string', '', 'default:cobble'},
-		{'farming:string', 'default:cobble', ''},
+		{'throwing:string', 'default:cobble', ''},
+		{'throwing:string', '', 'default:cobble'},
+		{'throwing:string', 'default:cobble', ''},
 	}
 })
 
@@ -92,9 +92,9 @@ minetest.register_tool("throwing:bow_steel", {
 minetest.register_craft({
 	output = 'throwing:bow_steel',
 	recipe = {
-		{'farming:string', 'default:steel_ingot', ''},
-		{'farming:string', '', 'default:steel_ingot'},
-		{'farming:string', 'default:steel_ingot', ''},
+		{'throwing:string', 'default:steel_ingot', ''},
+		{'throwing:string', '', 'default:steel_ingot'},
+		{'throwing:string', 'default:steel_ingot', ''},
 	}
 })
 

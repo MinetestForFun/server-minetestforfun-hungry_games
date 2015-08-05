@@ -10,11 +10,38 @@
 -- [regis-food] Cigerette (-4)
 -- =====================================
 
+minetest.register_alias("farming:bread", "food:bread")
+minetest.register_alias("farming:bread_slice", "food:bread_slice")
 
-----------------------Load Files-----------------------------
-dofile(minetest.get_modpath("food").."/support.lua")
+-- Bread from the farming mod
+minetest.register_craftitem("food:bread", {
+	description = "Bread",
+	inventory_image = "food_bread.png",
+	on_use = minetest.item_eat(4),
+})
 
---dofile(minetest.get_modpath("food").."/food/meats.lua") Nothing yet
-dofile(minetest.get_modpath("food").."/food/baking.lua")
+minetest.register_craftitem("food:bread_slice", {
+	description = "Bread Slice",
+	inventory_image = "food_bread_slice.png",
+	on_use = minetest.item_eat(2),
+})
 
-dofile(minetest.get_modpath("food").."/drinks/juice.lua")
+minetest.register_craftitem("food:bun", {
+	description = "Bun",
+	inventory_image = "food_bun.png",
+	on_use = minetest.item_eat(4),
+	groups={food=2},
+})
+
+--------------------------Apple Juice--------------------------
+minetest.register_craftitem("food:apple_juice", {
+	description = "Apple Juice",
+	inventory_image = "food_juice_apple.png",
+	on_use = minetest.item_eat(2)
+})
+----------------------cactus juice----------------------------
+minetest.register_craftitem("food:cactus_juice", {
+	description = "Cactuz Juice",
+	inventory_image = "food_juice_cactus.png",
+	on_use = minetest.item_eat(2),
+})

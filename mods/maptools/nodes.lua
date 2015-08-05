@@ -296,7 +296,7 @@ minetest.register_node("maptools:damage_" .. damage_num, {
 	description = S("Damaging Block (%s)"):format(damage_num),
 	range = 12,
 	stack_max = 10000,
-	inventory_image = "default_steel_block.png^farming_cotton_" .. damage_num .. ".png",
+	inventory_image = "default_steel_block.png^maptools_cotton_" .. damage_num .. ".png",
 	drawtype = "airlike",
 	walkable = false,
 	pointable = false,
