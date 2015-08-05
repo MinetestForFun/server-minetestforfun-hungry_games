@@ -14,6 +14,8 @@ end
 
 local timer = 0;
 
+minetest.register_alias("vessels:drinking_glass", "survival_thirst:drinking_glass")
+
 minetest.register_node("survival_thirst:drinking_glass", {
 	description = "Drinking Glass (empty)",
 	drawtype = "plantlike",
