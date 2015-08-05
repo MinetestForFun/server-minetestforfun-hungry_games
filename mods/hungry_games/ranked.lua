@@ -42,7 +42,6 @@ function ranked.inc(name, key)
 end
 
 
-
 -- inventory_plus ranked menu
 minetest.register_on_player_receive_fields(function(player, formname, fields)
 	if inventory_plus.is_called(fields, "hgranks", player) then
@@ -50,7 +49,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 				default.inventory_background..
 				default.inventory_listcolors..
 				inventory_plus.get_tabheader(player, "hgranks")
-		formspec = formspec .. ranked.get_player_ranks_formspec(player:get_player_name()) .. ranked.get_ranks_formspec()
+		formspec = formspec .. ranked.get_player_ranks_formspec(player:get_player_name()) .. ranked.formspec
 		inventory_plus.set_inventory_formspec(player, formspec)
 	end
 
@@ -97,9 +96,7 @@ end
 -- set top 10 table
 function ranked.set_top_players()
 	local top_ranks = {}
-	print(dump(#ranked.players_ranks["nb_wins"]))
-	if ranked.players_ranks["nb_wins"] ~= nil and #ranked.players_ranks["nb_wins"] > 0 then
-	print(dump(ranked.players_ranks["nb_wins"]))
+	if ranked.players_ranks["nb_wins"] ~= nil then
 		local i = 1
 		-- this uses an custom sorting function ordering by score descending
 		for k,v in ranked.spairs(ranked.players_ranks["nb_wins"], function(t,a,b) return t[b] < t[a] end) do
@@ -121,9 +118,8 @@ function ranked.set_ranked_formspec()
 	table.insert(formspec, "label[4.1,0.5;Games]") --nbgames
 	table.insert(formspec, "label[5.3,0.5;Wins]") --nbwins
 	table.insert(formspec, "label[6.4,0.5;Lost]") --nblost
-	table.insert(formspec, "label[7.5,0.5;Quit]") --nbquit	
-
-	if ranked.top_ranks ~= nil and #ranked.top_ranks > 0 then
+	table.insert(formspec, "label[7.5,0.5;Quit]") --nbquit
+	if ranked.top_ranks ~= nil then
 		local Y = 2
 		for i ,name in pairs(ranked.top_ranks) do
 			local info = ranked.get_players_info(name)
@@ -135,10 +131,7 @@ function ranked.set_ranked_formspec()
 			table.insert(formspec, "label[7.5,"..Y..";"..tostring(info["nb_quit"]).."]") -- nbquit
 			Y = Y + 0.6
 		end
-	else
-		table.insert(formspec, "label[3.5,2.5;rankings empty]")
 	end
-	--table.insert(formspec, "button_exit[3.5,9.5;1.2,1;close;".."Close".."]")
 	return table.concat(formspec)
 end
 
@@ -148,13 +141,6 @@ function ranked.update_formspec()
 	ranked.formspec = ranked.set_ranked_formspec()
 end
 
--- return top 10 formspec
-function ranked.get_ranks_formspec()
-	if ranked.formspec == "" then
-		ranked.update_formspec()
-	end
-	return ranked.formspec
-end
 
 -- get player ranks formspec
 function ranked.get_player_ranks_formspec(name)
