@@ -15,7 +15,7 @@ minetest.register_globalstep(function(dtime)
 	timer = 0
 	for _,player in ipairs(minetest.get_connected_players()) do
 		local pname = player:get_player_name()
-		if minetest.get_player_privs(pname).interact then
+		if minetest.get_player_privs(pname).interact and player:get_hp() > 0 then
 			local pos = player:getpos()
 			pos.y = pos.y+0.5
 			local inv = player:get_inventory()
