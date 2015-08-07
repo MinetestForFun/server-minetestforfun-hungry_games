@@ -20,9 +20,6 @@ hotbar_size = minetest.setting_get("hotbar_size") or 16
 -- Update appearance when the player joins
 minetest.register_on_joinplayer(function(player)
 	player:hud_set_hotbar_itemcount(hotbar_size)
-	player:hud_set_hotbar_image("gui_hotbar.png")
-	player:hud_set_hotbar_selected_image("gui_hotbar_selected.png")
-	
 end)
 
 -- Load files
