@@ -34,19 +34,15 @@ local function tick()
 	-- Warn every days
 	if heure == "4" then
 		if minute == "00" then
-		--	minetest.chat_send_all("Rappel : Redémarrage journalier du serveur dans 30 minutes. (Dure 30 minutes)")
 			minetest.chat_send_all("Reminder : Daily reboot of the server in 30 minutes. (Lasts 30 minutes)")
 			sound_play_all("shutdown_shutdown")
 		elseif minute == "15" then
-		--	minetest.chat_send_all("Rappel : Redémarrage journalier du serveur dans 15 minutes. (Dure 30 minutes)")
 			minetest.chat_send_all("Reminder : Daily reboot of the server in 15 minutes. (Lasts 30 minutes)")
 			sound_play_all("shutdown_shutdown")
 		elseif minute == "25" then
-		--	minetest.chat_send_all("Rappel : Redémarrage journalier du serveur dans 5 minutes - Pensez à vous deconnecter !")
 			minetest.chat_send_all("Reminder : Daily reboot of the server in 5 minutes - Think about logout!")
 			sound_play_all("shutdown_shutdown")
 		elseif minute == "29" then
-		--	minetest.chat_send_all("=== ARRET DU SERVEUR - DE NOUVEAU EN LIGNE DANS 30 MIN ===")
 			minetest.chat_send_all("=== SERVER SHUTTING DOWN - ONLINE AGAIN IN 30 MIN ===")
 			sound_play_all("shutdown_shutdown")
 	--		minetest.request_shutdown()
