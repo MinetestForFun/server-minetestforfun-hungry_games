@@ -33,7 +33,6 @@ Coal Stone Bricks = Briques en pierre de charbon
 Iron Stone Bricks = Briques en pierre de fer
 Cactus Checker = Damier en cactus
 Cactus Brick = Briques de cactus
-Sweeper = Balai
 Jungle Stick = Bâton en bois de jungle
 Horizontal Tree = Tronc d'arbre horizontal
 Horizontal Jungle Tree = Tronc d'arbre de jungle horizontal

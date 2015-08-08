@@ -112,9 +112,10 @@ random_chests.setrefill("database", 5)
 --been spawned then don't add any more of those group types to the chest.
 --items
 chest_item('default:apple', 4, 5)
-chest_item('default:axe_wood', 10, 1, "axe")
-chest_item('default:axe_stone', 15, 1, "axe")
-chest_item('default:axe_steel', 20, 1, "axe")
+chest_item('default:sword_wood', 10, 1, "sword")
+chest_item('default:sword_stone', 15, 1, "sword")
+chest_item('default:sword_steel', 20, 1, "sword")
+chest_item('default:sword_diamond', 40, 1, "sword")
 chest_item('throwing:arrow', 4, 15)
 chest_item('throwing:arrow_fire', 12, 6)
 chest_item('throwing:bow_wood', 5, 1, "bow")

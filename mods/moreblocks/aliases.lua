@@ -6,7 +6,6 @@ Licensed under the zlib license. See LICENSE.md for more information.
 --]]
 
 -- More Blocks aliases:
-minetest.register_alias("sweeper", "moreblocks:sweeper")
 minetest.register_alias("circular_saw", "moreblocks:circular_saw")
 minetest.register_alias("jungle_stick", "moreblocks:jungle_stick")
 

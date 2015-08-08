@@ -34,7 +34,6 @@ Coal Stone Bricks = Kohlesteinziegel
 Iron Stone Bricks = Eisensteinziegel
 Cactus Checker = Karierter Kaktus
 Cactus Brick = Kaktusziegel
-Sweeper = Besen
 Jungle Stick = Tropenholzstock
 Rope = Seil
 All-faces Tree = Baumscheibenstamm
