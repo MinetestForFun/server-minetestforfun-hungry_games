@@ -146,39 +146,6 @@ minetest.register_abm({
 
 
 
---Grow Pine Saplings
-minetest.register_abm({
-	nodenames = {"snow:sapling_pine"},
-	interval = 10,
-	chance = 50,
-	action = function(pos, node)
-
--- Check if there is enough vertical-space for the sapling to grow without
--- hitting anything else.  ~ LazyJ, 2014_04_10
-
-		-- 'If' there is air in each of the 8 nodes dirctly above the sapling,... ~LazyJ
-		for i = 1,8 do
-			if minetest.get_node({x=pos.x, y=pos.y+i, z=pos.z}).name ~= "air" then
-				return
-			end
-		end
-		-- 'then' let the sapling grow into a tree. ~ LazyJ
-
-		snow.make_pine(pos,false)
-		-- This finds the sapling under the grown tree. ~ LazyJ
-		if minetest.get_node(pos).name == "snow:sapling_pine" then
-			   -- This switches the sapling to a tree trunk. ~ LazyJ
-			   minetest.set_node(pos, {name="default:pinetree"})
-			   -- This is more for testing but it may be useful info to some admins when
-			   -- grepping the server logs too. ~ LazyJ
-			   minetest.log("action", "A pine sapling grows into a tree at "..minetest.pos_to_string(pos))
-		end
-	end
-})
-
-
-
-
 --Grow Christmas Tree Saplings
 minetest.register_abm({
 	nodenames = {"snow:xmas_tree"},
