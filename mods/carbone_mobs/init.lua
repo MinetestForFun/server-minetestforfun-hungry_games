@@ -211,24 +211,6 @@ minetest.register_craftitem("carbone_mobs:sheep", {
 	end,
 })
 
-minetest.register_craftitem("carbone_mobs:meat_raw", {
-	description = "Raw Meat",
-	inventory_image = "mobs_meat_raw.png",
-})
-
-minetest.register_craftitem("carbone_mobs:meat", {
-	description = "Meat",
-	inventory_image = "mobs_meat.png",
-	on_use = minetest.item_eat(6),
-})
-
-minetest.register_craft({
-	type = "cooking",
-	output = "carbone_mobs:meat",
-	recipe = "carbone_mobs:meat_raw",
-	cooktime = 25,
-})
-
 carbone_mobs:register_mob("carbone_mobs:rat", {
 	type = "animal",
 	hp_max = 1,
@@ -267,26 +249,6 @@ minetest.register_craftitem("carbone_mobs:rat", {
 		end
 		return itemstack
 	end,
-})
-
-minetest.register_craftitem("carbone_mobs:rat_cooked", {
-	description = "Cooked Rat",
-	inventory_image = "mobs_cooked_rat.png",
-	on_use = minetest.item_eat(3),
-})
-
-minetest.register_craft({
-	type = "cooking",
-	output = "carbone_mobs:rat_cooked",
-	recipe = "carbone_mobs:rat",
-	cooktime = 15,
-})
-
-minetest.register_craft({
-	type = "cooking",
-	output = "default:scorched_stuff",
-	recipe = "carbone_mobs:rat_cooked",
-	cooktime = 10,
 })
 
 carbone_mobs:register_mob("carbone_mobs:oerkki", {
