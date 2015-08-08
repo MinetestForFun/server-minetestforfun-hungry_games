@@ -13,11 +13,6 @@ minetest.register_node("snow:needles",{
 		max_items = 1,
 		items = {
 			{
-				-- player will get sapling with 1/20 chance
-				items = {'snow:sapling_pine'},
-				rarity = 20,
-			},
-			{
 				-- player will get leaves only if he get no saplings,
 				-- this is because max_items is 1
 				items = {'snow:needles'},
@@ -47,11 +42,6 @@ if snow.christmas_content then
 					-- player will get xmas tree with 1/120 chance
 					items = {'snow:xmas_tree'},
 					rarity = 120,
-				},
-				{
-					-- player will get sapling with 1/20 chance
-					items = {'snow:sapling_pine'},
-					rarity = 20,
 				},
 				{
 					-- player will get leaves only if he get no saplings,
@@ -134,11 +124,6 @@ minetest.register_node("snow:needles_decorated", {
 				rarity = 120,
 			},
 			{
-				-- player will get sapling with 1/20 chance
-				items = {'snow:sapling_pine'},
-				rarity = 20,
-			},
-			{
 				-- player will get leaves only if he get no saplings,
 				-- this is because max_items is 1
 				items = {'snow:needles_decorated'},
@@ -165,22 +150,6 @@ minetest.register_node("snow:xmas_tree", {
 	sounds = default.node_sound_defaults(),
 })
 
-
-
--- Pine Sapling
-minetest.register_node("snow:sapling_pine", {
-	description = "Pine Sapling",
-	drawtype = "plantlike",
-	visual_scale = 1.0,
-	tiles = {"snow_sapling_pine.png"},
-	inventory_image = "snow_sapling_pine.png",
-	wield_image = "snow_sapling_pine.png",
-	paramtype = "light",
-	walkable = false,
-	groups = {snappy=2,dig_immediate=3},
-	sounds = default.node_sound_defaults(),
-
-})
 
 
 
