@@ -21,13 +21,6 @@ minetest.register_craft({
 
 
 
-minetest.register_craft({
-	type = "fuel",
-	recipe = "snow:sapling_pine",
-	burntime = 10,
-})
-
-
 
 minetest.register_craft({
 	type = "fuel",
