@@ -51,6 +51,14 @@ minetest.register_craft({
 		{'throwing:string', 'default:wood', ''},
 	}
 })
+minetest.register_craft({
+	output = 'throwing:bow_wood',
+	recipe = {
+		{'', 'default:wood', 'throwing:string'},
+		{'default:wood', '', 'throwing:string'},
+		{'', 'default:wood', 'throwing:string'},
+	}
+})
 
 minetest.register_tool("throwing:bow_stone", {
 	description = "Stone Bow",
@@ -72,6 +80,14 @@ minetest.register_craft({
 		{'throwing:string', 'hungry_games:stones', ''},
 		{'throwing:string', '', 'hungry_games:stones'},
 		{'throwing:string', 'hungry_games:stones', ''},
+	}
+})
+minetest.register_craft({
+	output = 'throwing:bow_stone',
+	recipe = {
+		{'', 'hungry_games:stones', 'throwing:string'},
+		{'hungry_games:stones', '', 'throwing:string'},
+		{'', 'hungry_games:stones', 'throwing:string'},
 	}
 })
 
@@ -97,12 +113,20 @@ minetest.register_craft({
 		{'throwing:string', 'default:steel_ingot', ''},
 	}
 })
+minetest.register_craft({
+	output = 'throwing:bow_steel',
+	recipe = {
+		{'', 'default:steel_ingot', 'throwing:string'},
+		{'default:steel_ingot', '', 'throwing:string'},
+		{'', 'default:steel_ingot', 'throwing:string'},
+	}
+})
 
 dofile(minetest.get_modpath("throwing").."/arrow.lua")
 dofile(minetest.get_modpath("throwing").."/fire_arrow.lua")
-dofile(minetest.get_modpath("throwing").."/teleport_arrow.lua")
-dofile(minetest.get_modpath("throwing").."/dig_arrow.lua")
-dofile(minetest.get_modpath("throwing").."/build_arrow.lua")
+--dofile(minetest.get_modpath("throwing").."/teleport_arrow.lua")
+--dofile(minetest.get_modpath("throwing").."/dig_arrow.lua")
+--dofile(minetest.get_modpath("throwing").."/build_arrow.lua")
 -- Craft exported from other mods (like farming mod)
 dofile(minetest.get_modpath("throwing").."/crafts.lua")
 
