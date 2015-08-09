@@ -69,9 +69,9 @@ minetest.register_tool("throwing:bow_stone", {
 minetest.register_craft({
 	output = 'throwing:bow_stone',
 	recipe = {
-		{'throwing:string', 'default:cobble', ''},
-		{'throwing:string', '', 'default:cobble'},
-		{'throwing:string', 'default:cobble', ''},
+		{'throwing:string', 'hungry_games:stones', ''},
+		{'throwing:string', '', 'hungry_games:stones'},
+		{'throwing:string', 'hungry_games:stones', ''},
 	}
 })
 
