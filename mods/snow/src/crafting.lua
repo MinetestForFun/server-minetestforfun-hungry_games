@@ -92,4 +92,3 @@ local recycle_snowmod_slabs = {
 	"snow_brick",
 	"snow_cobble",
 }
-
