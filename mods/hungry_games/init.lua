@@ -4,10 +4,14 @@
 	Feilds Marked with [SAFE] are safe to edit if you already have worlds generated.
 ]]--
 
+--load ranked
 ranked = {}
 dofile(minetest.get_modpath("hungry_games").."/ranked.lua")
-dofile(minetest.get_modpath("hungry_games").."/engine.lua")
+--load top wall
+--top = {}
+--dofile(minetest.get_modpath("hungry_games").."/top.lua")
 
+dofile(minetest.get_modpath("hungry_games").."/engine.lua")
 
 -----------------------------------
 --------Arena configuration--------
