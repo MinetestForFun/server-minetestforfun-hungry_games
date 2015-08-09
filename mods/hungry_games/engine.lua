@@ -114,7 +114,7 @@ local drop_player_items = function(playerName, clear) --If clear != nil, don't d
 					if math.random(1,2) == 1 then
 						z = -z
 					end
-					obj:setvelocity({x=1/x, y=obj:getvelocity().y, z=1/z})
+					obj:setvelocity({x=2/x, y=obj:getvelocity().y, z=2/z}) --MFF (09/08/2015)
 				end
 			end
 		end
@@ -130,8 +130,8 @@ local drop_player_items = function(playerName, clear) --If clear != nil, don't d
 	for i,stackName in ipairs(armorTypes) do
 		if not clear then
 			local stack = inv:get_stack("armor_" .. stackName, 1)
-			local x = math.random(0, 6)/3
-			local z = math.random(0, 6)/3
+			local x = math.random(0, 6)/2 --MFF (09/08/2015)
+			local z = math.random(0, 6)/2 --MFF (09/08/2015)
 			pos.x = pos.x + x
 			pos.z = pos.z + z
 			minetest.add_item(pos, stack)
