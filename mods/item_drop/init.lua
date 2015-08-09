@@ -7,12 +7,7 @@ item_entity.on_activate = function(self, staticdata, dtime_s)
 	timer = -1
 end
 
-minetest.register_globalstep(function(dtime)
-	timer = timer+dtime
-	if timer < 0.1 then
-		return
-	end
-	timer = 0
+local function tick()
 	for _,player in ipairs(minetest.get_connected_players()) do
 		local pname = player:get_player_name()
 		if minetest.get_player_privs(pname).interact and player:get_hp() > 0 then
@@ -41,9 +36,11 @@ minetest.register_globalstep(function(dtime)
 			end
 		end
 	end
-end)
+	minetest.after(0.25, tick)
+end
 
 
 if minetest.setting_get("log_mods") then
 	minetest.log("action", "item_drop loaded")
 end
+tick()
