@@ -9,29 +9,6 @@ The Xmas tree needles are registred and defined a farther down in this nodes.lua
 
 --]]
 
-if snow.christmas_content then
-	--Christmas trees
-
-	minetest.override_item("snow:needles", {
-		drop = {
-			max_items = 1,
-			items = {
-				{
-					-- player will get xmas tree with 1/120 chance
-					items = {'snow:xmas_tree'},
-					rarity = 120,
-				},
-				{
-					-- player will get leaves only if he get no saplings,
-					-- this is because max_items is 1
-					items = {'snow:needles'},
-				}
-			}
-		}
-	})
-end
-
-
 	--Christmas easter egg
 	minetest.register_on_mapgen_init( function()
 		if rawget(_G, "skins") then
