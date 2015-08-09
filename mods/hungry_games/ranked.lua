@@ -28,7 +28,7 @@ function ranked.save_players_ranks()
 		input:write(minetest.serialize(ranked.players_ranks))
 		input:close()
 	else
-		minetest.log("error", "open(" .. players_ranks_file .. ", 'w') failed: " .. err)
+		minetest.log("error", "open(" .. ranked.players_ranking_file .. ", 'w') failed: " .. err)
 	end
 end
 
