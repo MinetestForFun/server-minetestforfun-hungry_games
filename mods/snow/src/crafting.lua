@@ -13,31 +13,6 @@ The crafting recipe for the sled is in the sled.lua file.
 
 -- 1. Fuel
 
-minetest.register_craft({
-	type = "fuel",
-	recipe = "snow:needles",
-	burntime = 1,
-})
-
-
-
-
-minetest.register_craft({
-	type = "fuel",
-	recipe = "snow:needles_decorated",
-	burntime = 1,
-})
-
-
-
-minetest.register_craft({
-	type = "fuel",
-	recipe = "snow:xmas_tree",
-	burntime = 10,
-})
-
-
-
 -- 2. Cooking
 
 --[[
