@@ -13,7 +13,7 @@ minetest.register_tool("maptools:pick_admin", {
 	description = S("Admin Pickaxe"),
 	range = 12,
 	inventory_image = "maptools_adminpick.png",
-	groups = {not_in_creative_inventory = maptools.creative},
+	--groups = {not_in_creative_inventory = maptools.creative},
 	tool_capabilities = {
 		full_punch_interval = 0.1,
 		max_drop_level = 3,
@@ -34,7 +34,7 @@ minetest.register_tool("maptools:pick_admin_with_drops", {
 	description = S("Admin Pickaxe with Drops"),
 	range = 12,
 	inventory_image = "maptools_adminpick_with_drops.png",
-	groups = {not_in_creative_inventory = maptools.creative},
+	--groups = {not_in_creative_inventory = maptools.creative},
 	tool_capabilities = {
 		full_punch_interval = 0.35,
 		max_drop_level = 3,
