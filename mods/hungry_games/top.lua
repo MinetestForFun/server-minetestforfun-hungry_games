@@ -2,17 +2,15 @@
 -- ### top playername
 dofile(minetest.get_modpath("hungry_games").."/letters.lua")
 
-top.position_file = minetest.get_worldpath() .. "/top_position.txt"
-top.position = {}
-top.position.hall = {}
-top.position.podium = {}
-top.name = {}
-top.node0 = "air"
-top.node1 = "default:obsidian"
-top.node2 = "maptools:sand"
+top.config_file = minetest.get_worldpath() .. "/top_config.txt"
+top.name = ""
+top.conf = {}
+top.conf.hall = {}
+top.conf.podium = {}
+
 -- load top table letters
 function top.load_position()
-	local file = io.open(top.position_file, "r")
+	local file = io.open(top.config_file, "r")
 	if file then
 		local t = minetest.deserialize(file:read("*all"))
 		file:close()
@@ -22,19 +20,53 @@ function top.load_position()
 	end
 	return {}
 end
-top.position = top.load_position()
-
+top.conf = top.load_position()
 -- save top position hall, podium
 function top.save_top_pos()
-	local input, err = io.open(top.position_file, "w")
+	local input, err = io.open(top.config_file, "w")
 	if input then
-		input:write(minetest.serialize(top.position))
+		input:write(minetest.serialize(top.conf))
 		input:close()
 	else
-		minetest.log("error", "open(" .. top.position_file .. ", 'w') failed: " .. err)
+		minetest.log("error", "open(" .. top.config_file .. ", 'w') failed: " .. err)
 	end
 end
 
+function top.get_correct_conf(playername)
+	if not top.conf or not top.conf.hall then
+		minetest.log("error", "no top.conf or top.conf.hall table")
+		if playername then
+			minetest.chat_send_player(playername, "no top.conf or top.conf.hall table")
+		end
+		return false
+	end
+	if not top.conf.hall["pos"]["x"] or not top.conf.hall["pos"]["y"] or not top.conf.hall["pos"]["z"] then
+		minetest.log("error", 'no top.conf.hall["pos"] (x or y or z) table')
+		if playername then
+			minetest.chat_send_player(playername, 'no top.conf.hall["pos"] (x or y or z) table')
+		end
+		return false
+	end
+
+	if not top.conf["node0"] or not top.conf["node1"] or not top.conf["node2"] then
+		minetest.log("error", 'no top.conf (node0 or node1 or node2) table')
+		if playername then
+			minetest.chat_send_player(playername, 'no top.conf (node0 or node1 or node2) table')
+		end
+		return false
+	end
+
+	local dir = top.conf.hall["dir"]
+	if not dir or (dir ~= "N" and dir ~= "S" and dir ~= "E" and dir ~= "W") then
+		minetest.log("error", 'no top.conf.hall["dir"] table')
+		if playername then
+			minetest.chat_send_player(playername, 'no top.conf.hall["dir"] table')
+		end
+		return false
+	end
+
+	return true
+end
 
 function top.get_pos(pos, dir, i)
 	local pos2 = {x=pos.x, y=pos.y, z=pos.z}
@@ -44,9 +76,9 @@ function top.get_pos(pos, dir, i)
 	elseif dir == "S" then
 		pos2.x=pos2.x-i
 	elseif dir == "E" then
-		pos2.z=pos2.z+i
-	elseif dir == "W" then
 		pos2.z=pos2.z-i
+	elseif dir == "W" then
+		pos2.z=pos2.z+i
 	end
 	return pos2
 end
@@ -54,39 +86,48 @@ end
 function top.set_letter(letter, lpos, dir)
 	for _, p in pairs(letter) do
 		local npos = top.get_pos(lpos, dir, p.x)
-		minetest.set_node({x=npos.x, y=npos.y+p.y , z=npos.z }, {name = top[p.node]})
+		minetest.set_node({x=npos.x, y=npos.y+p.y , z=npos.z }, {name = top.conf[p.node]})
 	end
 end
 
-minetest.register_chatcommand("top_go", {
+minetest.register_chatcommand("top_update", {
 	description = "",
 	privs = {server=true},
 	func = function(name, param)
-	top.update_name()
+		top.update_name(true)
 	end,
 })
 
-function top.update_name()
-	if not ranked.top_ranks[1] or top.name == ranked.top_ranks[1] then
+minetest.register_chatcommand("top_verif", {
+	description = "",
+	privs = {server=true},
+	func = function(name, param)
+		if top.get_correct_conf(name) then
+			minetest.chat_send_player(name, "top conf correct.")
+		end
+	end,
+})
+function top.update_name(force)
+	if not top.get_correct_conf() then return end
+	if not ranked.top_ranks[1] or (top.name == ranked.top_ranks[1] and not force) then
 		return
 	end
-	local playername = ranked.top_ranks[1]:upper()
+	top.name = ranked.top_ranks[1]
+	local playername = top.name:upper()
 	-- reset podium
-	local pos_m = top.position.hall["pos"]
-	local dir = top.position.hall["dir"]
+	local pos_m = top.conf.hall["pos"]
+	local dir = top.conf.hall["dir"]
 	local pos_deb = top.get_pos(pos_m, dir, -70)
-	for p=1,140 do
+	for p=1,150 do
 		local pos2 = top.get_pos(pos_deb, dir, p)
-		for j=1, 10 do
-			--minetest.set_node({x=pos2.x, y=pos2.y+j, z=pos2.z}  , {name="default:cobble"})
+		for j=0, 9 do
 			minetest.set_node({x=pos2.x, y=pos2.y+j, z=pos2.z}, {name="air"})
 		end
 	end
-	
 	local nb = playername:len()
 	local m = math.ceil(nb/2)
 	for i=1,nb do
-	local d_pos = top.get_pos(pos_m, dir, -(m-i)*8)
+	local d_pos = top.get_pos(pos_m, dir, -((m-i)*8)-3)
 		local l = playername:sub(i, i):upper()
 		local letter
 		if top.letters[l] ~= nil then
@@ -100,15 +141,42 @@ function top.update_name()
 end
 
 
-minetest.register_chatcommand("top_set", {
-	description = "set podium position (20 letters max).",
+minetest.register_chatcommand("top_node", {
+	description = "set nodes (support|letter center|letter) <0|1|2> <nodename>.",
 	privs = {server=true},
 	func = function(name, param)
 		if not param then
-			minetest.chat_send_player(name, "invalid param, /top_set x y z dir")
+			minetest.chat_send_player(name, "invalid param, /top_node  <0|1|2> <nodename>")
 			return
 		end
-		 print("param:"..param)
+		local param_num, param_node = param:match("^(%S+)%s(%S+)$")
+		if param_num == nil or param_node == nil then
+			minetest.chat_send_player(name, "invalid param, /top_node <0|1|2> <nodename>")
+		end
+		if param_num == nil or (param_num ~= "0" and param_num ~= "1" and param_num ~= "2") then
+			minetest.chat_send_player(name, "invalid param node num")
+			return
+		end
+		if param_node == nil or not minetest.registered_nodes[param_node] then
+			minetest.chat_send_player(name, "invalid param node")
+			return
+		end
+
+		top.conf["node"..param_num] = param_node
+		top.save_top_pos()
+	end,
+})
+
+
+
+minetest.register_chatcommand("top_set", {
+	description = "set wall middle position x y z dir<N,S,E,W>.",
+	privs = {server=true},
+	func = function(name, param)
+		if not param then
+			minetest.chat_send_player(name, "invalid param, /top_set x y z dir<N,S,E,W>")
+			return
+		end
 		local param_x, param_y , param_z, param_d = param:match("^(%S+)%s(%S+)%s(%S+)%s(%S+)$")
 		if param_x == nil or param_y == nil or param_z == nil or param_d == nil then
 			minetest.chat_send_player(name, "invalid param, /top_set x y z")
@@ -128,15 +196,16 @@ minetest.register_chatcommand("top_set", {
 			minetest.chat_send_player(name, "invalid param z")
 			return
 		end
-		
+
 		if not param_d or (param_d ~= "N" and param_d ~= "S" and param_d ~= "E" and param_d ~= "W") then
-			print("param:"..param_d)
 			minetest.chat_send_player(name, "invalid param dir")
 			return
-		end		
-		top.position.hall = {}
-		top.position.hall["pos"] = {["x"]=x,["y"]=y,["z"]=z}
-		top.position.hall["dir"] = param_d
+		end
+		if top.conf.hall == nil then
+			top.conf.hall = {}
+		end
+		top.conf.hall["pos"] = {["x"]=x,["y"]=y,["z"]=z}
+		top.conf.hall["dir"] = param_d
 		top.save_top_pos()
 	end,
 })

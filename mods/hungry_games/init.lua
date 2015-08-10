@@ -7,10 +7,6 @@
 --load ranked
 ranked = {}
 dofile(minetest.get_modpath("hungry_games").."/ranked.lua")
---load top wall
---top = {}
---dofile(minetest.get_modpath("hungry_games").."/top.lua")
-
 dofile(minetest.get_modpath("hungry_games").."/engine.lua")
 
 -----------------------------------

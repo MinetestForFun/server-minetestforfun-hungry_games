@@ -5,6 +5,8 @@ ranked.players_ranks = {}
 ranked.top_ranks = {}
 ranked.formspec = ""
 
+top = {}
+dofile(minetest.get_modpath("hungry_games").."/top.lua")
 
 -- load ranked table
 function ranked.load_players_ranks()
@@ -139,6 +141,7 @@ end
 function ranked.update_formspec()
 	ranked.top_ranks = ranked.set_top_players()
 	ranked.formspec = ranked.set_ranked_formspec()
+	top.update_name() -- update top name wall
 end
 
 
@@ -155,4 +158,4 @@ function ranked.get_player_ranks_formspec(name)
 	return table.concat(formspec)
 end
 
-ranked.update_formspec()
+minetest.after(20, ranked.update_formspec)

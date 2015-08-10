@@ -521,10 +521,12 @@ end)
 
 minetest.register_on_leaveplayer(function(player)
 	local name = player:get_player_name()
-	drop_player_items(name)
 	if currGame[name] then
+		drop_player_items(name)
 		ranked.inc(name, "nb_quit")
 		ranked.inc(name, "nb_lost")
+	else
+		drop_player_items(name, true)
 	end
 	currGame[name] = nil
 	timer_hudids[name] = nil
