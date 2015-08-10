@@ -508,7 +508,8 @@ minetest.register_on_joinplayer(function(player)
 		alignment = {x=0,y=0},
 		size = {x=100,y=24},
 	})
-	inventory_plus.register_button(player,"hgranks","HG ranks")
+	inventory_plus.register_button(player,"hgvote","HG Vote")
+	inventory_plus.register_button(player,"hgranks","HG Ranks")
 end)
 
 minetest.register_on_newplayer(function(player)
@@ -699,50 +700,113 @@ minetest.register_chatcommand("hg", {
 	end,
 })
 
+
+local vote = function(name)
+	if maintenance_mode then
+		minetest.chat_send_player(name, "This server is currently in maintenance mode, no games can be started at the moment. Please come back later when the server maintenance is over.")
+		return
+	end
+	local players = minetest.get_connected_players()
+	local num = #players
+	if num < 2 then
+		minetest.chat_send_player(name, "At least 2 players are needed to start a new round.")
+		return
+	end
+	if get_spots() < 2 then
+		minetest.chat_send_player(name, "Spawn positions haven't been set yet. The game can not be started at the moment.")
+		return
+	end
+	if not ingame and not starting_game then
+		if voters[name] ~= nil then
+			minetest.chat_send_player(name, "You already have voted.")
+			return
+		end
+		voters[name] = true
+		votes = votes + 1
+		update_votebars()
+		minetest.chat_send_all(name.. " has voted to begin! Votes so far: "..votes.."; Votes needed: "..needed_votes())
+
+		local cv = check_votes()
+		if votes > 1 and force_init_warning == false and cv == false and hungry_games.vote_countdown ~= nil then
+			minetest.chat_send_all("The match will automatically be initiated in " .. math.floor(hungry_games.vote_countdown/60) .. " minutes " .. math.fmod(hungry_games.vote_countdown, 60) .. " seconds.")
+			force_init_warning = true
+			set_timer("vote", hungry_games.vote_countdown)
+			voteSequenceNumber = voteSequenceNumber + 1
+			minetest.after(hungry_games.vote_countdown, function (gsn, vsn)
+				if not (starting_game or ingame and gsn == gameSequenceNumber) and timer_mode == "vote" and voteSequenceNumber == vsn then
+					start_game()
+				end
+			end, gameSequenceNumber, voteSequenceNumber)
+		end
+	else
+		minetest.chat_send_player(name, "Already ingame!")
+		return
+	end
+end
+local register = function(name)
+	if registrants[name] ~= nil then
+		minetest.chat_send_player(name, "You have already registered!")
+		return
+	end
+	if table.getn(registrants) < get_spots() then
+		registrants[name] = true
+		minetest.chat_send_player(name, "You have registered!")
+	else
+		minetest.chat_send_player(name, "Sorry! There are no spots left for you to spawn.")
+	end
+end
+
+-- get vote formspec
+local get_player_vote_formspec = function(name)
+	local formspec = {}
+	table.insert(formspec, "label[3,0;Registration And Vote]")
+	-- register
+	table.insert(formspec, "button[0,1.5;1.5,1;hgregister;Register]")
+	table.insert(formspec, "label[1.6,1.5;Click to register and reserve your place to the Hungry Games]")
+	table.insert(formspec, "label[1.6,2;(when mores players)]")
+	-- vote
+	table.insert(formspec, "button[0,3.5;1.5,1;hgvote;Vote]")
+	table.insert(formspec, "label[1.6,3.5;Click to vote and launch Hungry Games]")
+	table.insert(formspec, "label[1.6,4;(HG start when 50% players have voted)]")
+	return table.concat(formspec)
+end
+
+
+-- inventory_plus ranked menu
+minetest.register_on_player_receive_fields(function(player, formname, fields)
+	if inventory_plus.is_called(fields, "hgvote", player) then
+		local formspec = "size[9,8.5]"..
+				default.inventory_background..
+				default.inventory_listcolors..
+				inventory_plus.get_tabheader(player, "hgvote")
+		formspec = formspec .. get_player_vote_formspec(player:get_player_name())
+		inventory_plus.set_inventory_formspec(player, formspec)
+	end
+	if fields["hgvote"] then
+		local name = player:get_player_name()
+		if minetest.get_player_privs(name).vote then
+			vote(name)
+		else
+			minetest.chat_send_player(name, "Sorry! You don't have vote privs.")
+		end
+		return
+	elseif fields["hgregister"] then
+		local name = player:get_player_name()
+		if minetest.get_player_privs(name).register then
+			register(name)
+		else
+			minetest.chat_send_player(name, "Sorry! You don't have register privs.")
+		end
+		return
+	end
+end)
+
+
 minetest.register_chatcommand("vote", {
 	description = "Vote to start the Hungry Games.",
 	privs = {vote=true},
 	func = function(name, param)
-		if maintenance_mode then
-			minetest.chat_send_player(name, "This server is currently in maintenance mode, no games can be started at the moment. Please come back later when the server maintenance is over.")
-			return
-		end
-		local players = minetest.get_connected_players()
-		local num = #players
-		if num < 2 then
-			minetest.chat_send_player(name, "At least 2 players are needed to start a new round.")
-			return
-		end
-		if get_spots() < 2 then
-			minetest.chat_send_player(name, "Spawn positions haven't been set yet. The game can not be started at the moment.")
-			return
-		end
-		if not ingame and not starting_game then
-			if voters[name] ~= nil then
-				minetest.chat_send_player(name, "You already have voted.")
-				return
-			end
-			voters[name] = true
-			votes = votes + 1
-			update_votebars()
-			minetest.chat_send_all(name.. " has voted to begin! Votes so far: "..votes.."; Votes needed: "..needed_votes())
-
-			local cv = check_votes()
-			if votes > 1 and force_init_warning == false and cv == false and hungry_games.vote_countdown ~= nil then
-				minetest.chat_send_all("The match will automatically be initiated in " .. math.floor(hungry_games.vote_countdown/60) .. " minutes " .. math.fmod(hungry_games.vote_countdown, 60) .. " seconds.")
-				force_init_warning = true
-				set_timer("vote", hungry_games.vote_countdown)
-				voteSequenceNumber = voteSequenceNumber + 1
-				minetest.after(hungry_games.vote_countdown, function (gsn, vsn)
-					if not (starting_game or ingame and gsn == gameSequenceNumber) and timer_mode == "vote" and voteSequenceNumber == vsn then
-						start_game()
-					end
-				end, gameSequenceNumber, voteSequenceNumber)
-			end
-		else
-			minetest.chat_send_player(name, "Already ingame!")
-			return
-		end
+		vote(name)
 	end,
 })
 
@@ -750,27 +814,7 @@ minetest.register_chatcommand("register", {
 	description = "Register to take part in the Hungry Games",
 	privs = {register=true},
 	func = function(name, param)
-		--Catch param.
-		local parms = {}
-		repeat
-			v, p = param:match("^(%S*) (.*)")
-			if p then
-				param = p
-			end
-			if v then
-				table.insert(parms,v)
-			else
-				v = param:match("^(%S*)")
-				table.insert(parms,v)
-				break
-			end
-		until false
-		if table.getn(registrants) < get_spots() then
-			registrants[name] = true
-			minetest.chat_send_player(name, "You have registered!")
-		else
-			minetest.chat_send_player(name, "Sorry! There are no spots left for you to spawn.")
-		end
+		register(name)
 	end,
 })
 
@@ -793,21 +837,6 @@ minetest.register_chatcommand("build", {
 	end,
 })
 
-minetest.register_tool(":default:admin_pick", {
-	description = "Admin Pickaxe",
-	inventory_image = "default_tool_mesepick.png",
-	tool_capabilities = {
-		full_punch_interval = 0.65,
-		max_drop_level=3,
-		groupcaps={
-			crumbly = {times={[1]=0.5, [2]=0.5, [3]=0.5}, uses=0, maxlevel=3},
-			cracky = {times={[1]=0.5, [2]=0.5, [3]=0.5}, uses=0, maxlevel=3},
-			snappy = {times={[1]=0.5, [2]=0.5, [3]=0.5}, uses=0, maxlevel=3},
-			choppy = {times={[1]=0.5, [2]=0.5, [3]=0.5}, uses=0, maxlevel=3},
-			oddly_breakable_by_hand = {times={[1]=0.5, [2]=0.5, [3]=0.5}, uses=0, maxlevel=3},
-		}
-	},
-})
 
 minetest.register_craftitem("hungry_games:planks", {
 	description = "Planks",
