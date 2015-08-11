@@ -776,11 +776,13 @@ end
 
 -- Remind to vote
 vote_reminder = function()
-	local playerlist = minetest.get_connected_players()
-	if table.getn(playerlist) >= 2 then
-		for index, player in pairs(playerlist) do
-			if not voters[player:get_player_name()] then
-				minetest.chat_send_player(player:get_player_name(), voteReminder)
+	if not ingame then
+		local playerlist = minetest.get_connected_players()
+		if table.getn(playerlist) >= 2 then
+			for index, player in pairs(playerlist) do
+				if not voters[player:get_player_name()] then
+					minetest.chat_send_player(player:get_player_name(), voteReminder)
+				end
 			end
 		end
 	end
