@@ -5,6 +5,9 @@ local force_init_warning = false
 local grace = false
 local countdown = false
 
+local voteReminder = "Remember to vote using a voteblock or /vote to start the Hungry Games!"
+local voteReminderInterval = 20
+
 local registrants = {}
 local voters = {}
 local currGame = {}
@@ -771,6 +774,20 @@ local get_player_vote_formspec = function(name)
 	return table.concat(formspec)
 end
 
+-- Remind to vote
+vote_reminder = function()
+	local playerlist = minetest.get_connected_players()
+	if table.getn(playerlist) >= 2 then
+		for index, player in pairs(playerlist) do
+			if not voters[player:get_player_name()] then
+				minetest.chat_send_player(player:get_player_name(), voteReminder)
+			end
+		end
+	end
+	minetest.after(voteReminderInterval, vote_reminder)
+end
+
+vote_reminder()
 
 -- inventory_plus ranked menu
 minetest.register_on_player_receive_fields(function(player, formname, fields)
