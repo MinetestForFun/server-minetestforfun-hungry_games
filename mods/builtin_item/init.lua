@@ -64,7 +64,7 @@ local function get_nodes(pos)
 end
 
 local function get_flowing_dir(pos)
-	local data = get_nodes(pos)
+	local data = get_nodes(pos) or {}
 	local param2 = minetest.get_node(pos).param2
 	if param2 > 7 then
 		return
