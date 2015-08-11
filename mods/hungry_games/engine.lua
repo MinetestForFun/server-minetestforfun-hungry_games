@@ -849,3 +849,33 @@ minetest.register_craftitem("hungry_games:stones", {
 	inventory_image = "default_cobble.png",
 	groups = {stone=1},
 })
+
+--special block vote
+minetest.register_node("hungry_games:blockvote", {
+	description = "Command Block Vote",
+	inventory_image = "hungry_games_blockvote.png",
+	range = 12,
+	stack_max = 99,
+	drawtype = "glasslike",
+	tiles  = {"hungry_games_blockvote.png", "hungry_games_blockvote.png", "hungry_games_blockvote.png",
+			"hungry_games_blockvote.png", "hungry_games_blockvote.png", "hungry_games_blockvote.png"},
+	drop = "",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	light_source = 13,
+	sunlight_propagates = true,
+	post_effect_color = {a = 128, r= 255, g= 128, b= 255},
+	--post_effect_color = {a=255, r=0, g=0, b=0},
+	groups = {unbreakable = 1},
+	sounds = default.node_sound_wood_defaults(),
+
+	after_place_node = function(pos, placer)
+		local meta = minetest.get_meta(pos)
+		meta:set_string("infotext", "Punch it to vote")
+	end,
+
+	on_punch = function(pos, node, puncher, pointed_thing)
+		if not puncher then return end
+		minetest.after(0.10, vote, puncher:get_player_name())
+	end,
+})
