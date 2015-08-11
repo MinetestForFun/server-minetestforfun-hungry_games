@@ -12,7 +12,7 @@ end
 --Set arena texture
 function glass_arena.set_texture(name)
 	minetest.register_node(":glass_arena:wall",{
-		drawtype = "glasslike",
+		drawtype = "glasslike_framed_optional",
 		tiles = {name},
 		inventory_image = minetest.inventorycube("default_glass.png"),
 		paramtype = "light",
@@ -26,7 +26,7 @@ end
 
 --Node defs
 minetest.register_node("glass_arena:wall",{
-	drawtype = "glasslike",
+	drawtype = "glasslike_framed_optional",
 	tiles = {"default_glass.png"},
 	inventory_image = minetest.inventorycube("default_glass.png"),
 	paramtype = "light",
@@ -37,7 +37,7 @@ minetest.register_node("glass_arena:wall",{
 })
 
 minetest.register_node("glass_arena:wall_middle",{
-	drawtype = "glasslike",
+	drawtype = "glasslike_framed_optional",
 	tiles = {"glass_arena.png"},
 	inventory_image = minetest.inventorycube("default_glass.png"),
 	paramtype = "light",
@@ -48,7 +48,7 @@ minetest.register_node("glass_arena:wall_middle",{
 })
 
 minetest.register_node("glass_arena:wall_end",{
-	drawtype = "glasslike",
+	drawtype = "glasslike_framed_optional",
 	tiles = {"glass_arena.png"},
 	inventory_image = minetest.inventorycube("default_glass.png"),
 	paramtype = "light",

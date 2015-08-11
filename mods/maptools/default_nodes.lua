@@ -116,7 +116,7 @@ minetest.register_node("maptools:glass", {
 	description = S("Unbreakable Glass"),
 	range = 12,
 	stack_max = 10000,
-	drawtype = "glasslike",
+	drawtype = "glasslike_framed_optional",
 	tiles = {"default_glass.png"},
 	paramtype = "light",
 	sunlight_propagates = true,
