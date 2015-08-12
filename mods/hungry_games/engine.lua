@@ -155,7 +155,6 @@ local stop_game = function()
 		   	local privs = minetest.get_player_privs(name)
 			privs.fast = nil
 			privs.fly = nil
-			privs.interact = nil
 			minetest.set_player_privs(name, privs)
 			drop_player_items(name, true)
 			player:set_hp(20)
@@ -272,7 +271,6 @@ local start_game_now = function(input)
 			local privs = minetest.get_player_privs(name)
 			privs.fast = nil
 			privs.fly = nil
-			privs.interact = true
 			minetest.set_player_privs(name, privs)
 			minetest.after(0.1, function(table)
 				local player = table[1]
@@ -460,14 +458,13 @@ minetest.register_on_dieplayer(function(player)
 	check_win()
 
    	local privs = minetest.get_player_privs(playerName)
-	if privs.interact then
+	if privs.interact and ingame then
 		minetest.sound_play("hungry_games_death", {pos = pos})
 	end
-	if privs.interact or privs.fly then
+	if privs.interact or privs.fly and ingame then
    		if privs.interact and (hungry_games.death_mode == "spectate") then
 		   	privs.fast = true
 			privs.fly = true
-			privs.interact = nil
 			minetest.set_player_privs(playerName, privs)
 			minetest.chat_send_player(playerName, "You are now spectating")
 		end
@@ -494,7 +491,6 @@ minetest.register_on_joinplayer(function(player)
 	privs.register = true
 	privs.fast = nil
 	privs.fly = nil
-	privs.interact = nil
 	minetest.set_player_privs(name, privs)
 	minetest.chat_send_player(name, "You are now spectating")
 	spawning.spawn(player, "lobby")
@@ -638,12 +634,11 @@ minetest.register_chatcommand("hg", {
 		elseif parms[1] == "build" then
 			if not ingame then
 				local privs = minetest.get_player_privs(name)
-				privs.interact = true
 				privs.fly = true
 				privs.fast = true
 				minetest.set_player_privs(name, privs)
 
-				minetest.chat_send_player(name, "You now have interact and fly/fast!")
+				minetest.chat_send_player(name, "You now have fly/fast!")
 			else
 				minetest.chat_send_player(name, "You cant build while in a match!")
 				return
