@@ -153,7 +153,7 @@ survival.register_state("hunger", {
     on_update = function ( dtime, player, state )
         local name = player:get_player_name();
         local privs = minetest.get_player_privs(name)
-		if privs.interact then
+		if privs.ingame then
 		    state.count = state.count + dtime;
 		    if (state.flag and (state.count >= HUNGER_TIME)) then
 		        local hp = player:get_hp();

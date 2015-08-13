@@ -45,7 +45,7 @@ hungry_games.grace_period = 75
 
 --Set what happens when a player dies during a match.
 --Possible values are: "spectate" or "lobby"
-hungry_games.death_mode = "lobby"
+hungry_games.death_mode = "spectate"
 
 --Percentage of players that must have voted (/vote) for the match to start (0 is 0%, 0.5 is 50%, 1 is 100%) must be <1 and >0
 hungry_games.vote_percent = 0.5

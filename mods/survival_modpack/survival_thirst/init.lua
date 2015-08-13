@@ -176,7 +176,7 @@ survival.register_state("thirst", {
         if (player:get_hp() > 0) then
        		local name = player:get_player_name();
 		    local privs = minetest.get_player_privs(name)
-	        if privs.interact then
+	        if privs.ingame then
 
 		        state.count = state.count + dtime;
 
