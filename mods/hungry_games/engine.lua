@@ -491,6 +491,7 @@ minetest.register_on_joinplayer(function(player)
 	privs.register = true
 	privs.fast = nil
 	privs.fly = nil
+	privs.interact = true
 	minetest.set_player_privs(name, privs)
 	minetest.chat_send_player(name, "You are now spectating")
 	spawning.spawn(player, "lobby")
