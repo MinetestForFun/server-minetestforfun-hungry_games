@@ -155,6 +155,7 @@ local stop_game = function()
 		   	local privs = minetest.get_player_privs(name)
 			privs.fast = nil
 			privs.fly = nil
+			privs.interact = true
 			minetest.set_player_privs(name, privs)
 			drop_player_items(name, true)
 			player:set_hp(20)
