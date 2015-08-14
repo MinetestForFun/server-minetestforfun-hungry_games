@@ -457,6 +457,7 @@ minetest.register_on_dieplayer(function(player)
 	if ingame and currGame[playerName] and count ~= 1 then
 		minetest.chat_send_all(playerName .. " has died! Players left: " .. tostring(count))
 		ranked.inc(playerName, "nb_lost")
+		survival.player_hide_hudbar(playerName)
 	end
 
 	drop_player_items(playerName)
