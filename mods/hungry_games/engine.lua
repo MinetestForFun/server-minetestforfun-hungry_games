@@ -308,7 +308,7 @@ local start_game_now = function(input)
 		unset_timer()
 	end
 	minetest.setting_set("enable_damage", "true")
-	survival.enable()
+	survival.enable(contestants)
 	votes = 0
 	voters = {}
 	update_votebars()
@@ -518,6 +518,9 @@ minetest.register_on_joinplayer(function(player)
 		alignment = {x=0,y=0},
 		size = {x=100,y=24},
 	})
+	if ingame then
+		minetest.after(1, survival.player_hide_hudbar, name)
+	end
 	inventory_plus.register_button(player,"hgvote","HG Vote")
 	inventory_plus.register_button(player,"hgranks","HG Ranks")
 end)
