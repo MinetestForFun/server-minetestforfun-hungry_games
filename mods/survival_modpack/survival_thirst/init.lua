@@ -110,21 +110,24 @@ local known_drinks = {
 };
 
 local function override_on_use ( def )
-    local on_use = def.on_use;
-    def.on_use = function ( itemstack, user, pointed_thing )
-        local state = survival.get_player_state(user:get_player_name(), "thirst");
-        minetest.sound_play({ name="survival_thirst_drink" }, {
-            pos = user:getpos();
-            max_hear_distance = 16;
-            gain = 1.0;
-        });
-        if (on_use) then
-            return on_use(itemstack, user, pointed_thing);
-        else
-            itemstack:take_item(1);
-            return itemstack;
-        end
-    end
+	local on_use = def.on_use;
+	def.on_use = function ( itemstack, user, pointed_thing )
+	        local state = survival.get_player_state(user:get_player_name(), "thirst");
+	        state.count = 0;
+	        state.thirsty = false;
+	        minetest.sound_play({ name="survival_thirst_drink" }, {
+	            pos = user:getpos();
+	            max_hear_distance = 16;
+	            gain = 1.0;
+	        });
+	        local inv = user:get_inventory();
+	        local stack = ItemStack("survival_thirst:drinking_glass");
+	        if (inv:room_for_item("main", stack)) then
+	            inv:add_item("main", stack);
+	        end
+	        itemstack:take_item(1);
+	        return itemstack -- May cause problems with callbacks (Mg)
+	end
 end
 
 -- Try to override the on_use callback of as many food items as possible.
