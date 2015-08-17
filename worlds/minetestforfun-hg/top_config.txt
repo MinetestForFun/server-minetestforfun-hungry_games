@@ -1,1 +1,1 @@
-return {["hall"] = {["dir"] = "W", ["pos"] = {["y"] = 30020, ["x"] = -49, ["z"] = 0}}, ["node0"] = "air", ["node1"] = "default:steelblock", ["node2"] = "default:obsidian"}
+return {["hall"] = {["dir"] = "W", ["pos"] = {["y"] = 30040, ["x"] = -49, ["z"] = 0}}, ["node0"] = {["p2"] = "air", ["p1"] = "air", ["p3"] = "air"}, ["node1"] = {["p2"] = "default:obsidian", ["p1"] = "default:obsidian", ["p3"] = "default:obsidian"}, ["node2"] = {["p2"] = "default:steelblock", ["p1"] = "default:goldblock", ["p3"] = "default:copperblock"}}

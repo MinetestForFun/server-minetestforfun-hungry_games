@@ -3,7 +3,7 @@
 dofile(minetest.get_modpath("hungry_games").."/letters.lua")
 
 top.config_file = minetest.get_worldpath() .. "/top_config.txt"
-top.name = ""
+top.name = {"","",""}
 top.conf = {}
 top.conf.hall = {}
 top.conf.podium = {}
@@ -40,6 +40,7 @@ function top.get_correct_conf(playername)
 		end
 		return false
 	end
+
 	if not top.conf.hall["pos"]["x"] or not top.conf.hall["pos"]["y"] or not top.conf.hall["pos"]["z"] then
 		minetest.log("error", 'no top.conf.hall["pos"] (x or y or z) table')
 		if playername then
@@ -52,6 +53,30 @@ function top.get_correct_conf(playername)
 		minetest.log("error", 'no top.conf (node0 or node1 or node2) table')
 		if playername then
 			minetest.chat_send_player(playername, 'no top.conf (node0 or node1 or node2) table')
+		end
+		return false
+	end
+
+	if not top.conf["node0"]["p1"] or not top.conf["node1"]["p1"] or not top.conf["node2"]["p1"] then
+		minetest.log("error", 'no top.conf (node0[1] or node1[1] or node2[1]) table')
+		if playername then
+			minetest.chat_send_player(playername, 'no top.conf (node0[p1] or node1[p1] or node2[p1]) table')
+		end
+		return false
+	end
+
+	if not top.conf["node0"]["p2"] or not top.conf["node1"]["p2"] or not top.conf["node2"]["p2"] then
+		minetest.log("error", 'no top.conf (node0[p2] or node1[p2] or node2[p2]) table')
+		if playername then
+			minetest.chat_send_player(playername, 'no top.conf (node0[p2] or node1[p2] or node2[p2]) table')
+		end
+		return false
+	end
+
+	if not top.conf["node0"]["p3"] or not top.conf["node1"]["p3"] or not top.conf["node2"]["p3"] then
+		minetest.log("error", 'no top.conf (node0[p3] or node1[p3] or node2[p3]) table')
+		if playername then
+			minetest.chat_send_player(playername, 'no top.conf (node0[p3] or node1[p3] or node2[p3]) table')
 		end
 		return false
 	end
@@ -83,40 +108,55 @@ function top.get_pos(pos, dir, i)
 	return pos2
 end
 
-function top.set_letter(letter, lpos, dir)
+function top.set_letter(num, letter, lpos, dir)
 	for _, p in pairs(letter) do
 		local npos = top.get_pos(lpos, dir, p.x)
-		minetest.set_node({x=npos.x, y=npos.y+p.y , z=npos.z }, {name = top.conf[p.node]})
+		local nname = top.conf[p.node]["p"..num]
+		if nname ~= "air" then
+			minetest.set_node({x=npos.x, y=npos.y+p.y, z=npos.z }, {name=nname})
+		end
 	end
 end
 
 minetest.register_chatcommand("top_update", {
-	description = "",
+	description = "update top name",
 	privs = {server=true},
 	func = function(name, param)
-		top.update_name(true)
+		if not param then
+			minetest.chat_send_player(name, "invalid param, /top_update <1|2|3>")
+			return
+		end
+		local param_num = param:match("^(%S+)$")
+		if param_num == nil or not tonumber(param_num) or (tonumber(param_num)~= 1 and tonumber(param_num)~= 2 and tonumber(param_num)~= 3) then
+			minetest.chat_send_player(name, "invalid param, /top_update <1|2|3>")
+			return
+		end
+		top.update_name(tonumber(param_num), true)
 	end,
 })
 
 minetest.register_chatcommand("top_verif", {
-	description = "",
+	description = "Verify top configuration",
 	privs = {server=true},
 	func = function(name, param)
 		if top.get_correct_conf(name) then
-			minetest.chat_send_player(name, "top conf correct.")
+			minetest.chat_send_player(name, "top configuration correct.")
 		end
 	end,
 })
-function top.update_name(force)
+
+function top.update_name(num, force)
 	if not top.get_correct_conf() then return end
-	if not ranked.top_ranks[1] or (top.name == ranked.top_ranks[1] and not force) then
+	if not ranked.top_ranks[num] or (top.name[num] == ranked.top_ranks[num] and not force) then
 		return
 	end
-	top.name = ranked.top_ranks[1]
-	local playername = top.name:upper()
+	top.name[num] = ranked.top_ranks[num]
+	local playername = top.name[num]:upper()
 	-- reset podium
-	local pos_m = top.conf.hall["pos"]
+	local pos_m = {x=top.conf.hall["pos"].x, y=top.conf.hall["pos"].y, z=top.conf.hall["pos"].z}
 	local dir = top.conf.hall["dir"]
+	local dec = 13*(num-1)
+	pos_m.y = pos_m.y-dec
 	local pos_deb = top.get_pos(pos_m, dir, -70)
 	for p=1,150 do
 		local pos2 = top.get_pos(pos_deb, dir, p)
@@ -127,59 +167,64 @@ function top.update_name(force)
 	local nb = playername:len()
 	local m = math.ceil(nb/2)
 	for i=1,nb do
-	local d_pos = top.get_pos(pos_m, dir, -((m-i)*8)-3)
-		local l = playername:sub(i, i):upper()
+		local d_pos = top.get_pos(pos_m, dir, -((m-i)*8)-3)
+		local l = playername:sub(i, i)
 		local letter
 		if top.letters[l] ~= nil then
 			letter = top.letters[l]
 		else
 			letter = top.letters["?"]
 		end
-		top.set_letter(letter, d_pos, dir)
+		top.set_letter(num, letter, d_pos, dir)
 	end
-
 end
 
 
 minetest.register_chatcommand("top_node", {
-	description = "set nodes (support|letter center|letter) <0|1|2> <nodename>.",
+	description = "set nodes <player num(1|2|3)> <0|1|2 (support|letter center|letter)> <nodename>.",
 	privs = {server=true},
 	func = function(name, param)
 		if not param then
-			minetest.chat_send_player(name, "invalid param, /top_node  <0|1|2> <nodename>")
+			minetest.chat_send_player(name, "invalid param, /top_node <1|2|3> <0|1|2> <nodename>")
 			return
 		end
-		local param_num, param_node = param:match("^(%S+)%s(%S+)$")
-		if param_num == nil or param_node == nil then
-			minetest.chat_send_player(name, "invalid param, /top_node <0|1|2> <nodename>")
-		end
-		if param_num == nil or (param_num ~= "0" and param_num ~= "1" and param_num ~= "2") then
-			minetest.chat_send_player(name, "invalid param node num")
+		local param_num, param_node_num, param_node = param:match("^(%S+)%s(%S+)%s(%S+)$")
+		if param_num == nil or param_node_num == nil or param_node == nil then
+			minetest.chat_send_player(name, "invalid param, /top_node <player num(1|2|3)> <0|1|2> <nodename>")
 			return
 		end
-		if param_node == nil or not minetest.registered_nodes[param_node] then
-			minetest.chat_send_player(name, "invalid param node")
+		if param_num == nil or (param_num ~= "1" and param_num ~= "2" and param_num ~= "3") then
+			minetest.chat_send_player(name, "invalid param player num: ".. param_num)
 			return
 		end
-
-		top.conf["node"..param_num] = param_node
+		if param_node_num == nil or (param_node_num ~= "0" and param_node_num ~= "1" and param_node_num ~= "2") then
+			minetest.chat_send_player(name, "invalid param node num: "..param_node_num)
+			return
+		end
+		if param_node == nil or (not minetest.registered_nodes[param_node] and param_node ~= "air") then
+			minetest.chat_send_player(name, "invalid param node:"..param_node)
+			return
+		end
+		if not top.conf["node"..param_node_num] or type(top.conf["node"..param_node_num]) ~= "table" then
+			top.conf["node"..param_node_num] = {}
+		end
+		top.conf["node"..param_node_num]["p"..param_num] = param_node
 		top.save_top_pos()
 	end,
 })
 
 
-
 minetest.register_chatcommand("top_set", {
-	description = "set wall middle position x y z dir<N,S,E,W>.",
+	description = "set wall middle position, x y z <dir (N|S|E|W)>.",
 	privs = {server=true},
 	func = function(name, param)
 		if not param then
-			minetest.chat_send_player(name, "invalid param, /top_set x y z dir<N,S,E,W>")
+			minetest.chat_send_player(name, "invalid param, /top_set x y z <dir (N|S|E|W)>")
 			return
 		end
 		local param_x, param_y , param_z, param_d = param:match("^(%S+)%s(%S+)%s(%S+)%s(%S+)$")
 		if param_x == nil or param_y == nil or param_z == nil or param_d == nil then
-			minetest.chat_send_player(name, "invalid param, /top_set x y z")
+			minetest.chat_send_player(name, "invalid param, /top_set x y z <dir (N|S|E|W)>")
 		end
 		local x = tonumber(param_x)
 		if x == nil then
