@@ -775,7 +775,7 @@ local get_player_vote_formspec = function(name)
 	table.insert(formspec, "label[3,0;Registration And Vote]")
 	-- register
 	table.insert(formspec, "button[0,1.5;1.5,1;hgregister;Register]")
-	table.insert(formspec, "label[1.6,1.5;Click to register and reserve your place to the next Hunger Games]")
+	table.insert(formspec, "label[1.6,1.5;Click to register and reserve your place for the next Hunger Games]")
 	table.insert(formspec, "label[1.6,2;(Useful when many in-game players)]")
 	-- vote
 	table.insert(formspec, "button[0,3.5;1.5,1;hgvote;Vote]")
