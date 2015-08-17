@@ -39,7 +39,7 @@ minetest.register_craftitem("food:apple_juice", {
 	inventory_image = "food_juice_apple.png",
 	on_use = minetest.item_eat(2)
 })
-----------------------cactus juice----------------------------
+----------------------Cactus Juice----------------------------
 minetest.register_craftitem("food:cactus_juice", {
 	description = "Cactus Juice",
 	inventory_image = "food_juice_cactus.png",
