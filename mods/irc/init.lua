@@ -20,6 +20,7 @@ ie.package.path =
 		..ie.package.path
 		..";/usr/lib/*/lua/5.1/socket/?.so"
 		..";/usr/lib/?/lua/5.1/socket/*.so"
+		.."/usr/lib/x86_64-linux-gnu/liblua5.1-socket.so.2"
 		.."/usr/lib/x86_64-linux-gnu/lua/5.1/core.so"
 		.."/usr/lib/x86_64-linux-gnu/lua/5.1/mime/core.so"
 		.."/usr/lib/x86_64-linux-gnu/lua/5.1/socket/core.so"
