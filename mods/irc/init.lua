@@ -20,7 +20,7 @@ ie.package.path =
 		..ie.package.path
 		--..";/usr/lib/*/lua/5.1/socket/*.so"
 		--..";/usr/lib/x86_64-linux-gnu/lua/5.1/socket/core.so"
-		..";/usr/lib/x86_64-linux-gnu/lua/5.1/core.so"
+		..";/usr/lib/x86_64-linux-gnu/lua/5.1/core-mffhg.so"
 
 -- The build of Lua that Minetest comes with only looks for libraries under
 -- /usr/local/share and /usr/local/lib but LuaSocket is often installed under
