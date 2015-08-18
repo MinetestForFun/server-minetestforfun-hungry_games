@@ -110,53 +110,73 @@ random_chests.setrefill("database", 5)
 --eg chest_item('default:torch', 4, 6) #has a 1 in 4 chance of spawning up to 6 torches.
 --the last item is a group number/word which means if an item of that group number has already
 --been spawned then don't add any more of those group types to the chest.
---items
+-------------
+--- ITEMS ---
+-------------
+
+--Foods--
+--Hunger
 chest_item('default:apple', 4, 5)
-chest_item('default:sword_wood', 10, 1, "sword")
-chest_item('default:sword_stone', 15, 1, "sword")
-chest_item('default:sword_steel', 20, 1, "sword")
-chest_item('default:sword_diamond', 40, 1, "sword")
-chest_item('throwing:arrow', 4, 15)
-chest_item('throwing:arrow_fire', 12, 6)
-chest_item('throwing:bow_wood', 5, 1, "bow")
-chest_item('throwing:bow_stone', 10, 1, "bow")
-chest_item('throwing:bow_steel', 15, 1, "bow")
-chest_item('default:sword_wood', 10, 1, "sword")
-chest_item('default:sword_stone', 15, 1, "sword")
-chest_item('default:sword_steel', 20, 1, "sword")
-chest_item('default:sword_diamond', 40, 1, "sword")
 chest_item('food:bread', 3, 1)
 chest_item('food:bun', 5, 1)
 chest_item('food:bread', 10, 1)
+
+--Thirsty
 chest_item('food:apple_juice', 6, 2)
 chest_item('food:cactus_juice', 8, 2, "odd")
+--Other
 chest_item('survival_thirst:water_glass', 4, 2)
+
+--Swords--
+chest_item('default:sword_wood', 5, 1, "sword")
+chest_item('default:sword_stone', 8, 1, "sword")
+chest_item('default:sword_steel', 11, 1, "sword")
+chest_item('default:sword_bronze', 14, 1, "sword")
+chest_item('default:sword_mese', 17, 1, "sword")
+chest_item('default:sword_diamond', 20, 1, "sword")
+
+--Throwing--
+--Bows
+chest_item('throwing:bow_wood', 5, 1, "bow")
+chest_item('throwing:bow_stone', 10, 1, "bow")
+chest_item('throwing:bow_steel', 15, 1, "bow")
+--Arrows
+chest_item('throwing:arrow', 4, 15)
+chest_item('throwing:arrow_fire', 12, 8)
+
+--Armors--
+--Helmet
 chest_item('3d_armor:helmet_wood', 10, 1, "helmet")
 chest_item('3d_armor:helmet_steel', 30, 1, "helmet")
 chest_item('3d_armor:helmet_bronze', 20, 1, "helmet")
 chest_item('3d_armor:helmet_diamond', 50, 1, "helmet")
 chest_item('3d_armor:helmet_mithril', 40, 1, "helmet")
+--Chestplate
 chest_item('3d_armor:chestplate_wood', 10, 1, "chestplate")
 chest_item('3d_armor:chestplate_steel', 30, 1, "chestplate")
 chest_item('3d_armor:chestplate_bronze', 20, 1, "chestplate")
 chest_item('3d_armor:chestplate_mithril', 40, 1, "chestplate")
 chest_item('3d_armor:chestplate_diamond', 50, 1, "chestplate")
+--Leggings
 chest_item('3d_armor:leggings_wood', 10, 1, "leggings")
 chest_item('3d_armor:leggings_steel', 30, 1, "leggings")
 chest_item('3d_armor:leggings_bronze', 20, 1, "leggings")
 chest_item('3d_armor:leggings_mithril', 40, 1, "leggings")
 chest_item('3d_armor:leggings_diamond', 50, 1, "leggings")
+--Boots
 chest_item('3d_armor:boots_wood', 10, 1, "boots")
 chest_item('3d_armor:boots_steel', 30, 1, "boots")
 chest_item('3d_armor:boots_bronze', 20, 1, "boots")
 chest_item('3d_armor:boots_mithril', 40, 1, "boots")
 chest_item('3d_armor:boots_diamond', 50, 1, "boots")
+--Shields
 chest_item('shields:shield_wood', 10, 1, "shield")
 chest_item('shields:shield_steel', 30, 1, "shield")
 chest_item('shields:shield_bronze', 20, 1, "shield")
 chest_item('shields:shield_diamond', 50, 1, "shield")
 chest_item('shields:shield_mithril', 40, 1, "shield")
---crafting items
+
+--Crafting items
 chest_item('default:stick', 8, 10)
 chest_item('default:steel_ingot', 15, 3)
 chest_item('throwing:string', 7, 3)
@@ -167,4 +187,3 @@ chest_item('hungry_games:planks', 5, 3)
 if hungry_games.dig_mode ~= "normal" then
 	dofile(minetest.get_modpath("hungry_games").."/weapons.lua")
 end
-
