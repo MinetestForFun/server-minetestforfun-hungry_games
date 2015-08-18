@@ -18,6 +18,7 @@ ie.package.path =
 		-- For LuaIRC to find its files
 		..modpath.."/?.lua;"
 		..ie.package.path
+		..";/usr/lib/x86_64-linux-gnu/lua/5.1/socket/core.so"
 		..";/usr/lib/x86_64-linux-gnu/lua/5.1/core.so"
 
 -- The build of Lua that Minetest comes with only looks for libraries under
