@@ -166,8 +166,12 @@ function top.update_name(num, force)
 	end
 	local nb = playername:len()
 	local m = math.ceil(nb/2)
+	local center = 3
+	if nb%2 == 0 then
+		center = 7
+	end
 	for i=1,nb do
-		local d_pos = top.get_pos(pos_m, dir, -((m-i)*8)-3)
+		local d_pos = top.get_pos(pos_m, dir, -((m-i)*8)-center)
 		local l = playername:sub(i, i)
 		local letter
 		if top.letters[l] ~= nil then

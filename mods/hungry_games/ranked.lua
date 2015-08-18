@@ -142,8 +142,8 @@ function ranked.update_formspec()
 	ranked.top_ranks = ranked.set_top_players()
 	ranked.formspec = ranked.set_ranked_formspec()
 	minetest.after(2, top.update_name, 1) -- update top name wall
-	minetest.after(3, top.update_name, 2)
-	minetest.after(3, top.update_name, 3)
+	minetest.after(5, top.update_name, 2)
+	minetest.after(8, top.update_name, 3)
 end
 
 
