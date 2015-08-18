@@ -29,7 +29,7 @@ minetest.register_tool("default:sword_wood", {
 		groupcaps={
 			snappy={times={[2]=1.6, [3]=0.40}, uses=10, maxlevel=1},
 		},
-		damage_groups = {fleshy3},
+		damage_groups = {fleshy=3},
 	}
 })
 minetest.register_tool("default:sword_stone", {
