@@ -13,7 +13,7 @@ minetest.register_item(":", {
 			snappy = {times={[3]=0.40}, uses=0, maxlevel=1},
 			oddly_breakable_by_hand = {times={[1]=3.50,[2]=2.00,[3]=0.70}, uses=0}
 		},
-		damage_groups = {fleshy=1},
+		damage_groups = {fleshy=2},
 	}
 })
 --
@@ -29,7 +29,7 @@ minetest.register_tool("default:sword_wood", {
 		groupcaps={
 			snappy={times={[2]=1.6, [3]=0.40}, uses=10, maxlevel=1},
 		},
-		damage_groups = {fleshy=2},
+		damage_groups = {fleshy3},
 	}
 })
 minetest.register_tool("default:sword_stone", {
@@ -53,7 +53,7 @@ minetest.register_tool("default:sword_steel", {
 		groupcaps={
 			snappy={times={[1]=2.5, [2]=1.20, [3]=0.35}, uses=30, maxlevel=2},
 		},
-		damage_groups = {fleshy=6},
+		damage_groups = {fleshy=5},
 	}
 })
 minetest.register_tool("default:sword_bronze", {

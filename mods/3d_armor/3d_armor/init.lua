@@ -6,28 +6,28 @@ local use_moreores = true
 minetest.register_tool("3d_armor:helmet_wood", {
 	description = "Wood Helmet",
 	inventory_image = "3d_armor_inv_helmet_wood.png",
-	groups = {armor_head=5, armor_heal=0, armor_use=2000},
+	groups = {armor_head=3, armor_heal=0, armor_use=2000},
 	wear = 0,
 })
 
 minetest.register_tool("3d_armor:helmet_steel", {
 	description = "Steel Helmet",
 	inventory_image = "3d_armor_inv_helmet_steel.png",
-	groups = {armor_head=10, armor_heal=0, armor_use=500},
+	groups = {armor_head=5, armor_heal=2, armor_use=500},
 	wear = 0,
 })
 
 minetest.register_tool("3d_armor:helmet_bronze", {
 	description = "Bronze Helmet",
 	inventory_image = "3d_armor_inv_helmet_bronze.png",
-	groups = {armor_head=10, armor_heal=6, armor_use=250},
+	groups = {armor_head=7, armor_heal=4, armor_use=250},
 	wear = 0,
 })
 
 minetest.register_tool("3d_armor:helmet_diamond", {
 	description = "Diamond Helmet",
 	inventory_image = "3d_armor_inv_helmet_diamond.png",
-	groups = {armor_head=15, armor_heal=12, armor_use=100},
+	groups = {armor_head=9, armor_heal=6, armor_use=100},
 	wear = 0,
 })
 
@@ -35,7 +35,7 @@ if use_moreores then
 	minetest.register_tool("3d_armor:helmet_mithril", {
 		description = "Mithril Helmet",
 		inventory_image = "3d_armor_inv_helmet_mithril.png",
-		groups = {armor_head=15, armor_heal=12, armor_use=50},
+		groups = {armor_head=11, armor_heal=8, armor_use=50},
 		wear = 0,
 	})
 end
@@ -45,28 +45,28 @@ end
 minetest.register_tool("3d_armor:chestplate_wood", {
 	description = "Wood Chestplate",
 	inventory_image = "3d_armor_inv_chestplate_wood.png",
-	groups = {armor_torso=10, armor_heal=0, armor_use=2000},
+	groups = {armor_torso=8, armor_heal=0, armor_use=2000},
 	wear = 0,
 })
 
 minetest.register_tool("3d_armor:chestplate_steel", {
 	description = "Steel Chestplate",
 	inventory_image = "3d_armor_inv_chestplate_steel.png",
-	groups = {armor_torso=15, armor_heal=0, armor_use=500},
+	groups = {armor_torso=10, armor_heal=2, armor_use=500},
 	wear = 0,
 })
 
 minetest.register_tool("3d_armor:chestplate_bronze", {
 	description = "Bronze Chestplate",
 	inventory_image = "3d_armor_inv_chestplate_bronze.png",
-	groups = {armor_torso=15, armor_heal=6, armor_use=250},
+	groups = {armor_torso=12, armor_heal=4, armor_use=250},
 	wear = 0,
 })
 
 minetest.register_tool("3d_armor:chestplate_diamond", {
 	description = "Diamond Chestplate",
 	inventory_image = "3d_armor_inv_chestplate_diamond.png",
-	groups = {armor_torso=20, armor_heal=12, armor_use=100},
+	groups = {armor_torso=14, armor_heal=6, armor_use=100},
 	wear = 0,
 })
 
@@ -74,7 +74,7 @@ if use_moreores then
 	minetest.register_tool("3d_armor:chestplate_mithril", {
 		description = "Mithril Chestplate",
 		inventory_image = "3d_armor_inv_chestplate_mithril.png",
-		groups = {armor_torso=20, armor_heal=12, armor_use=50},
+		groups = {armor_torso=16, armor_heal=8, armor_use=50},
 		wear = 0,
 	})
 end
@@ -84,28 +84,28 @@ end
 minetest.register_tool("3d_armor:leggings_wood", {
 	description = "Wood Leggings",
 	inventory_image = "3d_armor_inv_leggings_wood.png",
-	groups = {armor_legs=5, armor_heal=0, armor_use=2000},
+	groups = {armor_legs=8, armor_heal=0, armor_use=2000},
 	wear = 0,
 })
 
 minetest.register_tool("3d_armor:leggings_steel", {
 	description = "Steel Leggings",
 	inventory_image = "3d_armor_inv_leggings_steel.png",
-	groups = {armor_legs=15, armor_heal=0, armor_use=500},
+	groups = {armor_legs=10, armor_heal=2, armor_use=500},
 	wear = 0,
 })
 
 minetest.register_tool("3d_armor:leggings_bronze", {
 	description = "Bronze Leggings",
 	inventory_image = "3d_armor_inv_leggings_bronze.png",
-	groups = {armor_legs=15, armor_heal=6, armor_use=250},
+	groups = {armor_legs=12, armor_heal=4, armor_use=250},
 	wear = 0,
 })
 
 minetest.register_tool("3d_armor:leggings_diamond", {
 	description = "Diamond Leggings",
 	inventory_image = "3d_armor_inv_leggings_diamond.png",
-	groups = {armor_legs=20, armor_heal=12, armor_use=100},
+	groups = {armor_legs=14, armor_heal=6, armor_use=100},
 	wear = 0,
 })
 
@@ -113,7 +113,7 @@ if use_moreores then
 	minetest.register_tool("3d_armor:leggings_mithril", {
 		description = "Mithril Leggings",
 		inventory_image = "3d_armor_inv_leggings_mithril.png",
-		groups = {armor_legs=20, armor_heal=12, armor_use=50},
+		groups = {armor_legs=16, armor_heal=8, armor_use=50},
 		wear = 0,
 	})
 end
@@ -123,28 +123,28 @@ end
 minetest.register_tool("3d_armor:boots_wood", {
 	description = "Wood Boots",
 	inventory_image = "3d_armor_inv_boots_wood.png",
-	groups = {armor_feet=5, armor_heal=0, armor_use=2000},
+	groups = {armor_feet=3, armor_heal=0, armor_use=2000},
 	wear = 0,
 })
 
 minetest.register_tool("3d_armor:boots_steel", {
 	description = "Steel Boots",
 	inventory_image = "3d_armor_inv_boots_steel.png",
-	groups = {armor_feet=10, armor_heal=0, armor_use=500},
+	groups = {armor_feet=5, armor_heal=2, armor_use=500},
 	wear = 0,
 })
 
 minetest.register_tool("3d_armor:boots_bronze", {
 	description = "Bronze Boots",
 	inventory_image = "3d_armor_inv_boots_bronze.png",
-	groups = {armor_feet=10, armor_heal=6, armor_use=250},
+	groups = {armor_feet=7, armor_heal=4, armor_use=250},
 	wear = 0,
 })
 
 minetest.register_tool("3d_armor:boots_diamond", {
 	description = "Diamond Boots",
 	inventory_image = "3d_armor_inv_boots_diamond.png",
-	groups = {armor_feet=15, armor_heal=12, armor_use=100},
+	groups = {armor_feet=9, armor_heal=6, armor_use=100},
 	wear = 0,
 })
 
@@ -152,7 +152,7 @@ if use_moreores then
 	minetest.register_tool("3d_armor:boots_mithril", {
 		description = "Mithril Boots",
 		inventory_image = "3d_armor_inv_boots_mithril.png",
-		groups = {armor_feet=15, armor_heal=12, armor_use=50},
+		groups = {armor_feet=11, armor_heal=8, armor_use=50},
 		wear = 0,
 	})
 end
@@ -199,4 +199,3 @@ for k, v in pairs(craft_ingreds) do
 		},
 	})
 end
-
