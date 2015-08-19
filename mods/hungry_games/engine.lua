@@ -191,7 +191,9 @@ local check_win = function()
 				local winnerName = playerName
 				ranked.inc(playerName, "nb_wins")
 				minetest.chat_send_player(winnerName, "You won!")
-				minetest.chat_send_all("The Hungry Games are now over, " .. winnerName .. " was the winner.")
+				local endstr = "The Hungry Games are now over, " .. winnerName .. " was the winner."
+				minetest.chat_send_all(enstr)
+				irc:say(endstr)
 				minetest.sound_play("hungry_games_victory")
 			end
 
@@ -292,7 +294,9 @@ local start_game_now = function(input)
 			end, {player, spots_shuffled[i], gameSequenceNumber})
 		end
 	end
-	minetest.chat_send_all("The Hungry Games has begun!")
+	local startstr"The Hungry Games has begun!"
+	minetest.chat_send_all(startstr)
+	irc:say(startstr)
 	if hungry_games.grace_period > 0 then
 		if hungry_games.grace_period >= 60 then
 			minetest.chat_send_all("You have "..(dump(hungry_games.grace_period)/60).."min until grace period ends!")
@@ -455,7 +459,9 @@ minetest.register_on_dieplayer(function(player)
 	count = count - 1
 
 	if ingame and currGame[playerName] and count ~= 1 then
-		minetest.chat_send_all(playerName .. " has died! Players left: " .. tostring(count))
+		local deathstr = playerName .. " has died! Players left: " .. tostring(count)
+		minetest.chat_send_all(deathstr)
+		irc:say(deathstr)
 		ranked.inc(playerName, "nb_lost")
 		survival.player_hide_hudbar(playerName)
 	end
