@@ -161,3 +161,29 @@ function ranked.get_player_ranks_formspec(name)
 end
 
 minetest.after(20, ranked.update_formspec)
+
+-- Ranks
+minetest.register_chatcommand("top3", {
+	description = "Show the top 3 players",
+	privs = {},
+	params = "",
+	func = function(name)
+		local topstr = "Top 3 players : "
+		if ranked.top_ranks[1] then
+			topstr = topstr .. ranked.top_ranks[1] .. " is first; "
+			if ranked.top_ranks[2] then
+				topstr = topstr .. ranked.top_ranks[2] .. " is second; "
+				if ranked.top_ranks[3] then
+					topstr = topstr .. " and " .. ranked.top_ranks[3] .. " is third."
+				else
+					topstr = topstr .. "and that's it."
+				end
+			else
+				topstr = topstr .. "and that's it."
+			end
+		else
+			topstr = "Nobody is ranked at the moment."
+		end
+		return true, topstr
+	end,
+})

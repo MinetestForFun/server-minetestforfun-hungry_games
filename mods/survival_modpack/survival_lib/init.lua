@@ -123,7 +123,7 @@ survival.set_player_state = function ( name, stname, state )
 end
 
 survival.reset_player_state = function ( name, stname )
-    if (name and stname and survival.registered_states[stname]) then
+    if (name and stname and survival.registered_states[stname] and player_states[name]) then
         player_states[name][stname] = survival.registered_states[stname].get_default(player_states[name][stname].hudid);
     end
 end

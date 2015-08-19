@@ -192,7 +192,7 @@ local check_win = function()
 				ranked.inc(playerName, "nb_wins")
 				minetest.chat_send_player(winnerName, "You won!")
 				local endstr = "The Hungry Games are now over, " .. winnerName .. " was the winner."
-				minetest.chat_send_all(enstr)
+				minetest.chat_send_all(endstr)
 				irc:say(endstr)
 				minetest.sound_play("hungry_games_victory")
 			end
@@ -294,7 +294,7 @@ local start_game_now = function(input)
 			end, {player, spots_shuffled[i], gameSequenceNumber})
 		end
 	end
-	local startstr"The Hungry Games has begun!"
+	local startstr = "The Hungry Games has begun!"
 	minetest.chat_send_all(startstr)
 	irc:say(startstr)
 	if hungry_games.grace_period > 0 then
