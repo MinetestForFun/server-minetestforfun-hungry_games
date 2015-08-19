@@ -123,13 +123,11 @@ minetest.register_chatcommand("top_update", {
 	privs = {server=true},
 	func = function(name, param)
 		if not param then
-			minetest.chat_send_player(name, "invalid param, /top_update <1|2|3>")
-			return
+			return false, "invalid param, /top_update <1|2|3>"
 		end
 		local param_num = param:match("^(%S+)$")
 		if param_num == nil or not tonumber(param_num) or (tonumber(param_num)~= 1 and tonumber(param_num)~= 2 and tonumber(param_num)~= 3) then
-			minetest.chat_send_player(name, "invalid param, /top_update <1|2|3>")
-			return
+			return false, "invalid param, /top_update <1|2|3>"
 		end
 		top.update_name(tonumber(param_num), true)
 	end,
@@ -140,7 +138,7 @@ minetest.register_chatcommand("top_verif", {
 	privs = {server=true},
 	func = function(name, param)
 		if top.get_correct_conf(name) then
-			minetest.chat_send_player(name, "top configuration correct.")
+			return true, "top configuration correct."
 		end
 	end,
 })
@@ -189,25 +187,20 @@ minetest.register_chatcommand("top_node", {
 	privs = {server=true},
 	func = function(name, param)
 		if not param then
-			minetest.chat_send_player(name, "invalid param, /top_node <1|2|3> <0|1|2> <nodename>")
-			return
+			return false, "invalid param, /top_node <1|2|3> <0|1|2> <nodename>"
 		end
 		local param_num, param_node_num, param_node = param:match("^(%S+)%s(%S+)%s(%S+)$")
 		if param_num == nil or param_node_num == nil or param_node == nil then
-			minetest.chat_send_player(name, "invalid param, /top_node <player num(1|2|3)> <0|1|2> <nodename>")
-			return
+			return false, "invalid param, /top_node <player num(1|2|3)> <0|1|2> <nodename>"
 		end
 		if param_num == nil or (param_num ~= "1" and param_num ~= "2" and param_num ~= "3") then
-			minetest.chat_send_player(name, "invalid param player num: ".. param_num)
-			return
+			return false, "invalid param player num: ".. param_num
 		end
 		if param_node_num == nil or (param_node_num ~= "0" and param_node_num ~= "1" and param_node_num ~= "2") then
-			minetest.chat_send_player(name, "invalid param node num: "..param_node_num)
-			return
+			return false, "invalid param node num: "..param_node_num
 		end
 		if param_node == nil or (not minetest.registered_nodes[param_node] and param_node ~= "air") then
-			minetest.chat_send_player(name, "invalid param node:"..param_node)
-			return
+			return false, "invalid param node:"..param_node
 		end
 		if not top.conf["node"..param_node_num] or type(top.conf["node"..param_node_num]) ~= "table" then
 			top.conf["node"..param_node_num] = {}
@@ -223,8 +216,7 @@ minetest.register_chatcommand("top_set", {
 	privs = {server=true},
 	func = function(name, param)
 		if not param then
-			minetest.chat_send_player(name, "invalid param, /top_set x y z <dir (N|S|E|W)>")
-			return
+			return false, "invalid param, /top_set x y z <dir (N|S|E|W)>"
 		end
 		local param_x, param_y , param_z, param_d = param:match("^(%S+)%s(%S+)%s(%S+)%s(%S+)$")
 		if param_x == nil or param_y == nil or param_z == nil or param_d == nil then
@@ -232,23 +224,19 @@ minetest.register_chatcommand("top_set", {
 		end
 		local x = tonumber(param_x)
 		if x == nil then
-			minetest.chat_send_player(name, "invalid param x")
-			return
+			return false, "invalid param x"
 		end
 		local y = tonumber(param_y)
 		if y == nil then
-			minetest.chat_send_player(name, "invalid param y")
-			return
+			return false, "invalid param y"
 		end
 		local z = tonumber(param_z)
 		if z == nil then
-			minetest.chat_send_player(name, "invalid param z")
-			return
+			return false, "invalid param z"
 		end
 
 		if not param_d or (param_d ~= "N" and param_d ~= "S" and param_d ~= "E" and param_d ~= "W") then
-			minetest.chat_send_player(name, "invalid param dir")
-			return
+			return false, "invalid param dir"
 		end
 		if top.conf.hall == nil then
 			top.conf.hall = {}
