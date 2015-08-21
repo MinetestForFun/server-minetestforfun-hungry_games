@@ -792,7 +792,7 @@ end
 
 -- Remind to vote
 vote_reminder = function()
-	if not ingame then
+	if not ingame and maintenance_mode == false then
 		local playerlist = minetest.get_connected_players()
 		if table.getn(playerlist) >= 2 then
 			for index, player in pairs(playerlist) do

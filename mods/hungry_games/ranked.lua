@@ -174,7 +174,7 @@ minetest.register_chatcommand("top3", {
 			if ranked.top_ranks[2] then
 				topstr = topstr .. ranked.top_ranks[2] .. " is second; "
 				if ranked.top_ranks[3] then
-					topstr = topstr .. " and " .. ranked.top_ranks[3] .. " is third."
+					topstr = topstr .. "and " .. ranked.top_ranks[3] .. " is third."
 				else
 					topstr = topstr .. "and that's it."
 				end
