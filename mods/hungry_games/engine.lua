@@ -7,11 +7,9 @@ local countdown = false
 
 minetest.register_privilege("ingame",{description = "privs when player is in current game HG.", give_to_singleplayer = false})
 
-local voteReminder = "Remember to vote using a voteblock or /vote to start the Hungry Games!"
-local voteReminderInterval = 20
-
 local registrants = {}
 local voters = {}
+local voters_hud = {}
 local currGame = {}
 local gameSequenceNumber = 0	--[[ Sequence number of current round, will be incremented each round.
 				     Used to determine whether minetest.after calls are still valid or should be discarded. ]]
@@ -164,6 +162,7 @@ local stop_game = function()
 			player:set_hp(20)
 			spawning.spawn(player, "lobby")
 		end)
+		ingame = false
 	end
 	registrants = {}
 	currGame = {}
@@ -294,6 +293,7 @@ local start_game_now = function(input)
 			end, {player, spots_shuffled[i], gameSequenceNumber})
 		end
 	end
+	ingame = true
 	local startstr = "The Hungry Games has begun!"
 	minetest.chat_send_all(startstr)
 	irc:say(startstr)
@@ -791,18 +791,30 @@ local get_player_vote_formspec = function(name)
 end
 
 -- Remind to vote
+local hudkit = dofile(minetest.get_modpath("hungry_games") .. "/hudkit.lua")
+vote_hud = hudkit()
 vote_reminder = function()
-	if not ingame and maintenance_mode == false then
-		local playerlist = minetest.get_connected_players()
-		if table.getn(playerlist) >= 2 then
-			for index, player in pairs(playerlist) do
-				if not voters[player:get_player_name()] then
-					minetest.chat_send_player(player:get_player_name(), voteReminder)
-				end
+	local playerlist = minetest.get_connected_players()
+	for index, player in pairs(playerlist) do
+		if not ingame and not starting_game and not grace and not countdown and maintenance_mode == false
+			and not voters[player:get_player_name()] and #playerlist >= 2 then
+			if not vote_hud:exists(player, "hungry_games:vote_reminder") then
+				vote_hud:add(player, "hungry_games:vote_reminder", {
+					hud_elem_type = "text",
+					position = {x = 0.5, y = 0.25},
+					scale = {x = 100, y = 100},
+					text = "Remember to vote using a voteblock or /vote to start the Hungry Games!",
+					offset = {x=0, y = 0},
+					number = 0xFF0000
+				})
+			end
+		else
+			if vote_hud:exists(player, "hungry_games:vote_reminder") then
+				vote_hud:remove(player, "hungry_games:vote_reminder")
 			end
 		end
 	end
-	minetest.after(voteReminderInterval, vote_reminder)
+	minetest.after(1, vote_reminder)
 end
 
 vote_reminder()
