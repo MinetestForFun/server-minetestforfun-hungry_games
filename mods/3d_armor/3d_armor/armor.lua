@@ -40,7 +40,7 @@ armor.update_player_visuals = function(self, player)
 end
 
 armor.set_player_armor = function(self, player)
-	if not player then
+	if not player or not player:get_inventory() then
 		return
 	end
 	local name = player:get_player_name()
