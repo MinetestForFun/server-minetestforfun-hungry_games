@@ -473,7 +473,7 @@ minetest.register_on_dieplayer(function(player)
    	local privs = minetest.get_player_privs(playerName)
 	if privs.ingame then
 		minetest.sound_play("hungry_games_death", {pos = pos})
-		privs.ingame = true
+		privs.ingame = nil
 		minetest.set_player_privs(playerName, privs)
 		minetest.chat_send_player(playerName, "You are now spectating")
 	end
