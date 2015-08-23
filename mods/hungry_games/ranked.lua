@@ -28,6 +28,7 @@ function ranked.load_players_ranks()
 	local min = tonumber(time[3])
 	if day == 1 and hour == 0
 		and min >= 25 and min <= 40 then
+		ranked.save_players_ranks()
 		return ranked.players_ranks
 	end
 	local file = io.open(ranked.players_ranking_file, "r")
