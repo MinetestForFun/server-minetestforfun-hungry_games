@@ -1,27 +1,12 @@
 
 
 ranked.players_ranking_file = minetest.get_worldpath() .. "/players_rankings.txt"
-ranked.players_ranks = {}
+ranked.players_ranks = {["nb_quit"] = {}, ["nb_games"] = {}, ["nb_wins"] = {}, ["nb_lost"] = {}}
 ranked.top_ranks = {}
 ranked.formspec = ""
 
 top = {}
 dofile(minetest.get_modpath("hungry_games").."/top.lua")
-
--- load ranked table
-function ranked.load_players_ranks()
-	local file = io.open(ranked.players_ranking_file, "r")
-	if file then
-		local t = minetest.deserialize(file:read("*all"))
-		file:close()
-		if t and type(t) == "table" then
-			return t
-		end
-	end
-	return {["nb_games"] = {}, ["nb_wins"] = {}, ["nb_lost"] = {}, ["nb_quit"] = {} }
-end
-ranked.players_ranks = ranked.load_players_ranks()
-
 
 -- save ranked table
 function ranked.save_players_ranks()
@@ -34,6 +19,28 @@ function ranked.save_players_ranks()
 	end
 end
 
+
+-- load ranked table
+function ranked.load_players_ranks()
+	local time = os.date("%d %H %M"):split(" ")
+	local day = tonumber(time[1])
+	local hour = tonumber(time[2])
+	local min = tonumber(time[3])
+	if day == 1 and hour == 0
+		and min >= 25 and min <= 40 then
+		return ranked.players_ranks
+	end
+	local file = io.open(ranked.players_ranking_file, "r")
+	if file then
+		local t = minetest.deserialize(file:read("*all"))
+		file:close()
+		if t and type(t) == "table" then
+			return t
+		end
+	end
+	return {["nb_games"] = {}, ["nb_wins"] = {}, ["nb_lost"] = {}, ["nb_quit"] = {} }
+end
+ranked.players_ranks = ranked.load_players_ranks()
 
 -- ranked table[key] +=1
 function ranked.inc(name, key)
