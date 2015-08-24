@@ -132,15 +132,15 @@ inventory_plus.get_formspec = function(player,page)
 		fp = fp + 1
 		f[fp] = "image[1,1;1,1;inventory_plus_armor_shield.png]"
 		fp = fp + 1
-		f[fp] = "list[detached:"..name.."_armor;armor_head;2,0;1,1;]"
+		f[fp] = "list[detached:"..name.."_armor;armor;2,0;1,1;1]"
 		fp = fp + 1
-		f[fp] = "list[detached:"..name.."_armor;armor_torso;2,1;1,1;]"
+		f[fp] = "list[detached:"..name.."_armor;armor;2,1;1,1;2]"
 		fp = fp + 1
-		f[fp] = "list[detached:"..name.."_armor;armor_legs;2,2;1,1;]"
+		f[fp] = "list[detached:"..name.."_armor;armor;2,2;1,1;3]"
 		fp = fp + 1
-		f[fp] = "list[detached:"..name.."_armor;armor_feet;2,3;1,1;]"
+		f[fp] = "list[detached:"..name.."_armor;armor;2,3;1,1;4]"
 		fp = fp + 1
-		f[fp] = "list[detached:"..name.."_armor;armor_shield;3,1;1,1;]"
+		f[fp] = "list[detached:"..name.."_armor;armor;3,1;1,1;5]"
 
 		-- crafting
 		fp = fp + 1
