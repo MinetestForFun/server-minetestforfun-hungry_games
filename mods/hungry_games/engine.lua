@@ -854,7 +854,11 @@ minetest.register_chatcommand("vote", {
 	description = "Vote to start the Hungry Games.",
 	privs = {vote=true},
 	func = function(name, param)
-		vote(name)
+		if minetest.get_player_by_name(name) then
+			vote(name)
+		else
+			return false, "You need to be ingame to vote"
+		end
 	end,
 })
 
