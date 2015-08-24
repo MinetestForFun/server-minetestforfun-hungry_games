@@ -59,7 +59,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 				default.inventory_background..
 				default.inventory_listcolors..
 				inventory_plus.get_tabheader(player, "hgranks")
-		formspec = formspec .. ranked.get_player_ranks_formspec(player:get_player_name()) .. ranked.formspec
+		formspec = formspec .. ranked.get_player_ranks_formspec(player:get_player_name()) .. ranked.formspec .. "label[1,8;Ranks are reset the first day of every month]"
 		inventory_plus.set_inventory_formspec(player, formspec)
 	end
 
