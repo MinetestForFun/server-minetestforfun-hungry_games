@@ -906,12 +906,15 @@ minetest.register_craftitem("hungry_games:stones", {
 for i in ipairs({1,2,3,4}) do
 	minetest.register_node("hungry_games:blockvote_"..i, {
 		description = "Command Block Vote "..i,
-		inventory_image = "hungry_games_blockvote_"..i..".png",
+		inventory_image = minetest.inventorycube("hungry_games_blockvote_"..i.."_inv.png"),
 		range = 12,
 		stack_max = 99,
 		drawtype = "normal",
-		tiles  = {"hungry_games_blockvote.png", "hungry_games_blockvote.png", "hungry_games_blockvote_"..i..".png",
-				"hungry_games_blockvote_"..i..".png", "hungry_games_blockvote_"..i..".png", "hungry_games_blockvote_"..i..".png"},
+		tiles = {
+		"hungry_games_blockvote.png", "hungry_games_blockvote.png", {name = "hungry_games_blockvote_"..i..".png", animation={type = "vertical_frames", aspect_w= 32, aspect_h = 32, length = 3}}
+	},
+
+
 		drop = "",
 		paramtype2 = "facedir",
 		light_source = 13,
