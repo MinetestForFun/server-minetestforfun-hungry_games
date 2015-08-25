@@ -7,7 +7,7 @@ local path = minetest.get_modpath("minesimon").."/"
 
 minesimon = {}
 minesimon["players"] = {}
-minesimon["ingames"] = {}
+minesimon["games"] = {}
 minesimon["notes"] = {1,2,3,4}
 -- load engine
 dofile(path .."engine.lua")
