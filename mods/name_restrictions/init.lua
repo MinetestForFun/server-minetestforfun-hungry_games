@@ -96,7 +96,7 @@ minetest.register_chatcommand("choosecase", {
 ------------------------
 -- Anti-impersonation --
 ------------------------
--- Prevents names that are too similar to annother player's name.
+-- Prevents names that are too similar to another player's name.
 
 local similar_chars = {
 	-- Only A-Z, a-z, 1-9, dash, and underscore are allowed in playernames
