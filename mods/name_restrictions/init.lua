@@ -17,20 +17,31 @@ temp = nil
 exemptions[minetest.setting_get("name")] = true
 exemptions["singleplayer"] = true
 
+local disallowed_names = {}
+local file = io.open(minetest.get_worldpath("name_restrictions") .. "/forbidden_names.txt", "r")
+if file then
+	for line in file:lines() do
+		local low_line = line:lower()
+		disallowed_names[low_line] = true
+	end
+	file:close()
+end
+
 ---------------------
 -- Simple matching --
 ---------------------
 
-local msg_guest = "Guest accounts are disallowed on this server.  "..
-		"Please choose a proper name and try again."
-local msg_misleading = "Your player name is misleading.  "..
-		"Please choose a more appropriate name."
 local disallowed = {
-	["^guest[0-9]+"] = msg_guest,
-	["^squeakecrafter[0-9]+"] = msg_guest,
-	["adm[1il]n"] = msg_misleading,
-	["[0o]wn[e3]r"]  = msg_misleading,
-	["^[0-9]+$"] = "All-numeric usernames are disallowed on this server.",
+	["^guest[0-9]+"] = "Guest accounts are disallowed on this server." ..
+	                   " Please choose a proper name and try again.",
+	["[4a]dm[1il]n"] = "Misleading name." ..
+					   " Please choose a proper name and try again.",
+	["[0o]wn[e3]r"]  = "Misleading name." ..
+					   " Please choose a proper name and try again.",
+	["^[0-9]+$"]     = "All-numeric names are disallowed on this server." ..
+					   " Please choose a proper name and try again.",
+	["[0-9].-[0-9].-[0-9].-[0-9].-[0-9].-[0-9]"] = "Too many numbers in your name (must be 5 at most)." ..
+					   " Please choose a proper name and try again.",
 }
 
 minetest.register_on_prejoinplayer(function(name, ip)
@@ -39,6 +50,9 @@ minetest.register_on_prejoinplayer(function(name, ip)
 		if lname:find(re) then
 			return reason
 		end
+	end
+	if disallowed_names[lname] then
+		return "If you really are the youtuber you pretend to be, please contact Cyberpangolin via Youtube using private messages. Thanks for your understanding."
 	end
 end)
 
@@ -53,7 +67,7 @@ minetest.register_on_prejoinplayer(function(name, ip)
 		if iname:lower() == lname and iname ~= name then
 			return "Sorry, someone else is already using this"
 				.." name.  Please pick another name."
-				.."  Annother possibility is that you used the"
+				.."  Another posibility is that you used the"
 				.." wrong case for your name."
 		end
 	end
@@ -61,9 +75,9 @@ end)
 
 -- Compatability, for old servers with conflicting players
 minetest.register_chatcommand("choosecase", {
-	description = "Choose the casing that a player name should have.",
+	description = "Choose the casing that a player name should have",
 	params = "<name>",
-	privs = {server=true},
+	privs = {server = true},
 	func = function(name, params)
 		local lname = params:lower()
 		local worldpath = minetest.get_worldpath()
@@ -71,7 +85,7 @@ minetest.register_chatcommand("choosecase", {
 			if iname:lower() == lname and iname ~= params then
 				minetest.auth_table[iname] = nil
 				assert(not iname:find("[/\\]"))
-				os.remove(worldpath.."/players/"..iname)
+				os.remove(worldpath .. "/players/" .. iname)
 			end
 		end
 		return true, "Done."
@@ -82,7 +96,7 @@ minetest.register_chatcommand("choosecase", {
 ------------------------
 -- Anti-impersonation --
 ------------------------
--- Prevents names that are too similar to another player's name.
+-- Prevents names that are too similar to annother player's name.
 
 local similar_chars = {
 	-- Only A-Z, a-z, 1-9, dash, and underscore are allowed in playernames
@@ -141,13 +155,22 @@ end)
 -- Name length --
 -----------------
 
-local min_name_len = tonumber(minetest.setting_get("name_restrictions.minimum_name_length")) or 3
+local min_name_len = tonumber(minetest.setting_get("name_restrictions.minimum_name_length")) or 2
+local max_name_len = tonumber(minetest.setting_get("name_restrictions.maximum_name_length")) or 17
 
 minetest.register_on_prejoinplayer(function(name, ip)
 	if exemptions[name] then return end
 
 	if #name < min_name_len then
-		return "Your player name is too short, please try a longer name."
+		return "Your player name is too short"
+		.. " (" .. #name .. " characters, must be " .. min_name_len .. " characters at least)."
+		.. " Please try a longer name."
+	end
+
+	if #name > max_name_len then
+		return "Your player name is too long"
+		.. " (" .. #name .. " characters, must be " .. max_name_len .. " characters at most)."
+		.. " Please try a shorter name."
 	end
 end)
 
