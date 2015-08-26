@@ -43,9 +43,9 @@ if input then
 	input:close()
 	input = nil
 end
-if not minetest.get_modpath("moreores") then
-	ARMOR_MATERIALS.mithril = nil
-end
+--if not minetest.get_modpath("moreores") then --Modif MFF (we need the mithril armor, even if the craft recipe is broken, it's just an in-chest generation)
+--	ARMOR_MATERIALS.mithril = nil
+--end
 if not minetest.get_modpath("ethereal") then
 	ARMOR_MATERIALS.crystal = nil
 end
