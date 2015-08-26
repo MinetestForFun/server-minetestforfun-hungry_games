@@ -129,10 +129,9 @@ local drop_player_items = function(playerName, clear) --If clear != nil, don't d
 	--Drop armor inventory
 	local armor_inv = minetest.get_inventory({type="detached", name=player:get_player_name().."_armor"})
 	local player_inv = player:get_inventory()
-	local armorTypes = {"head", "torso", "legs", "feet", "shield"}
-	for i,stackName in ipairs(armorTypes) do
+	for i = 1,6 do
 		if not clear then
-			local stack = inv:get_stack("armor_" .. stackName, 1)
+			local stack = inv:get_stack("armor", i)
 			local x = math.random(0, 6)/2 --MFF (09/08/2015)
 			local z = math.random(0, 6)/2 --MFF (09/08/2015)
 			pos.x = pos.x + x
@@ -141,8 +140,8 @@ local drop_player_items = function(playerName, clear) --If clear != nil, don't d
 			pos.x = pos.x - x
 			pos.z = pos.z - z
 		end
-		armor_inv:set_stack("armor_"..stackName, 1, nil)
-		player_inv:set_stack("armor_"..stackName, 1, nil)
+		armor_inv:set_stack("armor", i, nil)
+		player_inv:set_stack("armor", i, nil)
 	end
 	armor:set_player_armor(player)
 	return
@@ -194,6 +193,7 @@ local check_win = function()
 				minetest.chat_send_all(endstr)
 				irc:say(endstr)
 				minetest.sound_play("hungry_games_victory")
+				drop_player_items(winnerName, true)
 			end
 
 			local players = minetest.get_connected_players()

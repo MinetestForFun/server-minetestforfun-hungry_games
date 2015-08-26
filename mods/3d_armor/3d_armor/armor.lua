@@ -3,7 +3,7 @@ ARMOR_INIT_TIMES = 1
 ARMOR_BONES_DELAY = 1
 ARMOR_UPDATE_TIME = 1
 ARMOR_DROP = minetest.get_modpath("bones") ~= nil
-ARMOR_DESTROY = false
+ARMOR_DESTROY = true
 ARMOR_LEVEL_MULTIPLIER = 1
 ARMOR_HEAL_MULTIPLIER = 1
 ARMOR_MATERIALS = {
@@ -256,7 +256,7 @@ armor.update_armor = function(self, player)
 				end
 			end
 		end
-	end	
+	end
 	if hp <= 0 or hp == self.player_hp[name] then
 		return
 	end
@@ -456,7 +456,7 @@ minetest.register_on_joinplayer(function(player)
 	for i=1, 6 do
 		local stack = player_inv:get_stack("armor", i)
 		armor_inv:set_stack("armor", i, stack)
-	end	
+	end
 
 	-- Legacy support, import player's armor from old inventory format
 	for _,v in pairs(armor.elements) do
@@ -555,17 +555,15 @@ if ARMOR_DROP == true or ARMOR_DESTROY == true then
 		if ARMOR_DESTROY == false then
 			minetest.after(ARMOR_BONES_DELAY, function()
 				local node = minetest.get_node(vector.round(pos))
-				if node then
-					if node.name == "bones:bones" then
-						local meta = minetest.get_meta(vector.round(pos))
-						local owner = meta:get_string("owner")
-						local inv = meta:get_inventory()
-						for _,stack in ipairs(drop) do
-							if name == owner and inv:room_for_item("main", stack) then
-								inv:add_item("main", stack)
-							else
-								armor.drop_armor(pos, stack)
-							end
+				if node and node.name == "bones:bones" then
+					local meta = minetest.get_meta(vector.round(pos))
+					local owner = meta:get_string("owner")
+					local inv = meta:get_inventory()
+					for _,stack in ipairs(drop) do
+						if name == owner and inv:room_for_item("main", stack) then
+							inv:add_item("main", stack)
+						else
+							armor.drop_armor(pos, stack)
 						end
 					end
 				else
