@@ -26,7 +26,7 @@ function ranked.load_players_ranks()
 	local day = tonumber(time[1])
 	local hour = tonumber(time[2])
 	local min = tonumber(time[3])
-	if day == 1 and hour == 0
+	if day == 1 and hour == 4
 		and min >= 25 and min <= 40 then
 		ranked.save_players_ranks()
 		return ranked.players_ranks
