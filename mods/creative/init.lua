@@ -58,7 +58,8 @@ trash:set_size("main", 1)
 
 local get_formspec = function(player,start_i, pagenum)
 	if not minetest.get_player_privs(player:get_player_name()).hg_maker then
-		return
+		return "size[13,7.5]"
+			.. inventory_plus.get_tabheader(player, "hgmaker")
 	end
 	pagenum = math.floor(pagenum)
 	local pagemax = math.floor((creative_inventory.creative_inventory_size-1) / (6*4) + 1)
