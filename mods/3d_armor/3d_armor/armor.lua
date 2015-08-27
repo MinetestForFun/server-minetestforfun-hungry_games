@@ -124,6 +124,8 @@ elseif minetest.get_modpath("u_skins") then
 	skin_mod = "u_skins"
 elseif minetest.get_modpath("wardrobe") then
 	skin_mod = "wardrobe"
+elseif minetest.get_modpath("ranks_skins") then
+	skin_mod = "ranks_skins"
 end
 
 armor.def = {
@@ -305,6 +307,8 @@ armor.get_player_skin = function(self, name)
 		skin = u_skins.u_skins[name]
 	elseif skin_mod == "wardrobe" then
 		skin = string.gsub(wardrobe.playerSkins[name], "%.png$","")
+	elseif skin_mod == "ranks_skins" then
+		skin = ranks_skins.skins[name]
 	end
 	return skin or armor.default_skin
 end
@@ -500,6 +504,11 @@ minetest.register_on_joinplayer(function(player)
 		end
 	elseif skin_mod == "wardrobe" then
 		local skin = wardrobe.playerSkins[name]
+		if skin then
+			armor.textures[name].skin = skin
+		end
+	elseif skin_mod == "ranks_skins" then
+		local skin = ranks_skins.skins[name]
 		if skin then
 			armor.textures[name].skin = skin
 		end

@@ -175,6 +175,7 @@ local stop_game = function()
 	unset_timer()
 	ranked.save_players_ranks()
 	ranked.update_formspec()
+	update_rank_skins()
 end
 
 local check_win = function()

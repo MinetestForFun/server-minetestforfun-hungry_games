@@ -18,6 +18,7 @@ load_mod_maptools = true
 load_mod_moreblocks = true
 load_mod_player_inactive = true
 load_mod_signs_lib = true
+load_mod_ranks_skins = true
 
 load_mod_irc = true
 load_mod_irc_commands = true
