@@ -8,8 +8,18 @@ if hungry_games.dig_mode == "none" then
 			full_punch_interval = 0.9,
 			max_drop_level = 0,
 			damage_groups = {fleshy=1},
+			groupcaps = { ladder_diggable = {times = {[1]=2.5}, uses = 0} },
 		}
 	})
+
+	--Protect everything to ensure that no node is ever dug or placed by players who do not have hg_maker
+	minetest.is_protected = function(pos, name)
+		if minetest.check_player_privs(name, {hg_maker=true}) then
+			return false
+		else
+			return true
+		end
+	end
 end
 -- Swords
 minetest.register_tool(":default:sword_wood", {
@@ -66,3 +76,4 @@ minetest.register_tool(":default:sword_diamond", {
 		damage_groups = {fleshy=8},
 	}
 })
+

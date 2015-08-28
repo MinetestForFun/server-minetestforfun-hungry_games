@@ -165,6 +165,8 @@ function ranked.update_formspec()
 	minetest.after(8, top.update_name, 3)
 end
 
+ranked.update_formspec()
+
 
 -- get player ranks formspec
 function ranked.get_player_ranks_formspec(name)

@@ -50,8 +50,8 @@ survival.register_state = function ( name, def )
     survival.registered_states[#survival.registered_states + 1] = def;
 end
 
-survival.enable = function(players)
-    for _,player in pairs(players) do
+survival.enable = function()
+    for _,player in pairs(minetest.get_connected_players()) do
         local inv = player:get_inventory();
         local plname = player:get_player_name();
         for i, def in ipairs(survival.registered_states) do

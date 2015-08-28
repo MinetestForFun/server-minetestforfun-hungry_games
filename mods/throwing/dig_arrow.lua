@@ -42,31 +42,29 @@ local THROWING_ARROW_ENTITY={
 THROWING_ARROW_ENTITY.on_step = function(self, dtime)
 	self.timer=self.timer+dtime
 	local pos = self.object:getpos()
-	local node = minetest.get_node(pos)
+	local node = minetest.env:get_node(pos)
 
 	if self.timer>0.2 then
-		local objs = minetest.get_objects_inside_radius({x=pos.x,y=pos.y,z=pos.z}, 1)
+		local objs = minetest.env:get_objects_inside_radius({x=pos.x,y=pos.y,z=pos.z}, 1)
 		for k, obj in pairs(objs) do
 			if obj:get_luaentity() ~= nil then
-				if obj:get_luaentity().name ~= "throwing:arrow_dig_entity" and obj:get_luaentity().name ~= "__builtin:item" and obj:get_luaentity().name ~= "gauges:hp_bar" then
-					minetest.add_item(pos, 'throwing:arrow_dig')
-					minetest.remove_node(pos)
+				if obj:get_luaentity().name ~= "throwing:arrow_dig_entity" and obj:get_luaentity().name ~= "__builtin:item" then
+					minetest.env:add_item(pos, 'throwing:arrow_dig')
+					minetest.env:remove_node(pos)
 					self.object:remove()
-					return
 				end
 			else
-				minetest.add_item(pos, 'throwing:arrow_dig')
-				minetest.remove_node(pos)
+				minetest.env:add_item(pos, 'throwing:arrow_dig')
+				minetest.env:remove_node(pos)
 				self.object:remove()
-				return
 			end
 		end
 	end
 
 	if self.lastpos.x~=nil then
 		if node.name ~= "air" then
-			minetest.add_item(self.lastpos, 'throwing:arrow_dig')
-			minetest.remove_node(pos)
+			minetest.env:add_item(self.lastpos, 'throwing:arrow_dig')
+			minetest.env:remove_node(pos)
 			self.object:remove()
 		end
 	end
@@ -74,10 +72,3 @@ THROWING_ARROW_ENTITY.on_step = function(self, dtime)
 end
 
 minetest.register_entity("throwing:arrow_dig_entity", THROWING_ARROW_ENTITY)
-
-minetest.register_craft({
-	output = 'throwing:arrow_dig',
-	recipe = {
-		{'default:stick', 'default:stick', 'default:pick_steel'},
-	}
-})
