@@ -58,8 +58,10 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 		local formspec = "size[9,8.5]"..
 				default.inventory_background..
 				default.inventory_listcolors..
-				inventory_plus.get_tabheader(player, "hgranks")
-		formspec = formspec .. ranked.get_player_ranks_formspec(player:get_player_name()) .. ranked.formspec .. "label[1,8;Ranks are reset the first day of every month]"
+				inventory_plus.get_tabheader(player, "hgranks")..
+				ranked.get_player_ranks_formspec(player:get_player_name())..
+				ranked.formspec..
+				"label[2.1,8;Ranks are reset the first day of every month]"
 		inventory_plus.set_inventory_formspec(player, formspec)
 	end
 
@@ -67,7 +69,7 @@ end)
 
 -- return info player ranks
 function ranked.get_players_info(name)
-	local t = {["nb_games"] = 0, ["nb_wins"] = 0, ["nb_lost"] = 0, ["nb_quit"] = 0 }
+	local t = {["nb_games"] = 0, ["nb_wins"] = 0, ["nb_lost"] = 0, ["nb_quit"] = 0,["wins_pct"] = 0}
 	if ranked.players_ranks["nb_games"][name] then
 		t["nb_games"] = ranked.players_ranks["nb_games"][name]
 	end
@@ -81,6 +83,13 @@ function ranked.get_players_info(name)
 	end
 	if ranked.players_ranks["nb_quit"][name] then
 		t["nb_quit"] = ranked.players_ranks["nb_quit"][name]
+	end
+
+	if t["nb_wins"] > 0 and t["nb_games"] >0 then
+		t["wins_pct"] = tonumber(math.floor(t["nb_wins"]*100/t["nb_games"]))
+		if t["wins_pct"] > 100 then
+			t["wins_pct"] = 100
+		end
 	end
 	return t
 end
@@ -122,23 +131,25 @@ end
 
 
 function ranked.set_ranked_formspec()
-	local formspec = {"label[2.8,0;Hunger Games Rankings]"}
+	local formspec = {"label[2.9,0;Hunger Games Rankings]"}
 	table.insert(formspec, "label[0,0.5;Rank]") --rank
-	table.insert(formspec, "label[1.2,0.5;Name]") --name
-	table.insert(formspec, "label[4.1,0.5;Games]") --nbgames
-	table.insert(formspec, "label[5.3,0.5;Wins]") --nbwins
-	table.insert(formspec, "label[6.4,0.5;Lost]") --nblost
-	table.insert(formspec, "label[7.5,0.5;Quit]") --nbquit
+	table.insert(formspec, "label[0.9,0.5;Name]") --name
+	table.insert(formspec, "label[3.4,0.5;Games]") --nbgames
+	table.insert(formspec, "label[4.6,0.5;Wins]") --nbwins
+	table.insert(formspec, "label[5.6,0.5;Lost]") --nblost
+	table.insert(formspec, "label[6.6,0.5;Quit]") --nbquit
+	table.insert(formspec, "label[7.6,0.5;wins pct]") --nbquit
 	if ranked.top_ranks ~= nil then
 		local Y = 2
 		for i ,name in pairs(ranked.top_ranks) do
 			local info = ranked.get_players_info(name)
 			table.insert(formspec, "label[0,"..Y..";"..tostring(i).."]") -- rank
-			table.insert(formspec, "label[1.2,"..Y..";"..tostring(name).."]") -- playername
-			table.insert(formspec, "label[4.1,"..Y..";"..tostring(info["nb_games"]).."]") -- nbgames
-			table.insert(formspec, "label[5.3,"..Y..";"..tostring(info["nb_wins"]).."]") -- nbwins
-			table.insert(formspec, "label[6.4,"..Y..";"..tostring(info["nb_lost"]).."]") -- nblost
-			table.insert(formspec, "label[7.5,"..Y..";"..tostring(info["nb_quit"]).."]") -- nbquit
+			table.insert(formspec, "label[0.9,"..Y..";"..tostring(name).."]") -- playername
+			table.insert(formspec, "label[3.4,"..Y..";"..tostring(info["nb_games"]).."]") -- nbgames
+			table.insert(formspec, "label[4.6,"..Y..";"..tostring(info["nb_wins"]).."]") -- nbwins
+			table.insert(formspec, "label[5.6,"..Y..";"..tostring(info["nb_lost"]).."]") -- nblost
+			table.insert(formspec, "label[6.6,"..Y..";"..tostring(info["nb_quit"]).."]") -- nbquit
+			table.insert(formspec, "label[7.6,"..Y..";"..tostring(info["wins_pct"]).."/100]") -- nbquit
 			Y = Y + 0.6
 		end
 	end
@@ -160,11 +171,12 @@ function ranked.get_player_ranks_formspec(name)
 	local formspec = {}
 	local info = ranked.get_players_info(name)
 	table.insert(formspec, "label[0,1;-]") -- rank
-	table.insert(formspec, "label[1.2,1;You]") -- playername
-	table.insert(formspec, "label[4.1,1;"..tostring(info["nb_games"]).."]") -- nbgames
-	table.insert(formspec, "label[5.3,1;"..tostring(info["nb_wins"]).."]") -- nbwins
-	table.insert(formspec, "label[6.4,1;"..tostring(info["nb_lost"]).."]") -- nblost
-	table.insert(formspec, "label[7.5,1;"..tostring(info["nb_quit"]).."]") -- nbquit
+	table.insert(formspec, "label[0.9,1;You]") -- playername
+	table.insert(formspec, "label[3.4,1;"..tostring(info["nb_games"]).."]") -- nbgames
+	table.insert(formspec, "label[4.6,1;"..tostring(info["nb_wins"]).."]") -- nbwins
+	table.insert(formspec, "label[5.6,1;"..tostring(info["nb_lost"]).."]") -- nblost
+	table.insert(formspec, "label[6.6,1;"..tostring(info["nb_quit"]).."]") -- nbquit
+	table.insert(formspec, "label[7.6,1;"..tostring(info["wins_pct"]).."/100]") -- nbquit
 	return table.concat(formspec)
 end
 

@@ -321,6 +321,7 @@ local start_game_now = function(input)
 	countdown = false
 	starting_game = false
 	minetest.sound_play("hungry_games_start")
+	ranked.save_players_ranks()
 	return true
 end
 
