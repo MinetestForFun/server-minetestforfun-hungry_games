@@ -138,7 +138,7 @@ function ranked.set_ranked_formspec()
 	table.insert(formspec, "label[4.6,0.5;Wins]") --nbwins
 	table.insert(formspec, "label[5.6,0.5;Lost]") --nblost
 	table.insert(formspec, "label[6.6,0.5;Quit]") --nbquit
-	table.insert(formspec, "label[7.6,0.5;wins pct]") --nbquit
+	table.insert(formspec, "label[7.6,0.5;Wins %]") --pct
 	if ranked.top_ranks ~= nil then
 		local Y = 2
 		for i ,name in pairs(ranked.top_ranks) do
@@ -149,7 +149,7 @@ function ranked.set_ranked_formspec()
 			table.insert(formspec, "label[4.6,"..Y..";"..tostring(info["nb_wins"]).."]") -- nbwins
 			table.insert(formspec, "label[5.6,"..Y..";"..tostring(info["nb_lost"]).."]") -- nblost
 			table.insert(formspec, "label[6.6,"..Y..";"..tostring(info["nb_quit"]).."]") -- nbquit
-			table.insert(formspec, "label[7.6,"..Y..";"..tostring(info["wins_pct"]).."/100]") -- nbquit
+			table.insert(formspec, "label[7.6,"..Y..";"..tostring(info["wins_pct"]).." %]") -- pct
 			Y = Y + 0.6
 		end
 	end
@@ -176,7 +176,7 @@ function ranked.get_player_ranks_formspec(name)
 	table.insert(formspec, "label[4.6,1;"..tostring(info["nb_wins"]).."]") -- nbwins
 	table.insert(formspec, "label[5.6,1;"..tostring(info["nb_lost"]).."]") -- nblost
 	table.insert(formspec, "label[6.6,1;"..tostring(info["nb_quit"]).."]") -- nbquit
-	table.insert(formspec, "label[7.6,1;"..tostring(info["wins_pct"]).."/100]") -- nbquit
+	table.insert(formspec, "label[7.6,1;"..tostring(info["wins_pct"]).." %]") -- pct
 	return table.concat(formspec)
 end
 
