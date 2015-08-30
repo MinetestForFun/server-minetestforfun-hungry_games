@@ -1212,10 +1212,13 @@ minetest.register_node("default:apple", {
 	groups = {fleshy=3,dig_immediate=3,flammable=2,leafdecay=3,leafdecay_drop=1},
 	on_use = minetest.item_eat(1),
 	sounds = default.node_sound_leaves_defaults(),
-	after_place_node = function(pos, placer, itemstack)
-		if placer:is_player() then
-			minetest.set_node(pos, {name="default:apple", param2=1})
+	on_place = function(itemstack, placer, pointed_thing)
+		local node = minetest.get_node_or_nil(pointed_thing.above)
+		if node.name == "air" and placer:is_player() then
+			minetest.set_node(pointed_thing.above, {name="default:apple", param2=1})
+			itemstack:take_item()
 		end
+		return itemstack
 	end,
 })
 
