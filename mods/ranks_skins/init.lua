@@ -16,7 +16,7 @@ function update_rank_skin(player)
 			if index <= 3 then
 				ptexture = "character_top3.png"
 				break
-			elseif index >= 10 then
+			elseif index <= 10 then
 				ptexture = "character_top10.png"
 				break
 			end
