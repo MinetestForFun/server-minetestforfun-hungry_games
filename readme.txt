@@ -1,4 +1,5 @@
-#### Hungry games server version of MinetestForFun Team
+Hungry Games server version of MinetestForFun Team
+===================
  _    _                                 _____                                   
 | |  | |                               / ____|                              _   
 | |__| |_   _ _ __   __ _ _ __ _   _  | |  __  __ _ _ __ ___   ___  ___   _| |_ 
