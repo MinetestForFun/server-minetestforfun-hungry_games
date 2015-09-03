@@ -63,7 +63,7 @@ THROWING_ARROW_ENTITY.on_step = function(self, dtime)
 					end
 				end
 			end
-			if node.name ~= "air" and node.name ~= "throwing:light" then
+			if node.name ~= "air" and node.name ~= "throwing:light" and node.name ~= "fire:basic_flame" then
 				minetest.set_node(self.lastpos, {name="fire:basic_flame"})
 				self.object:remove()
 				return
