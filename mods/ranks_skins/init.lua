@@ -22,7 +22,6 @@ function update_rank_skin(player)
 			end
 		end
 	end
-	print(ptexture)
 	default.player_set_textures(player, {ptexture,})
 	ranks_skins.skins[name] = ptexture
 end
@@ -34,4 +33,3 @@ function update_rank_skins()
 end
 
 minetest.register_on_joinplayer(update_rank_skin)
---minetest.register_on_joinplayer(function(player) minetest.after(2, update_rank_skin, player) end)

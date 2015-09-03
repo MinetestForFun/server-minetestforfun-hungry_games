@@ -139,7 +139,6 @@ if minetest.setting_getbool("creative_mode") then
 				snappy = {times={[1]=0.5, [2]=0.5, [3]=0.5}, uses=0, maxlevel=3},
 				choppy = {times={[1]=0.5, [2]=0.5, [3]=0.5}, uses=0, maxlevel=3},
 				oddly_breakable_by_hand = {times={[1]=0.5, [2]=0.5, [3]=0.5}, uses=0, maxlevel=3},
-				ladder_diggable = {times={[1] = 0.5}, uses=0}
 			}
 		}
 	})
