@@ -16,6 +16,7 @@ load_mod_name_restrictions = true
 load_mod_playertools = true
 load_mod_maptools = true
 load_mod_moreblocks = true
+load_mod_peace_areas = true
 load_mod_player_inactive = true
 load_mod_signs_lib = true
 load_mod_itemframes = true
