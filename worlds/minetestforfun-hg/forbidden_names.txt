@@ -47,5 +47,3 @@ Bardin
 Elspawn
 Bytell
 MisterDaweed
-Daweed
-MrDaweed
