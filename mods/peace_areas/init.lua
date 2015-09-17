@@ -55,7 +55,7 @@ end
 minetest.register_on_punchplayer(function(player, hitter)
 	if is_in_peace_area(player) and hitter:is_player() then
 		minetest.chat_send_player(hitter:get_player_name(), "You cannot punch player " ..
-			player:get_player_name() .. ". They are in area '" .. peace_area(pos) .. "'.")
+			player:get_player_name() .. ". They are in area '" .. peace_area(player:getpos()) .. "'.")
 		return true
 		--[[
 		Note:
