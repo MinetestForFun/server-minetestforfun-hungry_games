@@ -13,6 +13,7 @@ load_mod_gauges = true
 load_mod_carbone_torches = true
 load_mod_carbone_mobs = true
 load_mod_name_restrictions = true
+load_mod_mff_hud = true
 load_mod_playertools = true
 load_mod_maptools = true
 load_mod_moreblocks = true

@@ -16,12 +16,6 @@ end
 default.inventory_background = "background[0,0;9,8;default_inventory_background.png;true]"
 default.inventory_listcolors = "listcolors[#8E6C3C;#EEAF6B;#683E12;#CA7700;#FFFFFF]"
 
-hotbar_size = minetest.setting_get("hotbar_size") or 16
--- Update appearance when the player joins
-minetest.register_on_joinplayer(function(player)
-	player:hud_set_hotbar_itemcount(hotbar_size)
-end)
-
 -- Load files
 dofile(minetest.get_modpath("default").."/functions.lua")
 dofile(minetest.get_modpath("default").."/nodes.lua")
