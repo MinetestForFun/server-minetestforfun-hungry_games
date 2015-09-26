@@ -1,4 +1,5 @@
 local votes = 0
+local skips = 0
 local starting_game = false
 local ingame = false
 local force_init_warning = false
@@ -9,6 +10,7 @@ minetest.register_privilege("ingame",{description = "privs when player is in cur
 
 local registrants = {}
 local voters = {}
+local skipers = {}
 local voters_hud = {}
 local currGame = {}
 
@@ -36,7 +38,7 @@ hb.register_hudbar("votes", 0xFFFFFF, "Votes", { bar = "hungry_games_votebar.png
 
 local update_timer_hud = function(text)
 	local players = minetest.get_connected_players()
-	for i=1,#players do
+	for i=1,#players - skips do
 		local player = players[i]
 		local name = player:get_player_name()
 		if timer_hudids[name] ~= nil then
@@ -122,7 +124,7 @@ end
 Returns the number of votes currently needed to start a game.
 ]]
 local needed_votes = function()
-	local num = #minetest.get_connected_players()
+  local num = #minetest.get_connected_players() - skips
 	if num <= hungry_games.vote_unanimous then
 		return num
 	else
@@ -137,7 +139,7 @@ local update_votebars = function()
 	local players = minetest.get_connected_players()
 	for i=1, #players do
 		hb.change_hudbar(players[i], "votes", votes, needed_votes())
-		if #players < 2 or ingame or starting_game or maintenance_mode then
+		if #players - skips < 2 or ingame or starting_game or maintenance_mode then
 			hb.hide_hudbar(players[i], "votes")
 		else
 			hb.unhide_hudbar(players[i], "votes")
@@ -218,23 +220,27 @@ Stops the game immediately.
 ]]
 local stop_game = function()
 	for _,player in ipairs(minetest.get_connected_players()) do
-		minetest.after(0.1, function()
-			local name = player:get_player_name()
-		   	local privs = minetest.get_player_privs(name)
-			player:set_nametag_attributes({color = {a=255, r=255, g=255, b=255}})
-			privs.fast = nil
-			privs.fly = nil
-			privs.interact = true
-			privs.ingame = nil
-			minetest.set_player_privs(name, privs)
-			drop_player_items(name, true)
-			player:set_hp(20)
-			spawning.spawn(player, "lobby")
-		end)
-		ingame = false
+	  if not skipers[player:get_player_name()] then
+		  minetest.after(0.1, function()
+			  local name = player:get_player_name()
+		     	local privs = minetest.get_player_privs(name)
+			  player:set_nametag_attributes({color = {a=255, r=255, g=255, b=255}})
+			  privs.fast = nil
+			  privs.fly = nil
+			  privs.interact = true
+			  privs.ingame = nil
+			  minetest.set_player_privs(name, privs)
+			  drop_player_items(name, true)
+			  player:set_hp(20)
+			  spawning.spawn(player, "lobby")
+		  end)
+		  ingame = false
+	  end
 	end
 	registrants = {}
 	currGame = {}
+	skips = 0
+	skipers = {}
 	ingame = false
 	grace = false
 	countdown = false
@@ -283,8 +289,8 @@ local check_win = function()
 		end
 	elseif starting_game then
 		local players = minetest.get_connected_players()
-		if #players < 2 then
-			if #players == 1 then
+		if #players - skips < 2 then
+			if #players - skips == 1 then
 				local winnerName = players[1]:get_player_name()
 				minetest.chat_send_player(winnerName, "You won! (All other players have left.)")
 				minetest.sound_play("hungry_games_victory")
@@ -457,10 +463,10 @@ local start_game = function()
 	local players = minetest.get_connected_players()
 	local players_shuffled = {}
 	local shuffle_free = {}
-	for j=1,#players do
+	for j=1,#players - skips do
 		shuffle_free[j] = j
 	end
-	for j=1,#players do
+	for j=1,#players - skips do
 		local rnd = math.random(1, #shuffle_free)
 		players_shuffled[j] = players[shuffle_free[rnd]]
 		table.remove(shuffle_free, rnd)
@@ -548,7 +554,7 @@ votes, calls start_game.
 local check_votes = function()
 	if not ingame then
 		local players = minetest.get_connected_players()
-		local num = table.getn(players)
+		local num = table.getn(players) - skips
 		if num > 1 and (votes >= needed_votes()) then
 			start_game()
 			return true
@@ -566,6 +572,7 @@ in the lobby and calls check_win.
 minetest.register_on_dieplayer(function(player)
 	local playerName = player:get_player_name()
 	local pos = player:getpos()
+  if skipers[player:get_player_name()] then return end
 
 	local count = 0
 	for _,_ in pairs(currGame) do
@@ -640,7 +647,7 @@ minetest.register_on_joinplayer(function(player)
 
 	spawning.spawn(player, "lobby")
 	reset_player_state(player)
-	hb.init_hudbar(player, "votes", votes, needed_votes(), (maintenance_mode or ingame or starting_game or #minetest.get_connected_players() < 2))
+	hb.init_hudbar(player, "votes", votes, needed_votes(), (maintenance_mode or ingame or starting_game or #minetest.get_connected_players() - skips < 2))
 	update_votebars()
 	timer_hudids[name] = player:hud_add({
 		hud_elem_type = "text",
@@ -679,6 +686,10 @@ minetest.register_on_leaveplayer(function(player)
 	if voters[name] and votes > 0 then
 		votes = votes - 1
 		voters[name] = nil
+	end
+	if skipers[name] and skips > 0 then
+	  skips = skips - 1
+	  skipers[name] = nil
 	end
 	if votes < 2 and timer_mode == "vote" then
 		unset_timer()
@@ -720,7 +731,7 @@ minetest.register_chatcommand("hg", {
 			end
 		until false
 		local ret
-		local num_players  = #minetest.get_connected_players()
+		local num_players  = #minetest.get_connected_players() - skips
 		--Restarts/Starts game.
 		if parms[1] == "start" then
 			if maintenance_mode then
@@ -826,12 +837,16 @@ minetest.register_chatcommand("hg", {
 				stop_game()
 				votes = 0
 				voters = {}
+				skips = 0
+				skipers = {}
 				maintenance_mode = true
 				update_votebars()
 				minetest.chat_send_all("This server is now in maintenance mode. The Hungry Games have been suspended until further notice.")
 			elseif maintenance_action == false then
 				votes = 0
 				voters = {}
+				skips = 0
+				skipers = {}
 				maintenance_mode = false
 				update_votebars()
 				minetest.chat_send_all("Server maintenance finished. The Hungry Games can begin!")
@@ -850,8 +865,8 @@ function vote(name, param)
 		return
 	end
 	local players = minetest.get_connected_players()
-	local num = #players
-	if num < 2 then
+	local num = #players - skips
+	if num < 2 and not skipers[name] then
 		minetest.chat_send_player(name, "At least 2 players are needed to start a new round.")
 		return
 	end
@@ -866,6 +881,11 @@ function vote(name, param)
 		end
 		voters[name] = true
 		votes = votes + 1
+		if skipers[name] then
+		  skipers[name] = nil
+		  skips = skips - 1
+		  minetest.chat_send_player(name, "Next game won't be skipped.")
+		end
 		update_votebars()
 		minetest.chat_send_all(name.. " has voted to begin! Votes so far: "..votes.."; Votes needed: "..needed_votes())
 
@@ -917,6 +937,11 @@ function register(name, param)
 	until false
 	if table.getn(registrants) < get_spots() then
 		registrants[name] = true
+		if skipers[name] then
+		  skipers[name] = nil
+		  skips = skips - 1
+		  minetest.chat_send_player(name, "Next game won't be skipped.")
+		end
 		minetest.chat_send_player(name, "You have registered!")
 	else
 		minetest.chat_send_player(name, "Sorry! There are no spots left for you to spawn.")
@@ -933,6 +958,36 @@ minetest.register_chatcommand("register", {
 			return false, "You need to be ingame to register"
 		end
 	end
+})
+
+function skip(name, param)
+  skipers[name] = true
+  skips = skips + 1
+  if registrants[name] then
+    registrants[name] = nil
+  end
+  if voters[name] then
+    voters[name] = nil
+    votes = votes - 1
+  end
+  if registrants[name] then
+    registrants[name] = nil
+  end
+  update_votebars()
+  minetest.chat_send_all(name .. " has chosen to skip next turn. Votes so far: ".. votes .. "; Votes needed: " .. needed_votes())
+  minetest.chat_send_player(name, "You will skip the next game. Vote or register to cancel.")
+end
+
+minetest.register_chatcommand("skip", {
+  description = "Skip the next hungry game",
+  privs = {vote = true},
+  func = function(name, param)
+    if minetest.get_player_by_name(name) then
+      skip(name)
+    else
+      return false, "You need to be ingame to skip"
+    end
+  end
 })
 
 -- get vote formspec
@@ -957,7 +1012,8 @@ vote_reminder = function()
 	local playerlist = minetest.get_connected_players()
 	for index, player in pairs(playerlist) do
 		if not ingame and not starting_game and not grace and not countdown and maintenance_mode == false
-			and not voters[player:get_player_name()] and #playerlist >= 2 then
+			and not voters[player:get_player_name()] and not skipers[player:get_player_name()] and
+			  not registrants[player:get_player_name()] and #playerlist - skips >= 2 then
 			if not vote_hud:exists(player, "hungry_games:vote_reminder") then
 				vote_hud:add(player, "hungry_games:vote_reminder", {
 					hud_elem_type = "text",
