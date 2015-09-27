@@ -196,7 +196,6 @@ local drop_player_items = function(playerName, clear)
 
 	--Drop armor inventory
 	local armor_inv = minetest.get_inventory({type="detached", name=player:get_player_name().."_armor"})
-	local player_inv = player:get_inventory()
 	for i = 1,6 do
 		if not clear then
 			local stack = inv:get_stack("armor", i)
@@ -208,8 +207,10 @@ local drop_player_items = function(playerName, clear)
 			pos.x = pos.x - x
 			pos.z = pos.z - z
 		end
-		armor_inv:set_stack("armor", i, nil)
-		player_inv:set_stack("armor", i, nil)
+		if armor_inv then
+			armor_inv:set_stack("armor", i, nil)
+		end
+		inv:set_stack("armor", i, nil)
 	end
 	armor:set_player_armor(player)
 	return
