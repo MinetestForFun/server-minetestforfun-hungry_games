@@ -592,7 +592,7 @@ minetest.register_node("default:junglesapling", {
 	on_place = minetest.rotate_node
 })
 
---[[minetest.register_node("default:pine_wood", {
+minetest.register_node("default:pine_wood", {
 	description = "Pine Wood Planks",
 	tiles = {"default_pine_wood.png"},
 	is_ground_content = false,
