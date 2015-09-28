@@ -954,7 +954,7 @@ minetest.register_chatcommand("register", {
 	privs = {register=true},
 	func = function(name, param)
 		if minetest.get_player_by_name(name) then
-			register(name)
+			register(name, param)
 		else
 			return false, "You need to be ingame to register"
 		end
@@ -1057,7 +1057,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 	elseif fields["hgregister"] then
 		local name = player:get_player_name()
 		if minetest.get_player_privs(name).register then
-			register(name)
+			register(name, param)
 		else
 			minetest.chat_send_player(name, "Sorry! You don't have register privs.")
 		end
