@@ -221,11 +221,11 @@ Stops the game immediately.
 ]]
 local stop_game = function()
 	for _,player in ipairs(minetest.get_connected_players()) do
-	  if not skipers[player:get_player_name()] then
-		  minetest.after(0.1, function()
-			  local name = player:get_player_name()
-		     	local privs = minetest.get_player_privs(name)
-			  player:set_nametag_attributes({color = {a=255, r=255, g=255, b=255}})
+	  minetest.after(0.1, function()
+		  local name = player:get_player_name()
+	     	  local privs = minetest.get_player_privs(name)
+		  player:set_nametag_attributes({color = {a=255, r=255, g=255, b=255}})
+		  if not skipers[player:get_player_name()] then
 			  privs.fast = nil
 			  privs.fly = nil
 			  privs.interact = true
@@ -234,14 +234,15 @@ local stop_game = function()
 			  drop_player_items(name, true)
 			  player:set_hp(20)
 			  spawning.spawn(player, "lobby")
-		  end)
-		  ingame = false
-	  end
+		else
+			skipers[name] = nil
+			skips = skips - 1 
+		end
+	  end)
+	  ingame = false
 	end
 	registrants = {}
 	currGame = {}
-	skips = 0
-	skipers = {}
 	ingame = false
 	grace = false
 	countdown = false
@@ -464,10 +465,10 @@ local start_game = function()
 	local players = minetest.get_connected_players()
 	local players_shuffled = {}
 	local shuffle_free = {}
-	for j=1,#players - skips do
+	for j=1,#players do
 		shuffle_free[j] = j
 	end
-	for j=1,#players - skips do
+	for j=1,#players do
 		local rnd = math.random(1, #shuffle_free)
 		players_shuffled[j] = players[shuffle_free[rnd]]
 		table.remove(shuffle_free, rnd)
@@ -488,6 +489,7 @@ local start_game = function()
 	-- Spawn players
 	for p=1,#players_shuffled  do
 		local player = players_shuffled[p]
+		if not skipers[player:get_player_name()] then
 		if diff > 0 then
 			registrants[player:get_player_name()] = true
 			diff = diff - 1
@@ -511,6 +513,7 @@ local start_game = function()
 			end
 		end, {player, spots_shuffled[i], gameSequenceNumber})
 		if registrants[player:get_player_name()] then i = i + 1 end
+		end
 	end
 	minetest.setting_set("enable_damage", "false")
 	if hungry_games.countdown > 0 then
