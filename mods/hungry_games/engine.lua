@@ -965,6 +965,7 @@ minetest.register_chatcommand("register", {
 })
 
 function skip(name, param)
+  if skipers[name] then return end
   skipers[name] = true
   skips = skips + 1
   if registrants[name] then
