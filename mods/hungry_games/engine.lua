@@ -1060,7 +1060,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 	elseif fields["hgregister"] then
 		local name = player:get_player_name()
 		if minetest.get_player_privs(name).register then
-			register(name, param)
+			register(name, "")
 		else
 			minetest.chat_send_player(name, "Sorry! You don't have register privs.")
 		end
