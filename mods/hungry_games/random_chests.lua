@@ -131,10 +131,12 @@ function random_chests.refill(i)
 			else
 				fill_chest(chests[i])
 			end
+			--[[ MFF crabman(2/10/2015)  disable timer refill
 			if i > (s+(chests_interval/2)) then
-				minetest.after(0.5,random_chests.refill, i)
+				minetest.after(0.5,random_chests.refill, i+1)
 				return
 			end
+			--]]
 		end
 		i = i + 1
 	end
