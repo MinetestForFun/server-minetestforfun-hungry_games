@@ -31,6 +31,7 @@ local fill_chest = function(pos)
 	end
 	local meta = minetest.get_meta(pos)
 	local inv = meta:get_inventory()
+	inv:set_list("main", {})
 	for _,itemstring in ipairs(invcontent) do
 		inv:add_item('main', itemstring)
 	end

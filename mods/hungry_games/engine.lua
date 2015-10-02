@@ -453,7 +453,7 @@ local start_game = function()
 		end, gameSequenceNumber)
 	end
 
-	random_chests.clear()
+	--random_chests.clear() --MFF crabman(1/10/2015) disabled 
 	random_chests.refill()
 
 	--Find out how many spots there are to spawn
@@ -1007,6 +1007,11 @@ local get_player_vote_formspec = function(name)
 	table.insert(formspec, "button[0,3.5;1.5,1;hgvote;Vote]")
 	table.insert(formspec, "label[1.6,3.5;Click to vote and start Hunger Games]")
 	table.insert(formspec, "label[1.6,4;(The Hunger Games start when there are at least 50% players voted)]")
+	-- skip
+	table.insert(formspec, "button[0,5.5;1.5,1;hgskip;Skip]")
+	table.insert(formspec, "label[1.6,5.5;Click to skip a Game]")
+	table.insert(formspec, "label[1.6,6;(You will skip the next game. Vote or register to cancel.)]")	
+	
 	return table.concat(formspec)
 end
 
@@ -1066,6 +1071,10 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 			minetest.chat_send_player(name, "Sorry! You don't have register privs.")
 		end
 		return
+	elseif fields["hgskip"] then
+		local name = player:get_player_name()
+		skip(name, "")
+		return		
 	end
 end)
 
