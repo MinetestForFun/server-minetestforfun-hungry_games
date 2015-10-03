@@ -88,6 +88,7 @@ refill_chests = function(args)
 	else
 		if refill then
 			minetest.chat_send_all("Refilling chests")
+			random_chests.clear()
 			random_chests.refill()
 		end
 
@@ -453,8 +454,8 @@ local start_game = function()
 		end, gameSequenceNumber)
 	end
 
-	--random_chests.clear() --MFF crabman(1/10/2015) disabled 
-	random_chests.refill()
+	random_chests.clear()
+	minetest.after(hungry_games.countdown, random_chests.refill) --MFF(Mg|10/03/15)
 
 	--Find out how many spots there are to spawn
 	local nspots = get_spots()
