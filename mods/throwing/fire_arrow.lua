@@ -49,15 +49,17 @@ THROWING_ARROW_ENTITY.on_step = function(self, dtime)
 			for k, obj in pairs(objs) do
 				local objpos = obj:getpos()
 				if throwing_is_player(self.player, obj) or throwing_is_entity(obj) then
-					if (pos.x - objpos.x < 0.5 and pos.x - objpos.x > -0.5) and (pos.z - objpos.z < 0.5 and pos.z - objpos.z > -0.5) then
-						local damage = 0
+					if throwing_touch(pos, objpos) then
 						if minetest.setting_getbool("enable_pvp") then
-							damage = 3
+							local puncher = self.object
+							if self.player and minetest.get_player_by_name(self.player) then
+								puncher = minetest.get_player_by_name(self.player)
+							end
+							obj:punch(puncher, 1.0, {
+									full_punch_interval=1.0,
+									damage_groups={fleshy=3},
+									}, nil)
 						end
-						obj:punch(self.object, 1.0, {
-								full_punch_interval=1.0,
-								damage_groups={fleshy=damage},
-								}, nil)
 						self.object:remove()
 						return
 					end

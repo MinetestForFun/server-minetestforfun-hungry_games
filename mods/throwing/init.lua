@@ -1,9 +1,9 @@
 arrows = {
 	{"throwing:arrow", "throwing:arrow_entity"},
 	{"throwing:arrow_fire", "throwing:arrow_fire_entity"},
-	{"throwing:arrow_teleport", "throwing:arrow_teleport_entity"},
-	{"throwing:arrow_dig", "throwing:arrow_dig_entity"},
-	{"throwing:arrow_build", "throwing:arrow_build_entity"}
+--	{"throwing:arrow_teleport", "throwing:arrow_teleport_entity"},
+--	{"throwing:arrow_dig", "throwing:arrow_dig_entity"},
+--	{"throwing:arrow_build", "throwing:arrow_build_entity"}
 }
 
 function throwing_is_player(name, obj)
@@ -32,6 +32,16 @@ function throwing_get_trajectoire(self, newpos)
 	end
 	table.insert(coord, newpos)
 	return coord
+end
+
+function throwing_touch(pos, objpos)
+	local rx = pos.x - objpos.x
+	local ry = pos.y - (objpos.y+1)
+	local rz = pos.z - objpos.z
+	if (ry < 1 and ry > -1) and (rx < 0.4 and rx > -0.4) and (rz < 0.4 and rz > -0.4) then
+		return true
+	end
+	return false
 end
 
 local throwing_shoot_arrow = function(itemstack, player)
