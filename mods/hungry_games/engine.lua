@@ -942,9 +942,10 @@ function register(name, param)
 	if table.getn(registrants) < get_spots() then
 		registrants[name] = true
 		if skipers[name] then
-		  skipers[name] = nil
-		  skips = skips - 1
-		  minetest.chat_send_player(name, "Next game won't be skipped.")
+			skipers[name] = nil
+			skips = skips - 1
+			minetest.chat_send_player(name, "Next game won't be skipped.")
+			check_votes()
 		end
 		minetest.chat_send_player(name, "You have registered!")
 	else
@@ -965,22 +966,25 @@ minetest.register_chatcommand("register", {
 })
 
 function skip(name, param)
-  if skipers[name] then return end
-  skipers[name] = true
-  skips = skips + 1
-  if registrants[name] then
-    registrants[name] = nil
-  end
-  if voters[name] then
-    voters[name] = nil
-    votes = votes - 1
-  end
-  if registrants[name] then
-    registrants[name] = nil
-  end
-  update_votebars()
-  minetest.chat_send_all(name .. " has chosen to skip next turn. Votes so far: ".. votes .. "; Votes needed: " .. needed_votes())
-  minetest.chat_send_player(name, "You will skip the next game. Vote or register to cancel.")
+	if skipers[name] then return end
+
+	skipers[name] = true
+	skips = skips + 1
+
+	if registrants[name] then
+		registrants[name] = nil
+	end
+
+	if voters[name] then
+		voters[name] = nil
+		votes = votes - 1
+	end
+
+	minetest.chat_send_all(name .. " has chosen to skip next turn. Votes so far: ".. votes .. "; Votes needed: " .. needed_votes())
+	minetest.chat_send_player(name, "You will skip the next game. Vote or register to cancel.")
+
+	update_votebars()
+	check_votes()
 end
 
 minetest.register_chatcommand("skip", {
