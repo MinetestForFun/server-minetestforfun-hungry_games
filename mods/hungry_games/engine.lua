@@ -88,7 +88,6 @@ refill_chests = function(args)
 	else
 		if refill then
 			minetest.chat_send_all("Refilling chests")
-			random_chests.clear()
 			random_chests.refill()
 		end
 
