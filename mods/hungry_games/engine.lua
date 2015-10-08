@@ -253,7 +253,7 @@ local stop_game = function()
 	unset_timer()
 	ranked.save_players_ranks()
 	ranked.update_formspec()
-	update_rank_skins()
+	minetest.after(1, update_rank_skins)
 end
 
 --[[
