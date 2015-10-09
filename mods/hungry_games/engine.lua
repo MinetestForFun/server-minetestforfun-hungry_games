@@ -878,7 +878,7 @@ function vote(name, param)
 		minetest.chat_send_player(name, "Spawn positions haven't been set yet. The game can not be started at the moment.")
 		return
 	end
-	if not ingame and not starting_game then
+	if not ingame and not starting_game and not grace then
 		if voters[name] ~= nil then
 			minetest.chat_send_player(name, "You already have voted.")
 			return
@@ -966,6 +966,11 @@ minetest.register_chatcommand("register", {
 })
 
 function skip(name, param)
+
+	if ingame or countdown or grace or starting_game then
+		return
+	end
+
 	if skipers[name] then return end
 
 	skipers[name] = true
