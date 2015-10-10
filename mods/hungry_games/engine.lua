@@ -38,7 +38,7 @@ hb.register_hudbar("votes", 0xFFFFFF, "Votes", { bar = "hungry_games_votebar.png
 
 local update_timer_hud = function(text)
 	local players = minetest.get_connected_players()
-	for i=1,#players - skips do
+	for i=1,#players do
 		local player = players[i]
 		local name = player:get_player_name()
 		if timer_hudids[name] ~= nil then
@@ -221,26 +221,32 @@ Stops the game immediately.
 ]]
 local stop_game = function()
 	for _,player in ipairs(minetest.get_connected_players()) do
-	  minetest.after(0.1, function()
-		  local name = player:get_player_name()
-	     	  local privs = minetest.get_player_privs(name)
-		  player:set_nametag_attributes({color = {a=255, r=255, g=255, b=255}})
-		  if not skipers[player:get_player_name()] then
-			  privs.fast = nil
-			  privs.fly = nil
-			  privs.interact = true
-			  privs.ingame = nil
-			  minetest.set_player_privs(name, privs)
-			  drop_player_items(name, true)
-			  player:set_hp(20)
-			  spawning.spawn(player, "lobby")
-		else
-			skipers[name] = nil
-			skips = skips - 1 
-		end
-	  end)
-	  ingame = false
+		minetest.after(0.1, function()
+			local name = player:get_player_name()
+	  		local privs = minetest.get_player_privs(name)
+			player:set_nametag_attributes({color = {a=255, r=255, g=255, b=255}})
+			privs.fast = nil
+			privs.fly = nil
+			privs.interact = true
+			privs.ingame = nil
+			minetest.set_player_privs(name, privs)
+			drop_player_items(name, true)
+			player:set_hp(20)
+			if not skipers[player:get_player_name()] then
+				spawning.spawn(player, "lobby")
+			else
+				skipers[name] = nil
+				skips = skips - 1 
+			end
+		end)
+		minetest.after(3, function()
+			-- Clear skips, since skipping is disabled ingame
+			skipers = {}
+			skips = 0
+		end)
+		ingame = false
 	end
+
 	registrants = {}
 	currGame = {}
 	ingame = false
@@ -253,7 +259,8 @@ local stop_game = function()
 	unset_timer()
 	ranked.save_players_ranks()
 	ranked.update_formspec()
-	minetest.after(1, update_rank_skins)
+	update_rank_skins()
+	minetest.after(1, update_votebars)
 end
 
 --[[
@@ -966,8 +973,8 @@ minetest.register_chatcommand("register", {
 })
 
 function skip(name, param)
-
 	if ingame or countdown or grace or starting_game then
+		minetest.chat_send_player(name, "You cannot skip during games, even if you don't play. Please wait.")
 		return
 	end
 
@@ -990,6 +997,11 @@ function skip(name, param)
 
 	update_votebars()
 	check_votes()
+	if votes < 2 and timer_mode == "vote" then
+		unset_timer()
+		minetest.chat_send_all("Automatic game start has been aborted; there are less than 2 votes.")
+		force_init_warning = false
+	end
 end
 
 minetest.register_chatcommand("skip", {

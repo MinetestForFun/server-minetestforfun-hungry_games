@@ -22,8 +22,6 @@ function update_rank_skin(player)
 			end
 		end
 	end
-	print(name)
-	print(ptexture)
 	default.player_set_textures(player, {ptexture,})
 	ranks_skins.skins[name] = ptexture
 end
