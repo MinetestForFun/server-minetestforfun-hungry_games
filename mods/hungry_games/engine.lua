@@ -933,6 +933,7 @@ minetest.register_chatcommand("vote", {
 function register(name, param)
 	--Catch param.
 	local parms = {}
+	local param = param or ""
 	repeat
 		v, p = param:match("^(%S*) (.*)")
 		if p then
