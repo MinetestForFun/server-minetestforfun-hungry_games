@@ -500,11 +500,12 @@ minetest.register_node("default:apple", {
 	sounds = default.node_sound_leaves_defaults(),
 
 	on_place = function(itemstack, placer, pointed_thing)
-		local node = minetest.get_node_or_nil(pointed_thing.above)
+	--[[	local node = minetest.get_node_or_nil(pointed_thing.above)
 		if node.name == "air" and placer:is_player() then
 			minetest.set_node(pointed_thing.above, {name="default:apple", param2=1})
 			itemstack:take_item()
  		end
+ 	--]]
 		return itemstack
  	end,
 })
