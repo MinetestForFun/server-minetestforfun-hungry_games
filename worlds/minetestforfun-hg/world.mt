@@ -8,6 +8,7 @@ load_mod_worldedit_infinity = true
 load_mod_worldedit_limited = false
 load_mod_worldedit_shortcommands = true
 
+load_mod_bobblocks = true
 load_mod_sprint = true
 load_mod_gauges = true
 load_mod_carbone_torches = true
