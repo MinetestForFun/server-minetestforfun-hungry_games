@@ -1,3 +1,6 @@
+Hunger Games server version of MinetestForFun Team
+===================
+
 ![banner_hunger_games](http://i.imgur.com/hXYmXpF.png)
 
 By Splizard.
