@@ -10,11 +10,13 @@ dofile(minetest.get_modpath("hungry_games").."/ranked.lua")
 dofile(minetest.get_modpath("hungry_games").."/engine.lua")
 dofile(minetest.get_modpath("hungry_games").."/random_chests.lua")
 dofile(minetest.get_modpath("hungry_games").."/spawning.lua")
+dofile(minetest.get_modpath("hungry_games").."/arena.lua")
 
------------------------------------
---------Arena configuration--------
+------------------------------------------------
+--------Arena configuration (arena.lua) --------
 
---Size of the arena.
+--How large the map gets before it stops generating. The map will be a cube centered around (0,0,0) with this number as its x y and z dimension.
+arena.size = 400
 glass_arena.set_size(400)
 
 --Texture of the arena wall. [SAFE]
@@ -45,11 +47,23 @@ hungry_games.countdown = 10
 --Grace period length in seconds (0 for no grace period).
 hungry_games.grace_period = 75
 
---What happens when a player dies during a match. Possible values are: "spectate" or "lobby".
-hungry_games.death_mode = "lobby"
+--If true, grant players fly and fast after they die in a match so that they can "spectate" the match, they will retain those privs until the end of the match. If false, just spawn them in the lobby without any additional privs.
+hungry_games.spectate_after_death = false
 
 --Interval at which chests are refilled during each match (seconds), set to -1 to only fill chests once at the beginning of the match.
 hungry_games.chest_refill_interval = 240
+
+--Time (in seconds) after which all player inventories and chests will be cleared, chest refilling will stop (if enabled) and all players will receive the contents of hungry_games.sudden_death_items. -1 to disable.
+hungry_games.sudden_death_time = 900
+
+--Items which each player will receive upon the game going into sudden death. This is an array of minetest itemstrings.
+hungry_games.sudden_death_items = {
+	"default:sword_steel",
+	"default:apple 2"
+}
+
+--Time (in seconds) after which the game will automatically end in a draw. Must be enabled.
+hungry_games.hard_time_limit = 3600
 
 --Percentage of players that must have voted (/vote) for the match to start (0 is 0%, 0.5 is 50%, 1 is 100%) must be <1 and >0.
 hungry_games.vote_percent = 0.5
@@ -69,11 +83,11 @@ hungry_games.allow_dig = false
 --Lobby and spawn points. [SAFE]
 --NOTE: These are overridden by /hg set spawn & /hg set lobby.
 spawning.register_spawn("spawn",{
-	mode = "static",
+	mode = "static", 
 	pos = {x=0,y=0,z=0},
 })
 spawning.register_spawn("lobby",{
-	mode = "static",
+	mode = "static", 
 	pos = {x=0,y=0,z=0},
 })
 

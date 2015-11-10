@@ -74,10 +74,10 @@ minetest.register_craftitem(":vessels:drinking_glass", {
 				if not(minetest.registered_items[node.name].liquidtype=="none") then
 					minetest.remove_node(pointed_thing.under);
 				end
-				itemstack:take_item();
+				itemstack:take_item(); 
 				return itemstack
 			end
-		end
+		end	
 	end,
 })
 
@@ -176,7 +176,7 @@ survival.register_state("thirst", {
 	        if privs.ingame then
 
 		        state.count = state.count + dtime;
-
+		        
 		        if (state.thirsty and (state.count >= PASS_OUT_TIME)) then
 		            state.count = 0;
 		            state.thirsty = false;

@@ -98,7 +98,7 @@ inventory_plus.get_formspec = function(player,page)
 	f[fp] = default.inventory_background
 	fp = fp + 1
 	f[fp] = default.inventory_listcolors
-
+	
 	-- player inventory
 	fp = fp + 1
 	f[fp] = "box[0.3,4.2;8.2,4.5;#FFFFFF40]"
@@ -163,7 +163,7 @@ inventory_plus.get_formspec = function(player,page)
 			player:get_inventory():set_size("craft", 3*3)
 		end
 	end
-
+	
 	return table.concat(f, "")
 end
 

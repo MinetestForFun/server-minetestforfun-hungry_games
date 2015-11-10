@@ -134,11 +134,24 @@ function doors.register_door(name, def)
 		end
 		local p2 = minetest.get_node(pos).param2
 		p2 = params[p2+1]
-
+		
 		minetest.swap_node(pos, {name=replace_dir, param2=p2})
-
+		
 		pos.y = pos.y-dir
 		minetest.swap_node(pos, {name=replace, param2=p2})
+
+		local snd_1 = def.sound_close_door
+		local snd_2 = def.sound_open_door 
+		if params[1] == 3 then
+			snd_1 = def.sound_open_door 
+			snd_2 = def.sound_close_door
+		end
+
+		if minetest.get_meta(pos):get_int("right") ~= 0 then
+			minetest.sound_play(snd_1, {pos = pos, gain = 0.3, max_hear_distance = 10})
+		else
+			minetest.sound_play(snd_2, {pos = pos, gain = 0.3, max_hear_distance = 10})
+		end
 	end
 
 	local function check_player_priv(pos, player)
@@ -193,12 +206,12 @@ function doors.register_door(name, def)
 			fixed = def.selection_box_bottom
 		},
 		groups = def.groups,
-
+		
 		after_dig_node = function(pos, oldnode, oldmetadata, digger)
 			pos.y = pos.y+1
 			after_dig_node(pos, name.."_t_1", digger)
 		end,
-
+		
 		on_rightclick = function(pos, node, clicker)
 			if check_player_priv(pos, clicker) then
 				on_rightclick(pos, 1, name.."_t_1", name.."_b_2", name.."_t_2", {1,2,3,0})
@@ -210,6 +223,7 @@ function doors.register_door(name, def)
 		end,
 
 		can_dig = check_player_priv,
+		sounds = def.sounds,
 		sunlight_propagates = def.sunlight,
 		on_blast = make_on_blast(name, 1, "_b_1", "_t_1")
 	})
@@ -219,7 +233,7 @@ function doors.register_door(name, def)
 		paramtype = "light",
 		paramtype2 = "facedir",
 		is_ground_content = false,
-		drop = name,
+		drop = "",
 		drawtype = "nodebox",
 		node_box = {
 			type = "fixed",
@@ -230,12 +244,12 @@ function doors.register_door(name, def)
 			fixed = def.selection_box_top
 		},
 		groups = def.groups,
-
+		
 		after_dig_node = function(pos, oldnode, oldmetadata, digger)
 			pos.y = pos.y-1
 			after_dig_node(pos, name.."_b_1", digger)
 		end,
-
+		
 		on_rightclick = function(pos, node, clicker)
 			if check_player_priv(pos, clicker) then
 				on_rightclick(pos, -1, name.."_b_1", name.."_t_2", name.."_b_2", {1,2,3,0})
@@ -247,6 +261,7 @@ function doors.register_door(name, def)
 		end,
 
 		can_dig = check_player_priv,
+		sounds = def.sounds,
 		sunlight_propagates = def.sunlight,
 		on_blast = make_on_blast(name, -1, "_t_1", "_b_1")
 	})
@@ -267,12 +282,12 @@ function doors.register_door(name, def)
 			fixed = def.selection_box_bottom
 		},
 		groups = def.groups,
-
+		
 		after_dig_node = function(pos, oldnode, oldmetadata, digger)
 			pos.y = pos.y+1
 			after_dig_node(pos, name.."_t_2", digger)
 		end,
-
+		
 		on_rightclick = function(pos, node, clicker)
 			if check_player_priv(pos, clicker) then
 				on_rightclick(pos, 1, name.."_t_2", name.."_b_1", name.."_t_1", {3,0,1,2})
@@ -284,6 +299,7 @@ function doors.register_door(name, def)
 		end,
 
 		can_dig = check_player_priv,
+		sounds = def.sounds,
 		sunlight_propagates = def.sunlight,
 		on_blast = make_on_blast(name, 1, "_b_2", "_t_2")
 	})
@@ -293,7 +309,7 @@ function doors.register_door(name, def)
 		paramtype = "light",
 		paramtype2 = "facedir",
 		is_ground_content = false,
-		drop = name,
+		drop = "",
 		drawtype = "nodebox",
 		node_box = {
 			type = "fixed",
@@ -304,12 +320,12 @@ function doors.register_door(name, def)
 			fixed = def.selection_box_top
 		},
 		groups = def.groups,
-
+		
 		after_dig_node = function(pos, oldnode, oldmetadata, digger)
 			pos.y = pos.y-1
 			after_dig_node(pos, name.."_b_2", digger)
 		end,
-
+		
 		on_rightclick = function(pos, node, clicker)
 			if check_player_priv(pos, clicker) then
 				on_rightclick(pos, -1, name.."_b_2", name.."_t_1", name.."_b_1", {3,0,1,2})
@@ -321,6 +337,7 @@ function doors.register_door(name, def)
 		end,
 
 		can_dig = check_player_priv,
+		sounds = def.sounds,
 		sunlight_propagates = def.sunlight,
 		on_blast = make_on_blast(name, -1, "_t_2", "_b_2")
 	})

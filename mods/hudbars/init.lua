@@ -283,7 +283,7 @@ function hb.register_hudbar(identifier, text_color, label, textures, default_sta
 	hudtable.default_start_max = default_start_max
 
 	hb.hudbars_count= hb.hudbars_count + 1
-
+	
 	hb.hudtables[identifier] = hudtable
 end
 
@@ -446,14 +446,14 @@ local function update_hud(player)
 		end
 		--air
 		local breath = player:get_breath()
-
+		
 		if breath == 11 and hb.settings.autohide_breath == true then
 			hb.hide_hudbar(player, "breath")
 		else
 			hb.unhide_hudbar(player, "breath")
 			hb.change_hudbar(player, "breath", math.min(breath, 10))
 		end
-
+		
 		--health
 		hb.change_hudbar(player, "health", player:get_hp())
 	elseif hb.settings.forceload_default_hudbars then
@@ -489,6 +489,3 @@ minetest.register_globalstep(function(dtime)
 	end
 	if timer > 4 then timer = 0 end
 end)
-
--- Our legacy
-dofile(minetest.get_modpath("hudbars").."/hud_legacy.lua")
