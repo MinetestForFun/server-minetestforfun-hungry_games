@@ -1051,7 +1051,7 @@ vote_reminder = function()
 					hud_elem_type = "text",
 					position = {x = 0.5, y = 0.25},
 					scale = {x = 100, y = 100},
-					text = "Remember to vote using a voteblock, your \"vote\" inventory or /vote to start the Hungry Games!",
+					text = "Remember to vote by punching a voteblock, your \"vote\" inventory or /vote to start the Hungry Games!",
 					offset = {x=0, y = 0},
 					number = 0xFF0000
 				})
