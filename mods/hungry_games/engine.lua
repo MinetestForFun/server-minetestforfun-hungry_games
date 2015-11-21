@@ -377,7 +377,7 @@ local start_game_now = function(input)
 	end
 	for i,player in ipairs(contestants) do
 		local name = player:get_player_name()
-		if minetest.get_player_by_name(name) then
+		if minetest.get_player_by_name(name) and not skipers[name] then -- Shouldn't have to check for skipers
 			ranked.inc(name, "nb_games")
 			currGame[name] = true
 			player:set_nametag_attributes({color = {a=255, r=0, g=255, b=0}})
@@ -591,7 +591,7 @@ minetest.register_on_dieplayer(function(player)
 	end
 	count = count - 1
 
-	if ingame and currGame[playerName] and count ~= 1 then
+	if ingame and currGame[playerName] and count ~= 1 and not skipers[playerName] then
 		player:set_nametag_attributes({color = {a=255, r=255, g=0, b=0}})
 		local deathstr = playerName .. " has died! Players left: " .. tostring(count)
 		minetest.chat_send_all(deathstr)
@@ -684,7 +684,7 @@ end)
 
 minetest.register_on_leaveplayer(function(player)
 	local name = player:get_player_name()
-	if currGame[name] then
+	if currGame[name] and not skipers[name] then
 		drop_player_items(name)
 		ranked.inc(name, "nb_quit")
 		ranked.inc(name, "nb_lost")
