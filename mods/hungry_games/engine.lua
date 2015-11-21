@@ -906,7 +906,8 @@ function vote(name, param)
 			force_init_warning = true
 			set_timer("vote", hungry_games.vote_countdown)
 			voteSequenceNumber = voteSequenceNumber + 1
-			minetest.after(hungry_games.vote_countdown, function (gsn, vsn)
+			-- Start the function a little bit before otherwise timer will be unset
+			minetest.after(hungry_games.vote_countdown-0.5, function (gsn, vsn)
 				if not (starting_game or ingame and gsn == gameSequenceNumber) and timer_mode == "vote" and voteSequenceNumber == vsn then
 					start_game()
 				end
