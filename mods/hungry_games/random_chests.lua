@@ -129,6 +129,7 @@ function random_chests.refill(i)
 				print("instead")
 				table.remove(chests,i)
 			else
+				minetest.get_meta(chests[i]):set_string("formspec", default.chest_formspec)
 				fill_chest(chests[i])
 			end
 			--[[ MFF crabman(2/10/2015)  disable timer refill

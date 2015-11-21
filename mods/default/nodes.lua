@@ -1338,7 +1338,7 @@ minetest.register_node("default:torch", {
 
 
 
-local chest_formspec =
+default.chest_formspec =
 	"size[8,9]"..
 	default.inventory_background..
 	default.inventory_listcolors..
@@ -1384,7 +1384,7 @@ minetest.register_node("default:chest", {
 
 	on_construct = function(pos)
 		local meta = minetest.get_meta(pos)
-		meta:set_string("formspec", chest_formspec)
+		meta:set_string("formspec", default.chest_formspec)
 		meta:set_string("infotext", "Chest")
 		local inv = meta:get_inventory()
 		inv:set_size("main", 8*4)
