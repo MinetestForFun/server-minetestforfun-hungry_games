@@ -112,41 +112,6 @@ minetest.register_node("bobblocks:spike_major_reverse", {
     groups = {cracky=2,melty=2},
 })
 
--- Crafting
-
-minetest.register_craft({
-	output = 'bobblocks:trap_spike 3',
-	recipe = {
-		{'', 'default:obsidian_shard', ''},
-		{'', 'default:steel_ingot', ''},
-	}
-})
-
-minetest.register_craft({
-	output = 'bobblocks:trap_spike_major',
-	recipe = {
-		{'default:obsidian_shard', 'default:obsidian_shard', 'default:obsidian_shard'},
-		{'', 'default:steel_ingot', ''},
-	}
-})
-
-minetest.register_craft({
-	output = 'bobblocks:trap_grass',
-	recipe = {
-		{'', '', ''},
-		{'', 'default:dirt', ''},
-		{'', 'default:stick', ''},
-	}
-})
-
-minetest.register_craft({
-	output = 'bobblocks:spike_major_reverse',
-	recipe = {
-		{'', 'default:steel_ingot', ''},
-		{'default:obsidian_shard', 'default:obsidian_shard', 'default:obsidian_shard'},
-	}
-})
-
 -- ABM
 minetest.register_abm(
 	{nodenames = {"bobblocks:trap_spike"},
