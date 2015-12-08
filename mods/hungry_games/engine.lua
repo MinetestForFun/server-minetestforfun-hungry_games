@@ -1195,3 +1195,16 @@ for i in ipairs({1,2,3,4}) do
 		end,
 	})
 end
+
+
+minetest.register_on_punchplayer(function(player, hitter, time_from_last_punch, toolcap, dir, damage)
+	if not player:is_player() or not hitter:is_player() then return end
+	local playerName = player:get_player_name()
+	local hitterName = hitter:get_player_name()
+	if ingame and currGame[playerName] and currGame[hitterName] then
+		if player:get_hp() > 0 and player:get_hp() - damage <= 0 then
+			ranked.inc(hitterName, "nb_kills")
+		end
+	end
+end)
+
