@@ -156,11 +156,9 @@ chest_item('shields:shield_bronze', 20, 1, "shield")
 chest_item('shields:shield_diamond', 50, 1, "shield")
 chest_item('shields:shield_mithril', 40, 1, "shield")
 --Crafting items
-chest_item('default:stick', 8, 10)
-chest_item('default:steel_ingot', 15, 3)
+chest_item('default:stick', 5, 10)
+chest_item('default:steel_ingot', 11, 3)
 chest_item('throwing:string', 7, 3)
-chest_item('hungry_games:stones', 6, 3)
-chest_item('hungry_games:planks', 5, 3)
 
 --END OF CONFIG OPTIONS
 if hungry_games.dig_mode ~= "normal" then

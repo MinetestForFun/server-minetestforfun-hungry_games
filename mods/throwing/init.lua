@@ -83,17 +83,17 @@ minetest.register_tool("throwing:bow_wood", {
 minetest.register_craft({
 	output = 'throwing:bow_wood',
 	recipe = {
-		{'throwing:string', 'hungry_games:planks', ''},
-		{'throwing:string', '', 'hungry_games:planks'},
-		{'throwing:string', 'hungry_games:planks', ''},
+		{'throwing:string', 'default:stick', ''},
+		{'throwing:string', '', 'default:stick'},
+		{'throwing:string', 'default:stick', ''},
 	}
 })
 minetest.register_craft({
 	output = 'throwing:bow_wood',
 	recipe = {
-		{'', 'hungry_games:planks', 'throwing:string'},
-		{'hungry_games:planks', '', 'throwing:string'},
-		{'', 'hungry_games:planks', 'throwing:string'},
+		{'', 'default:stick', 'throwing:string'},
+		{'default:stick', '', 'throwing:string'},
+		{'', 'default:stick', 'throwing:string'},
 	}
 })
 
@@ -111,7 +111,7 @@ minetest.register_tool("throwing:bow_stone", {
 	end,
 })
 
-minetest.register_craft({
+--[[minetest.register_craft({
 	output = 'throwing:bow_stone',
 	recipe = {
 		{'throwing:string', 'hungry_games:stones', ''},
@@ -126,7 +126,7 @@ minetest.register_craft({
 		{'hungry_games:stones', '', 'throwing:string'},
 		{'', 'hungry_games:stones', 'throwing:string'},
 	}
-})
+})]]
 
 minetest.register_tool("throwing:bow_steel", {
 	description = "Steel Bow",
