@@ -59,6 +59,7 @@ THROWING_ARROW_ENTITY.on_step = function(self, dtime)
 									damage_groups={fleshy=3},
 									}, nil)
 						end
+						minetest.add_item(self.lastpos, 'throwing:arrow')
 						self.object:remove()
 						return
 					end
