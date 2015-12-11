@@ -149,7 +149,7 @@ function top.update_name(num, force)
 		return
 	end
 	top.name[num] = ranked.top_ranks[num]
-	local playername = top.name[num]:upper()
+	local playername = top.name[num]
 	-- reset podium
 	local pos_m = {x=top.conf.hall["pos"].x, y=top.conf.hall["pos"].y, z=top.conf.hall["pos"].z}
 	local dir = top.conf.hall["dir"]
@@ -158,7 +158,7 @@ function top.update_name(num, force)
 	local pos_deb = top.get_pos(pos_m, dir, -70)
 	for p=1,150 do
 		local pos2 = top.get_pos(pos_deb, dir, p)
-		for j=0, 9 do
+		for j=0, 10 do
 			minetest.set_node({x=pos2.x, y=pos2.y+j, z=pos2.z}, {name="air"})
 		end
 	end
@@ -175,7 +175,7 @@ function top.update_name(num, force)
 		if top.letters[l] ~= nil then
 			letter = top.letters[l]
 		else
-			letter = top.letters["?"]
+			letter = top.letters["-"]
 		end
 		top.set_letter(num, letter, d_pos, dir)
 	end

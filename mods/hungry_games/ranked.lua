@@ -1,6 +1,7 @@
 
 
 ranked.players_ranking_file = minetest.get_worldpath() .. "/players_rankings.txt"
+ranked.html_ranking_file = minetest.get_worldpath() .. "/html_rankings.html"
 ranked.players_ranks = {["nb_quit"] = {}, ["nb_games"] = {}, ["nb_wins"] = {}, ["nb_lost"] = {}, ["nb_kills"] = {}}
 ranked.top_ranks = {}
 ranked.formspec = ""
@@ -189,6 +190,7 @@ end
 function ranked.update_formspec()
 	ranked.top_ranks = ranked.set_top_players()
 	ranked.formspec = ranked.set_ranked_formspec()
+	ranked.save_ranks_to_html()
 	minetest.after(2, top.update_name, 1) -- update top name wall
 	minetest.after(5, top.update_name, 2)
 	minetest.after(8, top.update_name, 3)
@@ -218,6 +220,37 @@ function ranked.get_player_ranks_formspec(name)
 	table.insert(formspec, "label[8.0,1;"..tostring(info["wins_pct"]).." %]") -- pct
 	return table.concat(formspec)
 end
+
+
+--to html
+function ranked.save_ranks_to_html()
+	local html_data = {}
+	table.insert(html_data, "<table><tr><th>Rank</th><th>UserName</th><th>Nb Games</th><th>Nb Kills</th><th>Nb Wins</th><th>Nb Lost</th><th>Nb Quit</th><th>Wins %</th></tr>\n")
+	local col = "<tr><td>%d</td><td>%s</td><td>%d</td><td>%d</td><td>%d</td><td>%d</td><td>%d</td><td>%d</td></tr>\n"
+	
+	if ranked.top_ranks ~= nil then
+		for i ,name in pairs(ranked.top_ranks) do
+			if i > 50 then
+				break
+			end
+			local info = ranked.get_players_info(name)
+			local str = string.format(col, i, name, info["nb_games"], info["nb_kills"], info["nb_wins"], info["nb_lost"], info["nb_quit"] , info["wins_pct"])
+			table.insert(html_data, str)
+		end
+	end
+
+	table.insert(html_data, "</table>\n")
+	
+	
+	local input, err  = io.open(ranked.html_ranking_file, "w")
+	if input then
+		input:write( table.concat(html_data) )
+		input:close()
+	else
+		minetest.log("error", "open(" .. ranked.html_ranking_file .. ", 'w') failed: " .. err)
+	end
+end
+
 
 minetest.after(20, ranked.update_formspec)
 
