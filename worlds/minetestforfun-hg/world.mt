@@ -1,5 +1,7 @@
 gameid = hungry_games
-backend = sqlite3
+backend = redis
+redis_hash = IGNORED
+redis_address = localhost
 
 load_mod_worldedit = true
 load_mod_worldedit_commands = true
