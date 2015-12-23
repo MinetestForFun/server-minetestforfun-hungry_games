@@ -23,7 +23,7 @@ minetest.register_chatcommand("report", {
 		end
 
 		if #mods > 0 then
-			mod_list = table.concat(mods, ", ")
+			local mod_list = table.concat(mods, ", ")
 			email.send_mail(name, minetest.setting_get("name"),
 				"Report: " .. param .. " (mods online: " .. mod_list .. ")")
 			return true, "Reported. Moderators currently online: " .. mod_list
@@ -34,3 +34,48 @@ minetest.register_chatcommand("report", {
 		end
 	end
 })
+
+
+-- inventory_plus ranked menu
+minetest.register_on_player_receive_fields(function(player, formname, fields)
+	if inventory_plus.is_called(fields, "report", player) then
+		local formspec = "size[9,8.5]"..
+				default.inventory_background..
+				default.inventory_listcolors..
+				inventory_plus.get_tabheader(player, "report")..
+				"label[3.5,0;Report Tab.]"..
+				"label[2.5,1;You can report a abus or grief.]"..
+				"field[1,3;6,1;text;Text about what to report:;]" ..
+				"button[7,2.9;2,0.5;report;Send]"
+		inventory_plus.set_inventory_formspec(player, formspec)
+	end
+
+	-- Copied from src/builtin/game/chatcommands.lua (with little tweaks)
+	
+	if not fields.report or not fields.text or fields.text == "" then
+		return
+	end
+	local name = player:get_player_name()
+	local cmd_def = core.chatcommands["report"]
+	if not cmd_def then
+		return
+	end
+	local has_privs, missing_privs = core.check_player_privs(name, cmd_def.privs)
+	if has_privs then
+		core.set_last_run_mod(cmd_def.mod_origin)
+		local success, message = cmd_def.func(name, fields.text)
+		if message then
+			core.chat_send_player(name, message)
+		end
+	else
+		core.chat_send_player(name, "You don't have permission"
+				.. " to run this command (missing privileges: "
+				.. table.concat(missing_privs, ", ") .. ")")
+	end
+end)
+
+
+minetest.register_on_joinplayer(function(player)
+	minetest.after(0.5, function() inventory_plus.register_button(player,"report","Report") end)
+end)
+

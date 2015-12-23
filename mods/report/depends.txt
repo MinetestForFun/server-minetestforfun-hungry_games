@@ -1,1 +1,2 @@
 email
+inventory_plus
