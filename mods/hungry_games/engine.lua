@@ -556,6 +556,7 @@ local start_game = function()
 				return
 			end
 			local name = player:get_player_name()
+			spectator.unwatching(name)
 			if registrants[name] == true and spawn_id ~= nil and spawning.is_spawn("player_"..spawn_id) then
 				table.insert(contestants, player)
 				spawning.spawn(player, "player_"..spawn_id)
@@ -929,6 +930,10 @@ function vote(name, param)
 		minetest.chat_send_player(name, "Spawn positions haven't been set yet. The game can not be started at the moment.")
 		return
 	end
+	if not minetest.get_player_privs(name).interact then
+		minetest.chat_send_player(name, "You're spectating at the moment. Use /unwatch or /unspectate and then vote")
+		return
+	end
 	if not ingame and not starting_game and not grace then
 		if voters[name] ~= nil then
 			minetest.chat_send_player(name, "You already have voted.")
@@ -976,6 +981,10 @@ minetest.register_chatcommand("vote", {
 })
 
 function register(name, param)
+	if not minetest.get_player_privs(name).interact then
+		minetest.chat_send_player(name, "You're spectating at the moment. Use /unwatch or /unspectate and then register")
+		return
+	end
 	--Catch param.
 	local parms = {}
 	local param = param or ""
