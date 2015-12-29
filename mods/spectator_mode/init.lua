@@ -3,6 +3,9 @@ local original_pos = {}
 minetest.register_privilege("watch", "Player can watch other players")
 
 spectator = {}
+spectator.register = {}
+
+dofile(minetest.get_modpath("spectator_mode") .. "/inventory.lua")
 
 local function unwatching(name)
 	local watcher = minetest.get_player_by_name(name)
@@ -43,6 +46,10 @@ local function unwatching(name)
 		minetest.after(0.2, function()
 			original_pos[watcher] = {}
 		end)
+
+		spectator.register[name] = nil
+		watcher:set_inventory_formspec(spectator.get_inventory(name))
+
 	end
 end
 
@@ -67,6 +74,10 @@ minetest.register_chatcommand("watch", {
 			if privs.ingame and not privs.server then
 				return false, "You're currently in a Hungry Game"
 			end
+
+			if spectator.register[param] then
+				return false, "Player " .. param .. " is currently a spectator"
+			end
 		
 			default.player_attached[name] = true
 			watcher:set_attach(target, "", {x=0, y=-5, z=-20}, {x=0, y=0, z=0})
@@ -90,6 +101,9 @@ minetest.register_chatcommand("watch", {
 
 			privs.interact = nil
 			minetest.set_player_privs(name, privs)
+			spectator.register[name] = param
+
+			watcher:set_inventory_formspec(spectator.get_inventory(name))
 
 			return true, "Watching '"..param.."' at "..minetest.pos_to_string(vector.round(target:getpos()))
 		end
@@ -115,6 +129,31 @@ end)
 
 
 -- Our modifications
+
+function spectator.watching_random(name, nochat)
+	local players = minetest.get_connected_players()
+
+	local c = 0
+	for _, _ in pairs(spectator.register) do
+		c = c + 1
+	end
+
+	if #players - c == 1 then
+		minetest.chat_send_player(name, "There is no other player to watch")
+		return
+	end
+
+	local random_player = ""
+	while random_player == "" or random_player == name or spectator.register[random_player] do
+		random_player = players[math.random(1, #players)]:get_player_name()
+	end
+
+	local _, msg = spectator.watching(name, random_player)
+	if not nochat then
+		minetest.chat_send_player(name, msg)
+	end
+end
+
 
 local cc_unwatch_def = core.chatcommands["unwatch"]
 
@@ -142,19 +181,6 @@ minetest.register_node("spectator_mode:spectator_switch", {
 		minetest.get_meta(pos):set_string("infotext", "Click to switch on spectator mode")
 	end,
 	on_punch = function(_, _, puncher)
-		local players = minetest.get_connected_players()
-		if #players == 1 then
-			minetest.chat_send_player(puncher:get_player_name(), "There is no other player to watch")
-			return
-		end
-
-		local name = puncher:get_player_name()
-		local random_player = ""
-		while random_player == "" or random_player == name do
-			random_player = players[math.random(1, #players)]:get_player_name()
-		end
-
-		local _, msg = spectator.watching(name, random_player)
-		minetest.chat_send_player(name, msg)
+		spectator.watching_random(puncher:get_player_name())
 	end,
 })
