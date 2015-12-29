@@ -98,6 +98,8 @@ minetest.register_chatcommand("watch", {
 	end
 })
 
+spectator.watching = core.chatcommands["watch"].func
+
 minetest.register_chatcommand("unwatch", {
 	description = "unwatch a player",
 	privs = {watch=true},
@@ -132,3 +134,27 @@ minetest.register_chatcommand("spectate", {
 })
 
 
+minetest.register_node("spectator_mode:spectator_switch", {
+	description = "Spectator switch",
+	tiles = {"spectator_mode_switch.png"},
+	groups = {unbreakable = 1},
+	on_construct = function(pos)
+		minetest.get_meta(pos):set_string("infotext", "Click to switch on spectator mode")
+	end,
+	on_punch = function(_, _, puncher)
+		local players = minetest.get_connected_players()
+		if #players == 1 then
+			minetest.chat_send_player(puncher:get_player_name(), "There is no other player to watch")
+			return
+		end
+
+		local name = puncher:get_player_name()
+		local random_player = ""
+		while random_player == "" or random_player == name do
+			random_player = players[math.random(1, #players)]:get_player_name()
+		end
+
+		local _, msg = spectator.watching(name, random_player)
+		minetest.chat_send_player(name, msg)
+	end,
+})
