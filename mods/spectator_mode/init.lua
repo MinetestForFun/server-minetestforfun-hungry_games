@@ -102,6 +102,7 @@ local function unwatching(name)
 		local watched = spectator.register[name]
 		spectator.register[name] = nil
 		spectator.update_hud(minetest.get_player_by_name(watched))
+		minetest.chat_send_player(watched, name .. " is no longer watching you")
 
 		watcher:set_inventory_formspec(spectator.get_inventory(name))
 
@@ -125,6 +126,7 @@ minetest.register_chatcommand("watch", {
 				unwatching(param)
 			else
 				original_pos[watcher] = watcher:getpos()
+				minetest.chat_send_player(name, "You can use your inventory to navigate to players!")
 			end
 			if privs.ingame and not privs.server then
 				return false, "You're currently in a Hungry Game"
@@ -158,6 +160,7 @@ minetest.register_chatcommand("watch", {
 			minetest.set_player_privs(name, privs)
 			spectator.register[name] = param
 			spectator.update_hud(minetest.get_player_by_name(param))
+			minetest.chat_send_player(param, name .. " is now watching you")
 
 			watcher:set_inventory_formspec(spectator.get_inventory(name))
 
