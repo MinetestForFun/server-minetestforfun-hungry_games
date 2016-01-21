@@ -5,7 +5,59 @@ minetest.register_privilege("watch", "Player can watch other players")
 spectator = {}
 spectator.register = {}
 
+spectator.hudkit = {}
+if minetest.get_modpath("hungry_games") then
+	spectator.hudkit = dofile(minetest.get_modpath("hungry_games") .. "/hudkit.lua")()
+else
+	spectator.hudkit = dofile(minetest.get_modpath("spectator_mode") .. "/hudkit.lua")()
+end
+
 dofile(minetest.get_modpath("spectator_mode") .. "/inventory.lua")
+
+function spectator.update_hud(player)
+	if not player then -- Typically happens in on_shutdown
+		return false, "noplayer"
+	end
+
+	local watched, count, players = spectator.is_watched(player:get_player_name())
+	if not watched then
+		if spectator.hudkit:exists(player, "spectator:spectator_count") then
+			spectator.hudkit:remove(player, "spectator:spectator_count")
+		end
+		return
+	end
+
+	if not spectator.hudkit:exists(player, "spectator:spectator_count") then
+		spectator.hudkit:add(player, "spectator:spectator_count", {
+			hud_elem_type = "text",
+			position = {x = 0.9, y = 0.9},
+			scale = {x = 100, y = 100},
+			text = "You are watched :\n " .. count .. " spectators",
+			offset = {x=0, y = 0},
+			number = 0xFF5500
+		})
+	else
+		spectator.hudkit:change(player, "spectator:spectator_count",
+			"text", "You are watched\n" .. count .. " spectators")
+	end
+end
+
+function spectator.is_watched(name)
+	if not minetest.get_player_by_name(name) then
+		return false, "noplayer"
+	end
+
+	local cnt = 0
+	local res = {}
+	for spectator, watched in pairs(spectator.register) do
+		if watched == name then
+			cnt = cnt + 1
+			table.insert(res, spectator)
+		end
+	end
+
+	return (cnt > 0), cnt, res
+end
 
 local function unwatching(name)
 	local watcher = minetest.get_player_by_name(name)
@@ -47,7 +99,10 @@ local function unwatching(name)
 			original_pos[watcher] = {}
 		end)
 
+		local watched = spectator.register[name]
 		spectator.register[name] = nil
+		spectator.update_hud(minetest.get_player_by_name(watched))
+
 		watcher:set_inventory_formspec(spectator.get_inventory(name))
 
 	end
@@ -78,7 +133,7 @@ minetest.register_chatcommand("watch", {
 			if spectator.register[param] then
 				return false, "Player " .. param .. " is currently a spectator"
 			end
-		
+
 			default.player_attached[name] = true
 			watcher:set_attach(target, "", {x=0, y=-5, z=-20}, {x=0, y=0, z=0})
 			watcher:set_eye_offset({x=0, y=-5, z=-20}, {x=0, y=0, z=0})
@@ -102,6 +157,7 @@ minetest.register_chatcommand("watch", {
 			privs.interact = nil
 			minetest.set_player_privs(name, privs)
 			spectator.register[name] = param
+			spectator.update_hud(minetest.get_player_by_name(param))
 
 			watcher:set_inventory_formspec(spectator.get_inventory(name))
 
@@ -118,7 +174,7 @@ minetest.register_chatcommand("unwatch", {
 	description = "unwatch a player",
 	privs = {watch=true},
 	func = function(name, param)
-		unwatching(name)		
+		unwatching(name)
 	end
 })
 
