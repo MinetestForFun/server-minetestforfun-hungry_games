@@ -55,14 +55,24 @@ end)
 
 function spectator.get_inventory(name)
 	if spectator.register[name] then
-		return "size[6,3.5]" ..
+		local formspec = [[ size[6,3.5]
 
-			"button[0,3;1,0.5;spect_prev;<<]" ..
-			"button[5,3;1,0.5;spect_next;>>]" ..
-			"button[1,3;1.5,0.5;spect_rand;Random]" ..
-			"button[2.5,3;2.5,0.5;spect_quit;Quit spectating]" ..
+			button[0,3;1,0.5;spect_prev;<<]
+			button[5,3;1,0.5;spect_next;>>]
+			button[1,3;1.5,0.5;spect_rand;Random]
+			button[2.5,3;2.5,0.5;spect_quit;Quit spectating]
 
-			"label[1,1;Currently watching: " .. spectator.register[name] .. "]"
+			label[1,1;Currently watching: ]] .. spectator.register[name] .. "]"
+
+		if rawget(_G, "ranked") then
+			for i, top in pairs(ranked.top_ranks) do
+				if name == top then
+					formspec = formspec .. "label[1,1.5;Rank: " .. i .. "]"
+				end
+			end
+		end
+
+		return formspec
 	else
 		return "size[9,8.5]" ..
 			default.inventory_background ..
