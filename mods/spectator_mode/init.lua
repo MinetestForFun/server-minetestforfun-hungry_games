@@ -184,6 +184,14 @@ minetest.register_chatcommand("unwatch", {
 minetest.register_on_leaveplayer(function(player)
 	local name = player:get_player_name()
 	unwatching(name)
+	for watcher, watched in pairs(spectator.register) do
+		if watched == name then
+			local res, code = spectator.watching_random(watcher)
+			if not res and code == "noother" then
+				unwatching(watcher)
+			end
+		end
+	end
 end)
 
 
@@ -197,9 +205,15 @@ function spectator.watching_random(name, nochat)
 		c = c + 1
 	end
 
-	if #players - c == 1 then
-		minetest.chat_send_player(name, "There is no other player to watch")
-		return
+	if spectator.register[name] then
+		c = c - 1 -- If player in register count them as out already
+	end
+
+	if #players - c <= 1 then
+		if not nochat then
+			minetest.chat_send_player(name, "There is no other player to watch")
+		end
+		return false, "noother"
 	end
 
 	local random_player = ""
@@ -211,6 +225,7 @@ function spectator.watching_random(name, nochat)
 	if not nochat then
 		minetest.chat_send_player(name, msg)
 	end
+	return true, "ok"
 end
 
 
