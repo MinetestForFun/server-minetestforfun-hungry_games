@@ -13,9 +13,11 @@ function whoison.createFile(loopit)
 
 		local name = player:get_player_name()
 		whoison.updateStats(name)
-		local ppos = minetest.pos_to_string(player:getpos())
-		local datastring = name.."|"..ppos.."\n"
-		file:write( datastring )
+		local ppos = player:getpos()
+		if ppos and ppos.x and ppos.y and ppos.z then -- If whoison is fast enough, the player might still be in the returned of `minetest.get_connected_players`
+			local datastring = name.."|"..minetest.pos_to_string(ppos).."\n"
+			file:write( datastring )
+		end
 	end
 	file:close()
 	minetest.log("action","Updated online player file")
