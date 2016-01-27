@@ -103,6 +103,9 @@ local function unwatching(name)
 		spectator.register[name] = nil
 		spectator.update_hud(minetest.get_player_by_name(watched))
 		minetest.chat_send_player(watched, name .. " is no longer watching you")
+		if minetest.get_modpath("gauges") then
+			add_HP_gauge(minetest.get_player_by_name(name))
+		end
 
 		watcher:set_inventory_formspec(spectator.get_inventory(name))
 
@@ -126,6 +129,14 @@ minetest.register_chatcommand("watch", {
 				unwatching(param)
 			else
 				original_pos[watcher] = watcher:getpos()
+				if minetest.get_modpath("gauges") ~= nil then
+					for _, ref in pairs(minetest.get_objects_inside_radius(original_pos[watcher], 1)) do
+						if not ref:is_player() and ref:get_entity_name() == "gauges:hp_bar" and (ref:get_luaentity().wielder or "") == watcher then
+							ref:remove()
+							break
+						end
+					end
+				end
 				minetest.chat_send_player(name, "You can use your inventory to navigate to players!")
 			end
 			if privs.ingame and not privs.server then
