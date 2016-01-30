@@ -70,9 +70,9 @@ local function unwatching(name)
 		watcher:set_nametag_attributes({color = {a=255, r=255, g=255, b=255}})
 
 		watcher:hud_set_flags({
-			healthbar = true,
-			minimap = true,
-			breathbar = true,
+			healthbar = false,
+			minimap = (minetest.setting_getbool("enable_minimap") or false),
+			breathbar = (minetest.setting_getbool("hotbar_health_visible") or false),
 			hotbar = true,
 			wielditem = true,
 			crosshair = true
