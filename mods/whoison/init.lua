@@ -20,7 +20,6 @@ function whoison.createFile(loopit)
 		end
 	end
 	file:close()
-	minetest.log("action","Updated online player file")
 	if ( loopit == true ) then
 		minetest.after(300,whoison.createFile,true)
 	end
