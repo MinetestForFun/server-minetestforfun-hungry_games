@@ -77,7 +77,7 @@ peace_areas.register_area("lobby", {
 
 function regenerate()
 	for name, player in pairs(minetest.get_connected_players()) do
-		if not minetest.get_player_privs(player:get_player_name()).ingame and is_in_peace_area(player) then
+		if (not minetest.get_player_privs(player:get_player_name()).ingame or minetest.get_player_privs(player:get_player_name()).server) and is_in_peace_area(player) then
 			player:set_hp(20)
 			survival.reset_player_state(player:get_player_name(), "hunger")
 			survival.reset_player_state(player:get_player_name(), "thirst")
