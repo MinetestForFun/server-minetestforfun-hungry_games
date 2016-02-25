@@ -89,12 +89,12 @@ local function unwatching(name)
 			minetest.set_player_privs(name, privs)
 		end
 
-		if original_pos[watcher] then
-			minetest.after(0.1, function()
+		minetest.after(0.1, function()
+			if original_pos[watcher] and original_pos[watcher].x then
 				watcher:setpos(original_pos[watcher])
-				original_pos[watcher] = {}
-			end)
-		end
+				original_pos[watcher] = nil
+			end
+		end)
 
 		local watched = spectator.register[name]
 		spectator.register[name] = nil
