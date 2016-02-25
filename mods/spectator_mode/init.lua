@@ -90,10 +90,11 @@ local function unwatching(name)
 		end
 
 		if original_pos[watcher] then
-			watcher:setpos(original_pos[watcher])
-			original_pos[watcher] = {}
-		end
-
+			minetest.after(0.1, function()
+				watcher:setpos(original_pos[watcher])
+				original_pos[watcher] = {}
+			end
+		end)
 
 		local watched = spectator.register[name]
 		spectator.register[name] = nil
