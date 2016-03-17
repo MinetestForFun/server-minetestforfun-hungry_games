@@ -10,7 +10,8 @@ dofile(minetest.get_modpath("hungry_games").."/ranked.lua")
 dofile(minetest.get_modpath("hungry_games").."/engine.lua")
 dofile(minetest.get_modpath("hungry_games").."/random_chests.lua")
 dofile(minetest.get_modpath("hungry_games").."/spawning.lua")
-dofile(minetest.get_modpath("hungry_games").."/arena.lua")
+-- dofile(minetest.get_modpath("hungry_games").."/arena.lua")
+arena = {}
 
 ------------------------------------------------
 --------Arena configuration (arena.lua) --------

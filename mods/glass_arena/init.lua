@@ -174,7 +174,7 @@ minetest.register_on_generated(function(minp, maxp, seed)
 				end
 			end
 		end
-		if not database[name].walkable then
+		if not database[name] or not database[name].walkable then
 			return true
 		else
 			return false
