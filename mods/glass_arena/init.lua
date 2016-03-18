@@ -3,6 +3,9 @@ arena_size = arena_size/2
 local replace = {}
 
 glass_arena = {}
+glass_arena.arenas = {
+	[0] = {x = 0, z = 0},
+}
 
 --Set size of the arena
 function glass_arena.set_size(n)
@@ -59,7 +62,8 @@ minetest.register_node("glass_arena:wall_end",{
 })
 
 --Teleport player within boundary
-glass_arena.rise = function(player)
+glass_arena.rise = function(player, arenaID)
+	if not glass_arena.arenas[arenaID] then return end
 	local pos = player:getpos()
 	if pos then
 		if minetest.get_node({x=pos.x,y=pos.y+1,z=pos.z}) ~= "air" then
@@ -67,7 +71,7 @@ glass_arena.rise = function(player)
 				local node = minetest.get_node({x=pos.x,y=y,z=pos.z})
 				if node.name == "ignore" then
 					player:setpos({x=pos.x,y=pos.y+y+1,z=pos.z})
-					minetest.after(2, glass_arena.rise, player)
+					minetest.after(2, glass_arena.rise, player, arenaID)
 					return
 				end
 				if minetest.get_node_light({x=pos.x,y=y,z=pos.z}, 0.5) > 5 then
@@ -85,10 +89,12 @@ glass_arena.rise = function(player)
 	end
 end
 
-function glass_arena.teleport(player)
+function glass_arena.teleport(player, arenaID)
+	if not glass_arena.arenas[arenaID] then return end
+	local arn = glass_arena.arenas[arenaID]
 	local pos = player:getpos()
-	player:setpos({x=math.random(-arena_size+1,arena_size-1),y=0,z=math.random(-arena_size+1,arena_size-1)})
-	minetest.after(1, glass_arena.rise, player)
+	player:setpos({x=math.random(-arena_size+1+arn.x,arena_size-1+arn.x),y=0,z=math.random(-arena_size+1+arn.z,arena_size-1+arn.z)})
+	minetest.after(1, glass_arena.rise, player, arenaID)
 	return true
 end
 
@@ -98,12 +104,12 @@ end
 
 --Regenerate walls if pieces are missing
 minetest.register_abm({
-    nodenames = {"glass_arena:wall_middle"},
-    neighbors = {"air","default:water_source","default:water_flowing","default:lava_source","default:lava_flowing"},
-    interval = 1.0,
-    chance = 1,
-    action = function(pos, node, active_object_count, active_object_count_wider)
-    	local function should_replace(pos)
+	nodenames = {"glass_arena:wall_middle"},
+	neighbors = {"air","default:water_source","default:water_flowing","default:lava_source","default:lava_flowing"},
+	interval = 1.0,
+	chance = 1,
+	action = function(pos, node, active_object_count, active_object_count_wider)
+		local function should_replace(pos)
 			local node = minetest.get_node(pos)
 			local name = node.name
 			if node.name == "air" or node.name == "ignore" or
@@ -113,49 +119,52 @@ minetest.register_abm({
 				return true
 			end
 		end
-    	if should_replace({x=pos.x,y=pos.y+1,z=pos.z}) then
-    		minetest.add_node({x=pos.x,y=pos.y+1,z=pos.z},{name="glass_arena:wall_middle"})
-    	end
-    	if should_replace({x=pos.x,y=pos.y-1,z=pos.z}) then
-    		minetest.add_node({x=pos.x,y=pos.y-1,z=pos.z},{name="glass_arena:wall_middle"})
-    	end
-    	if should_replace({x=pos.x+1,y=pos.y,z=pos.z}) then
-    		if pos.x == arena_size + 1 then
-    			minetest.add_node({x=pos.x+1,y=pos.y,z=pos.z},{name="glass_arena:wall_end"})
-    		elseif pos.x == -arena_size - 1 then
-    			minetest.add_node({x=pos.x+1,y=pos.y,z=pos.z},{name="glass_arena:wall"})
-    		else
-    			minetest.add_node({x=pos.x+1,y=pos.y,z=pos.z},{name="glass_arena:wall_middle"})
-    		end
-    	end
-    	if should_replace({x=pos.x-1,y=pos.y,z=pos.z}) then
-    		if pos.x == arena_size + 1 then
-    			minetest.add_node({x=pos.x-1,y=pos.y,z=pos.z},{name="glass_arena:wall"})
-    		elseif pos.x == -arena_size - 1 then
-    			minetest.add_node({x=pos.x-1,y=pos.y,z=pos.z},{name="glass_arena:wall_end"})
-    		else
-    			minetest.add_node({x=pos.x-1,y=pos.y,z=pos.z},{name="glass_arena:wall_middle"})
-    		end
-    	end
-    	if should_replace({x=pos.x,y=pos.y,z=pos.z+1}) then
-    		if pos.z == arena_size + 1 then
-    			minetest.add_node({x=pos.x,y=pos.y,z=pos.z+1},{name="glass_arena:wall_end"})
-    		elseif pos.z == -arena_size - 1 then
-    			minetest.add_node({x=pos.x,y=pos.y,z=pos.z+1},{name="glass_arena:wall"})
-    		else
-    			minetest.add_node({x=pos.x,y=pos.y,z=pos.z+1},{name="glass_arena:wall_middle"})
-    		end
-    	end
-    	if should_replace({x=pos.x,y=pos.y,z=pos.z-1}) then
-    		if pos.z == arena_size + 1 then
-    			minetest.add_node({x=pos.x,y=pos.y,z=pos.z-1},{name="glass_arena:wall"})
-    		elseif pos.z == -arena_size - 1 then
-    			minetest.add_node({x=pos.x,y=pos.y,z=pos.z-1},{name="glass_arena:wall_end"})
-    		else
-    			minetest.add_node({x=pos.x,y=pos.y,z=pos.z-1},{name="glass_arena:wall_middle"})
-    		end
-    	end
-    end,
+
+		if should_replace({x=pos.x,y=pos.y+1,z=pos.z}) then
+			minetest.add_node({x=pos.x,y=pos.y+1,z=pos.z},{name="glass_arena:wall_middle"})
+		end
+		if should_replace({x=pos.x,y=pos.y-1,z=pos.z}) then
+			minetest.add_node({x=pos.x,y=pos.y-1,z=pos.z},{name="glass_arena:wall_middle"})
+		end
+		for id, arn in pairs(glass_arena.arenas) do
+			if should_replace({x=pos.x+1,y=pos.y,z=pos.z}) then
+				if pos.x == arena_size + 1 + arn.x then
+					minetest.add_node({x=pos.x+1,y=pos.y,z=pos.z},{name="glass_arena:wall_end"})
+				elseif pos.x == -arena_size - 1 + arn.x then
+					minetest.add_node({x=pos.x+1,y=pos.y,z=pos.z},{name="glass_arena:wall"})
+				elseif pos.x == arena_size + arn.x then
+					minetest.add_node({x=pos.x+1,y=pos.y,z=pos.z},{name="glass_arena:wall_middle"})
+				end
+			end
+			if should_replace({x=pos.x-1,y=pos.y,z=pos.z}) then
+				if pos.x == arena_size + 1 + arn.x then
+					minetest.add_node({x=pos.x-1,y=pos.y,z=pos.z},{name="glass_arena:wall"})
+				elseif pos.x == -arena_size - 1 + arn.x then
+					minetest.add_node({x=pos.x-1,y=pos.y,z=pos.z},{name="glass_arena:wall_end"})
+				elseif pos.x == -arena_size + arn.x then
+					minetest.add_node({x=pos.x-1,y=pos.y,z=pos.z},{name="glass_arena:wall_middle"})
+				end
+			end
+			if should_replace({x=pos.x,y=pos.y,z=pos.z+1}) then
+				if pos.z == arena_size + 1 + arn.z then
+					minetest.add_node({x=pos.x,y=pos.y,z=pos.z+1},{name="glass_arena:wall_end"})
+				elseif pos.z == -arena_size - 1 + arn.z then
+					minetest.add_node({x=pos.x,y=pos.y,z=pos.z+1},{name="glass_arena:wall"})
+				elseif pos.z == arena_size + arn.z then
+					minetest.add_node({x=pos.x,y=pos.y,z=pos.z+1},{name="glass_arena:wall_middle"})
+				end
+			end
+			if should_replace({x=pos.x,y=pos.y,z=pos.z-1}) then
+				if pos.z == arena_size + 1 + arn.z then
+					minetest.add_node({x=pos.x,y=pos.y,z=pos.z-1},{name="glass_arena:wall"})
+				elseif pos.z == -arena_size - 1 + arn.z then
+					minetest.add_node({x=pos.x,y=pos.y,z=pos.z-1},{name="glass_arena:wall_end"})
+				elseif pos.z == -arena_size + arn.z then
+					minetest.add_node({x=pos.x,y=pos.y,z=pos.z-1},{name="glass_arena:wall_middle"})
+				end
+			end
+		end
+	end,
 })
 
 
@@ -180,10 +189,10 @@ minetest.register_on_generated(function(minp, maxp, seed)
 			return false
 		end
 	end
+	for id, arn in pairs(glass_arena.arenas) do
 	--Speed up generation by checking if this chunk needs to be proccesed.
-	if not ((minp.x > arena_size or minp.z > arena_size) or (maxp.x < -arena_size or maxp.z < -arena_size)) and
-	   not ((minp.x > -arena_size and maxp.x < arena_size) and (minp.z > -arena_size and maxp.z < arena_size)) then
-
+	if not ((minp.x > arena_size + arn.x or minp.z > arena_size + arn.z) or (maxp.x < -arena_size + arn.x or maxp.z < -arena_size + arn.z)) and
+	   not ((minp.x > -arena_size + arn.x and maxp.x < arena_size + arn.x) and (minp.z > -arena_size + arn.z and maxp.z < arena_size + arn.z)) then
 			--Should make things a bit faster.
 			local gen
 
@@ -204,7 +213,7 @@ minetest.register_on_generated(function(minp, maxp, seed)
 			local z = z0+(i or 0)
 
 			--Build Wall
-			if x == arena_size and z <= arena_size and z >= -arena_size then
+			if x == arena_size + arn.x and z <= arena_size + arn.z and z >= -arena_size + arn.z then
 				for y=0, (maxp.y-minp.y) do
 
 					local y = y0+y
@@ -224,7 +233,7 @@ minetest.register_on_generated(function(minp, maxp, seed)
 				end
 			end
 
-			if z == arena_size and x <= arena_size and x >= -arena_size then
+			if z == arena_size + arn.z and x <= arena_size + arn.x and x >= -arena_size + arn.x then
 				for y=0, (maxp.y-minp.y) do
 
 					local y = y0+y
@@ -245,7 +254,7 @@ minetest.register_on_generated(function(minp, maxp, seed)
 				end
 			end
 
-			if x == -arena_size and z >= -arena_size and z <= arena_size then
+			if x == -arena_size + arn.x and z >= -arena_size + arn.z and z <= arena_size + arn.z then
 				for y=0, (maxp.y-minp.y) do
 
 					local y = y0+y
@@ -266,7 +275,7 @@ minetest.register_on_generated(function(minp, maxp, seed)
 				end
 			end
 
-			if z == -arena_size and x >= -arena_size and x <= arena_size then
+			if z == -arena_size + arn.z and x >= -arena_size + arn.x and x <= arena_size + arn.x then
 				for y=0, (maxp.y-minp.y) do
 
 					local y = y0+y
@@ -286,7 +295,7 @@ minetest.register_on_generated(function(minp, maxp, seed)
 
 				end
 			end
-
+			end
 			end
 		end
 	end
