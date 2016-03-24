@@ -69,38 +69,61 @@ end
 minetest.register_on_placenode(function(pos, newnode, placer, oldnode, itemstack, pointed_thing)
 	if newnode.name == "default:chest" then
 		if not filling then
-			table.insert(chests,pos)
-			random_chests.save()
+			local arnid = glass_arena.which_arena(pos)
+			if arnid then
+				if not chests[arnid] then
+					chests[arnid] = pos
+				else
+					table.insert(chests[arnid] ,pos)
+				end
+				random_chests.save()
+			end
 		end
 	end
 end)
 
 --Load chests
-local input = io.open(filepath..".chests", "r")
-if input then
-    while true do
-        local nodename = input:read("*l")
-        if not nodename then break end
-        local parms = {}
-        --Catch config.
-		flags = nodename
+local function read_chest_file(filebuf)
+	local response = {}
+	while true do
+		local nodenames = filebuf:read("*l")
+		if not nodenames then break end
+		local parms = {}
+		-- Catch config
+		local flags = nodenames
 		repeat
-			v, p = flags:match("^(%S*) (.*)")
+			local v, p = flags:match("^(%S*) (.*)")
 			if p then
 				flags = p
 			end
 			if v then
-				table.insert(parms,v)
+				table.insert(parms, v)
 			else
 				v = flags:match("^(%S*)")
-				table.insert(parms,v)
+				table.insert(parms, v)
 				break
 			end
 		until false
-		table.insert(chests,{x=parms[1],y=parms[2],z=parms[3]})
+		table.insert(response, {x = parms[1], y = parms[2], z = parms[3]})
 	end
-	io.close(input)
+	return response
 end
+
+-- legacy
+local input = io.open(filepath..".chests", "r")
+if input then
+	chests = {[0] = read_chest_file(input)}
+	input:close()
+else
+	for arnid, _ in pairs(glass_arena.arenas) do
+		local input = io.open(filepath .. "_" .. arnid .. ".chests", "r")
+		if input then
+			chests[arnid] = read_chest_file(input)
+			input:close()
+		end
+	end
+end
+
 
 local clear_chest = function(pos)
 	local meta = minetest.get_meta(pos)
@@ -108,29 +131,31 @@ local clear_chest = function(pos)
 	inv:set_list("main", {})
 end
 
-function random_chests.clear()
+function random_chests.clear(arnid)
+	assert(chests[arnid])
 	local i = 1
-	while i <= table.getn(chests) do
-		clear_chest(chests[i])
+	while i <= table.getn(chests[arnid]) do
+		clear_chest(chests[arnid][i])
 		i = i + 1	
 	end
 end
 
-function random_chests.refill(i)
+function random_chests.refill(arnid, i)
+	assert(chests[arnid])
 	filling = true
 	if i == nil then i = 1 end
 	local s = i
-	while i <= table.getn(chests) do
-		if chests[i] then
-			local n = minetest.get_node(chests[i]).name
+	while i <= table.getn(chests[arnid]) do
+		if chests[arnid][i] then
+			local n = minetest.get_node(chests[arnid][i]).name
 			if (not n:match("default:chest")) and n ~= "ignore" then
 				print("chest missing! found:")
-				print(minetest.get_node(chests[i]).name)
+				print(minetest.get_node(chests[arnid][i]).name)
 				print("instead")
-				table.remove(chests,i)
+				table.remove(chests[arnid],i)
 			else
-				minetest.get_meta(chests[i]):set_string("formspec", default.chest_formspec)
-				fill_chest(chests[i])
+				minetest.get_meta(chests[arnid][i]):set_string("formspec", default.chest_formspec)
+				fill_chest(chests[arnid][i])
 			end
 			--[[ MFF crabman(2/10/2015)  disable timer refill
 			if i > (s+(chests_interval/2)) then
@@ -146,11 +171,13 @@ function random_chests.refill(i)
 end
 
 function random_chests.save()
-	local output = io.open(filepath..".chests", "w")
-	for i,v in pairs(chests) do
-		output:write(v.x.." "..v.y.." "..v.z.."\n")
+	for arnid, tab in pairs(chests) do
+		local output = io.open(filepath .. "_" .. arnid .. ".chests", "w")
+		for i, v in pairs(tab) do
+			output:write(v.x.." "..v.y.." "..v.z.."\n")
+		end
+		io.close(output)
 	end
-	io.close(output)
 end
 
 random_chests.setrefillspeed = function(interval)
@@ -161,10 +188,15 @@ end
 minetest.register_on_generated(function(minp, maxp, seed)
 	if chests_spawn then
 		local divs = maxp.x - minp.x
-		if chests_boundary == 0 or CheckCollision(minp.x,minp.z,divs,divs, -chests_boundary,-chests_boundary,chests_boundary*2,chests_boundary*2) then
+		local col = false
+		for _, tab in pairs(glass_arena.arenas) do
+			col = col or CheckCollision(minp.x, minp.z, divs, divs, -chests_boundary + tab.x, -chests_boundary + tab.z, chests_boundary * 2, chests_boundary * 2)
+		end
+		if chests_boundary == 0 or col then
 			for i=1, chest_rarity do
 				local pos = {x=math.random(minp.x,maxp.x),z=math.random(minp.z,maxp.z), y=minp.y}
-				if chests_boundary == 0 or CheckCollision(pos.x,pos.z,1,1, -chests_boundary,-chests_boundary,chests_boundary*2,chests_boundary*2) then
+				local arnid = glass_arena.which_arena(pos)
+				if chests_boundary == 0 or arnid then
 					 -- Find ground level (0...15)
 					local ground = nil
 					for y=maxp.y,minp.y+1,-1 do
@@ -175,7 +207,11 @@ minetest.register_on_generated(function(minp, maxp, seed)
 					end
 	
 					if ground then
-						table.insert(chests, {x=pos.x,y=ground+1,z=pos.z})
+						if not chests[arnid] then
+							chests[arnid] = {{x = pos.x, y = ground + 1, z = pos.z}}
+						else
+							table.insert(chests[arnid], {x=pos.x,y=ground+1,z=pos.z})
+						end
 						minetest.set_node({x=pos.x,y=ground+1,z=pos.z}, {name="default:chest"})
 					end
 				end

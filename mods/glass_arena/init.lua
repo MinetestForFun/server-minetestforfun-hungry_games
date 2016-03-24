@@ -7,6 +7,18 @@ glass_arena.arenas = {
 	[0] = {x = 0, z = 0},
 }
 
+function glass_arena.which_arena(pos)
+	assert(pos and pos.x and pos.y and pos.z)
+
+	for id, arn in pairs(glass_arena.arenas) do
+		if (pos.x <= (arn.x + arena_size) and pos.x >= (arn.x - arena_size)) and
+			(pos.z <= (arn.z + arena_size) and pos.z >= (arn.z - arena_size)) then
+			return id
+		end
+	end
+	return nil
+end
+
 --Set size of the arena
 function glass_arena.set_size(n)
 	arena_size = (n/2)

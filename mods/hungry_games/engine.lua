@@ -20,6 +20,7 @@ Used to determine whether minetest.after calls are still valid or should be disc
 ]]
 local gameSequenceNumber = 0
 local voteSequenceNumber = 0
+local arenaID = nil
 
 local spots_shuffled = {}
 
@@ -300,10 +301,11 @@ end
 --[[
 Returns the number of spawn points available for players to spawn in.
 ]]
-local get_spots = function()
+local get_spots = function(arena_id)
+	assert(arena_id)
 	i = 1
 	while true do
-		if spawning.is_spawn("player_"..i) then
+		if spawning.is_spawn("player_" .. arena_id .. "_" .. i) then
 			i = i + 1
 		else
 			return i - 1
@@ -352,11 +354,11 @@ Refills all chests.
 
 Informs all players of the chest refill and then calls random_chests.refill.
 ]]
-local refill_chests = function(gsn)
+local refill_chests = function(gsn, arena_id)
 	if gsn ~= gameSequenceNumber then
 		return
 	else
-		random_chests.refill()
+		random_chests.refill(arena_id)
 		minetest.chat_send_all("Chests have been refilled")
 	end
 end
@@ -391,7 +393,7 @@ the sudden death (if set).
 
 Called when the countdown initiated by start_game is finished.
 ]]
-local start_game_now = function(input)
+local start_game_now = function(input, arena_id)
 	local contestants = input[1]
 	local gsn = input[2]
 	if gsn ~= gameSequenceNumber or not starting_game then
@@ -436,7 +438,7 @@ local start_game_now = function(input)
 		end
 
 		for i=1,numRefills do
-			minetest.after(hungry_games.grace_period+hungry_games.chest_refill_interval*i, refill_chests, gameSequenceNumber)
+			minetest.after(hungry_games.grace_period+hungry_games.chest_refill_interval*i, refill_chests, gameSequenceNumber, arena_id)
 			minetest.after(hungry_games.grace_period+hungry_games.chest_refill_interval*(i-1), set_timer, {gameSequenceNumber, "chest_refill", hungry_games.chest_refill_interval})
 		end
 	else --Chest refilling disabled
@@ -485,7 +487,8 @@ Spawns all players in random spawnpoints, starts a countdown that lasts
 hungry_games.countdown seconds during which players cannot leave their
 spawnpoints and calls start_game_now after the countdown has finished.
 ]]
-local start_game = function()
+local start_game = function(arena_id)
+	assert(arena_id)
 	if starting_game or ingame then
 		return
 	end
@@ -506,11 +509,11 @@ local start_game = function()
 		end, gameSequenceNumber)
 	end
 
-	random_chests.clear()
-	minetest.after(hungry_games.countdown, random_chests.refill) --MFF(Mg|10/03/15)
+	random_chests.clear(arena_id)
+	minetest.after(hungry_games.countdown, random_chests.refill, arena_id) --MFF(Mg|10/03/15)
 
 	--Find out how many spots there are to spawn
-	local nspots = get_spots()
+	local nspots = get_spots(arena_id)
 	local diff =  nspots-table.getn(registrants)
 	local contestants = {}
 
@@ -557,9 +560,9 @@ local start_game = function()
 			end
 			local name = player:get_player_name()
 			spectator.unwatching(name)
-			if registrants[name] == true and spawn_id ~= nil and spawning.is_spawn("player_"..spawn_id) then
+			if registrants[name] == true and spawn_id ~= nil and spawning.is_spawn("player_" .. arena_id .. "_" .. spawn_id) then
 				table.insert(contestants, player)
-				spawning.spawn(player, "player_"..spawn_id)
+				spawning.spawn(player, "player_" .. arena_id .. "_" .. spawn_id)
 				reset_player_state(player)
 				minetest.chat_send_player(name, "Get ready to fight!")
 			else
@@ -577,6 +580,7 @@ local start_game = function()
 				local contestants = list[1]
 				local i = list[2]
 				local gsn = list[3]
+				local arnid = list[4]
 				if gsn ~= gameSequenceNumber or not starting_game then
 					return
 				end
@@ -588,17 +592,18 @@ local start_game = function()
 					minetest.after(0.1, function(table)
 						local player = table[1]
 						local i = table[2]
+						local arnid = table[3]
 						local name = player:get_player_name()
-						if spawning.is_spawn("player_"..i) then
-							spawning.spawn(player, "player_"..i)
+						if spawning.is_spawn("player_".."_"..arnid.."_"..i) then
+							spawning.spawn(player, "player_".."_"..arnid.."_"..i)
 						end
-					end, {player, spots_shuffled[i]})
+					end, {player, spots_shuffled[i], arnid})
 				end
-			end, {contestants,i,gameSequenceNumber})
+			end, {contestants,i,gameSequenceNumber, arena_id})
 		end
-		minetest.after(hungry_games.countdown, start_game_now, {contestants,gameSequenceNumber})
+		minetest.after(hungry_games.countdown, start_game_now, {contestants,gameSequenceNumber}, arena_id)
 	else
-		start_game_now({contestants,gameSequenceNumber})
+		start_game_now({contestants,gameSequenceNumber}, arena_id)
 	end
 end
 
@@ -614,7 +619,7 @@ local check_votes = function()
 		local players = minetest.get_connected_players()
 		local num = table.getn(players) - skips
 		if num > 1 and (votes >= needed_votes()) then
-			start_game()
+			start_game(math.random(0, #glass_arena.arenas))
 			return true
 		end
 	end
@@ -798,9 +803,11 @@ minetest.register_chatcommand("hg", {
 				minetest.chat_send_player(name, "At least 2 players are needed to start a new round.")
 				return
 			end
-			if get_spots() < 2 then
-				minetest.chat_send_player(name, "There are less than 2 active spawn positions. Please set new spawn positions with \"/hg set player_#\".")
-				return
+			for arnid, tab in pairs(glass_arena.arenas) do
+				if get_spots(arnid) < 2 then
+					minetest.chat_send_player(name, "There are less than 2 active spawn positions in arena #" .. arnid .. " (" .. tab.x .. ", " .. tab.z .. "). Please set new spawn positions with \"/hg set player_#\".")
+					return
+				end
 			end
 			local nostart
 			if starting_game or ingame then
@@ -809,7 +816,7 @@ minetest.register_chatcommand("hg", {
 			if nostart then
 				minetest.chat_send_player(name, "There is already a game running!")
 			end
-			ret = start_game()
+			local ret = start_game(math.random(0, #glass_arena.arenas))
 			if ret == false then
 				minetest.chat_send_player(name, "The game could not be started.")
 			end
@@ -825,11 +832,13 @@ minetest.register_chatcommand("hg", {
 				minetest.chat_send_player(name, "At least 2 players are needed to start a new round.")
 				return
 			end
-			if get_spots() < 2 then
-				minetest.chat_send_player(name, "There are less than 2 active spawn positions. Please set new spawn positions with \"/hg set player_#\".")
-				return
+			for arnid, tab in pairs(glass_arena.arenas) do
+				if get_spots(arnid) < 2 then
+					minetest.chat_send_player(name, "There are less than 2 active spawn positions in arena #" .. arnid .. " (" .. tab.x .. ", " .. tab.z .. "). Please set new spawn positions with \"/hg set player_#\".")
+					return
+				end
 			end
-			ret = start_game()
+			local ret = start_game(math.random(0, #glass_arena.arenas))
 			if ret == false then
 				minetest.chat_send_player(name, "The game could not be restarted.")
 			end
@@ -861,18 +870,30 @@ minetest.register_chatcommand("hg", {
 				local pos = {}
 				if parms[3] and parms[4] and parms[5] then
 					pos = {x=parms[3],y=parms[4],z=parms[5]}
-					spawning.set_spawn(parms[2], pos)
+					local arnid = glass_arena.which_arena(pos)
+					if not arnid then
+						return false, "You must provide coordinates of a position in an arena"
+					end
+					spawning.set_spawn("player_" .. arnid .. "_" .. parms[2]:split("_")[2], pos)
 				else
 					pos = minetest.get_player_by_name(name):getpos()
-					spawning.set_spawn(parms[2], pos)
+					local arnid = glass_arena.which_arena(pos)
+					if not arnid then
+						return false, "You must be standing in an arena"
+					end
+					spawning.set_spawn("player_" .. arnid .. "_" .. parms[2]:split("_")[2], pos)
 				end
 				minetest.chat_send_player(name, parms[2].." has been set to "..pos.x.." "..pos.y.." "..pos.z)
 			else
 				minetest.chat_send_player(name, "Set what?")
 			end
 		elseif parms[1] == "unset" then
+			local arnid = glass_arena.which_arena(minetest.get_player_by_name(name):getpos())
+			if not arnid then
+				return false, "You must be standing in an arena"
+			end
 			if parms[2] ~= nil and (parms[2] == "spawn" or parms[2] == "lobby" or parms[2]:match("player_%d")) then
-				spawning.unset_spawn(parms[2])
+				spawning.unset_spawn("player_" .. arnid .. "_" .. parms[2]:match("player_%d"))
 				minetest.chat_send_player(name, parms[2].." has been unset.")
 			else
 				minetest.chat_send_player(name, "Unset what?")
@@ -926,9 +947,11 @@ function vote(name, param)
 		minetest.chat_send_player(name, "At least 2 players are needed to start a new round.")
 		return
 	end
-	if get_spots() < 2 then
-		minetest.chat_send_player(name, "Spawn positions haven't been set yet. The game can not be started at the moment.")
-		return
+	for arnid, tab in pairs(glass_arena.arenas) do
+		if get_spots(arnid) < 2 then
+			minetest.chat_send_player(name, "Spawn positions haven't been set yet for arena #" .. arnid .. " (" .. tab.x .. ", " .. tab.z .. "). The game can not be started at the moment.")
+			return
+		end
 	end
 	if not minetest.get_player_privs(name).interact then
 		minetest.chat_send_player(name, "You're spectating at the moment. Use /unwatch or /unspectate and then vote")
@@ -958,7 +981,7 @@ function vote(name, param)
 			-- Start the function a little bit before otherwise timer will be unset
 			minetest.after(hungry_games.vote_countdown-0.5, function (gsn, vsn)
 				if not (starting_game or ingame and gsn == gameSequenceNumber) and timer_mode == "vote" and voteSequenceNumber == vsn then
-					start_game()
+					start_game(math.random(0, #glass_arena.arenas))
 				end
 			end, gameSequenceNumber, voteSequenceNumber)
 		end
@@ -1001,7 +1024,11 @@ function register(name, param)
 			break
 		end
 	until false
-	if table.getn(registrants) < get_spots() then
+	local spots = true
+	for arnid, _ in pairs(glass_arena.arenas) do
+		spots = spots and table.getn(registants) < get_spots(arnid)
+	end
+	if spots then
 		registrants[name] = true
 		if skipers[name] then
 			skipers[name] = nil
