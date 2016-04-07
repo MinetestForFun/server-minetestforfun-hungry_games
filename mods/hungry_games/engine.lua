@@ -1026,7 +1026,7 @@ function register(name, param)
 	until false
 	local spots = true
 	for arnid, _ in pairs(glass_arena.arenas) do
-		spots = spots and table.getn(registants) < get_spots(arnid)
+		spots = spots and table.getn(registrants) < get_spots(arnid)
 	end
 	if spots then
 		registrants[name] = true
