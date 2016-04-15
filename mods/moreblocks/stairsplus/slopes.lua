@@ -241,7 +241,7 @@ function stairsplus:register_slope(modname, subname, recipeitem, fields)
 
 	-- Some saw-less recipes:
 
-	minetest.register_craft({
+--[[	minetest.register_craft({
 		type = "shapeless",
 		output = recipeitem,
 		recipe =  {modname .. ":slope_" .. subname, modname .. ":slope_" .. subname},
@@ -343,5 +343,5 @@ function stairsplus:register_slope(modname, subname, recipeitem, fields)
 		type = "shapeless",
 		output = modname .. ":slope_" .. subname .. "_inner_cut_half_raised",
 		recipe =  {modname .. ":slab_" .. subname, modname .. ":slope_" .. subname .. "_inner_cut_half"},
-	})
+	})]]
 end

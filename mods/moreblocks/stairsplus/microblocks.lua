@@ -88,7 +88,7 @@ function stairsplus:register_micro(modname, subname, recipeitem, fields)
 
 	-- Some saw-less recipes:
 
-	minetest.register_craft({
+--[[	minetest.register_craft({
 		type = "shapeless",
 		output = modname .. ":micro_" .. subname .. " 7",
 		recipe = {modname .. ":stair_" .. subname .. "_inner"},
@@ -134,5 +134,5 @@ function stairsplus:register_micro(modname, subname, recipeitem, fields)
 		type = "shapeless",
 		output = recipeitem,
 		recipe = {modname .. ":micro_" .. subname, modname .. ":micro_" .. subname, modname .. ":micro_" .. subname, modname .. ":micro_" .. subname, modname .. ":micro_" .. subname, modname .. ":micro_" .. subname, modname .. ":micro_" .. subname, modname .. ":micro_" .. subname},
-	})
+	})]]
 end

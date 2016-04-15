@@ -59,7 +59,7 @@ function stairsplus:register_slab(modname, subname, recipeitem, fields)
 
 	-- Some saw-less recipes:
 
-		minetest.register_craft({
+--[[		minetest.register_craft({
 			output = modname .. ":slab_" .. subname .. " 6",
 			recipe = {{recipeitem, recipeitem, recipeitem}},
 		})
@@ -205,5 +205,5 @@ function stairsplus:register_slab(modname, subname, recipeitem, fields)
 			type = "shapeless",
 			output = modname .. ":slab_" .. subname .. " 3",
 			recipe = {modname .. ":stair_" .. subname, modname .. ":stair_" .. subname},
-		})
+		})]]
 end

@@ -88,7 +88,7 @@ function stairsplus:register_panel(modname, subname, recipeitem, fields)
 
 	-- Some saw-less recipes:
 
-	minetest.register_craft({
+--[[	minetest.register_craft({
 		output = modname .. ":panel_" .. subname .. " 12",
 		recipe = {
 			{recipeitem, ""},
@@ -114,5 +114,5 @@ function stairsplus:register_panel(modname, subname, recipeitem, fields)
 		type = "shapeless",
 		output = recipeitem,
 		recipe = {modname .. ":panel_" .. subname, modname .. ":panel_" .. subname, modname .. ":panel_" .. subname, modname .. ":panel_" .. subname},
-	})
+	})]]
 end
