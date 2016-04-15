@@ -6,8 +6,40 @@ Licensed under the zlib license. See LICENSE.md for more information.
 --]]
 
 -- More Blocks aliases:
+minetest.register_alias("sweeper", "moreblocks:sweeper")
 minetest.register_alias("circular_saw", "moreblocks:circular_saw")
 minetest.register_alias("jungle_stick", "moreblocks:jungle_stick")
+
+-- Wrong drops
+
+-- //MFF(Mg|10/11/15)
+
+-- Microblocks
+for _,i in pairs({"", "_1", "_2", "_4", "_12", "_14", "_15"}) do
+	minetest.register_alias("moreblocks:micro_clay_brick" .. i, "moreblocks:micro_brick" .. i)
+end
+
+-- Panels
+for _,i in pairs({"", "_1", "_2", "_4", "_12", "_14", "_15"}) do
+	minetest.register_alias("moreblocks:panel_clay_brick" .. i, "moreblocks:panel_brick" .. i)
+end
+
+-- Slabs
+for _,i in pairs({"", "_1", "_2", "_quarter", "_three_quarter", "_14", "_15"}) do
+	minetest.register_alias("moreblocks:slab_clay_brick" .. i, "moreblocks:slab_brick" .. i)
+end
+
+-- Stairs
+for _,i in pairs({"", "_outer", "_inner", "_alt", "_alt_1", "_alt_2", "_alt_4", "_half"}) do
+	minetest.register_alias("moreblocks:stair_clay_brick" .. i, "moreblocks:stair_brick" .. i)
+end
+
+-- Slopes
+for _,i in pairs({"", "_half", "_half_raised", "_outer", "_outer_cut", "_outer_cut_half", "_outer_half", "_outer_half_raised", "_inner", "_inner_half", "_inner_half_raised"}) do
+	minetest.register_alias("moreblocks:slope_clay_brick" .. i, "moreblocks:slope_brick" .. i)
+end
+
+
 
 -- Old block/item replacement:
 minetest.register_alias("moreblocks:oerkkiblock", "default:mossycobble")

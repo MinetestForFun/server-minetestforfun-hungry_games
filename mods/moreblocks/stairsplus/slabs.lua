@@ -10,7 +10,7 @@ local S = moreblocks.intllib
 -- Node will be called <modname>:slab_<subname>
 
 function register_slab(modname, subname, recipeitem, groups, images, description, drop, light)
-	return stairsplus:register_slab(modname, subname, recipeitem, {
+	stairsplus:register_slab(modname, subname, recipeitem, {
 		groups = groups,
 		tiles = images,
 		description = description,
@@ -30,6 +30,7 @@ function stairsplus:register_slab(modname, subname, recipeitem, fields)
 		["_14"] = 14,
 		["_15"] = 15,
 	}
+
 	local desc_base = S("%s Slab"):format(fields.description)
 	for alternate, num in pairs(defs) do
 		local def = {
@@ -38,20 +39,23 @@ function stairsplus:register_slab(modname, subname, recipeitem, fields)
 				fixed = {-0.5, -0.5, -0.5, 0.5, (num/16)-0.5, 0.5},
 			}
 		}
+		for k, v in pairs(fields) do
+			def[k] = v
+		end
 		def.drawtype = "nodebox"
 		def.paramtype = "light"
 		def.paramtype2 = "facedir"
 		def.on_place = minetest.rotate_node
-		for k, v in pairs(fields) do
-			def[k] = v
-		end
 		def.description = ("%s (%d/16)"):format(desc_base, num)
+		def.groups = stairsplus:prepare_groups(fields.groups)
 		if fields.drop then
 			def.drop = modname.. ":slab_" .. fields.drop .. alternate
 		end
 		minetest.register_node(":" .. modname .. ":slab_" .. subname .. alternate, def)
 	end
 	minetest.register_alias("stairs:slab_" .. subname, modname .. ":slab_" .. subname)
+
+	circular_saw.known_nodes[recipeitem] = {modname, subname}
 
 	-- Some saw-less recipes:
 
@@ -66,6 +70,15 @@ function stairsplus:register_slab(modname, subname, recipeitem, fields)
 			recipe = {modname .. ":micro_" .. subname, modname .. ":micro_" .. subname, modname .. ":micro_" .. subname, modname .. ":micro_" .. subname},
 		})
 
+		-- uncomment this rule when conflict is no longer likely to happen
+		-- 	https://github.com/minetest/minetest/issues/2881
+		-- minetest.register_craft({
+		-- 	type = "shapeless",
+		-- 	output = modname .. ":slab_" .. subname,
+		-- 	recipe = {modname .. ":panel_" .. subname, modname .. ":panel_" .. subname},
+		-- })
+
+		-- then remove these two
 		minetest.register_craft({
 			output = modname .. ":slab_" .. subname,
 			recipe = {{modname .. ":panel_" .. subname, modname .. ":panel_" .. subname}},
@@ -78,11 +91,114 @@ function stairsplus:register_slab(modname, subname, recipeitem, fields)
 				{modname .. ":panel_" .. subname},
 			},
 		})
+		------------------------------
 
 		minetest.register_craft({
 			type = "shapeless",
 			output = recipeitem,
 			recipe = {modname .. ":slab_" .. subname, modname .. ":slab_" .. subname},
+		})
+
+		minetest.register_craft({
+			type = "shapeless",
+			output = recipeitem,
+			recipe = {modname .. ":slab_" .. subname .. "_quarter", modname .. ":slab_" .. subname .. "_quarter", modname .. ":slab_" .. subname .. "_quarter", modname .. ":slab_" .. subname .. "_quarter"},
+		})
+
+		minetest.register_craft({
+			type = "shapeless",
+			output = recipeitem,
+			recipe = {modname .. ":slab_" .. subname .. "_2", modname .. ":slab_" .. subname .. "_2", modname .. ":slab_" .. subname .. "_2", modname .. ":slab_" .. subname .. "_2", modname .. ":slab_" .. subname .. "_2", modname .. ":slab_" .. subname .. "_2", modname .. ":slab_" .. subname .. "_2", modname .. ":slab_" .. subname .. "_2"},
+		})
+
+		minetest.register_craft({
+			type = "shapeless",
+			output = recipeitem,
+			recipe = {modname .. ":slab_" .. subname .. "_three_quarter", modname .. ":slab_" .. subname .. "_quarter"},
+		})
+
+		minetest.register_craft({
+			type = "shapeless",
+			output = recipeitem,
+			recipe = {modname .. ":slab_" .. subname .. "_14", modname .. ":slab_" .. subname .. "_2"},
+		})
+
+		minetest.register_craft({
+			type = "shapeless",
+			output = recipeitem,
+			recipe = {modname .. ":slab_" .. subname .. "_15", modname .. ":slab_" .. subname .. "_1"},
+		})
+
+		minetest.register_craft({
+			type = "shapeless",
+			output = modname .. ":slab_" .. subname,
+			recipe = {modname .. ":slab_" .. subname .. "_quarter", modname .. ":slab_" .. subname .. "_quarter"},
+		})
+
+		minetest.register_craft({
+			type = "shapeless",
+			output = modname .. ":slab_" .. subname,
+			recipe = {modname .. ":slab_" .. subname .. "_2", modname .. ":slab_" .. subname .. "_2", modname .. ":slab_" .. subname .. "_2", modname .. ":slab_" .. subname .. "_2"},
+		})
+
+		minetest.register_craft({
+			type = "shapeless",
+			output = modname .. ":slab_" .. subname,
+			recipe = {modname .. ":slab_" .. subname .. "_1", modname .. ":slab_" .. subname .. "_1", modname .. ":slab_" .. subname .. "_1", modname .. ":slab_" .. subname .. "_1", modname .. ":slab_" .. subname .. "_1", modname .. ":slab_" .. subname .. "_1", modname .. ":slab_" .. subname .. "_1", modname .. ":slab_" .. subname .. "_1"},
+		})
+
+		minetest.register_craft({
+			type = "shapeless",
+			output = modname .. ":slab_" .. subname .. "_quarter",
+			recipe = {modname .. ":slab_" .. subname .. "_2", modname .. ":slab_" .. subname .. "_2"},
+		})
+
+		minetest.register_craft({
+			type = "shapeless",
+			output = modname .. ":slab_" .. subname .. "_quarter",
+			recipe = {modname .. ":slab_" .. subname .. "_1", modname .. ":slab_" .. subname .. "_1", modname .. ":slab_" .. subname .. "_1", modname .. ":slab_" .. subname .. "_1"},
+		})
+
+		minetest.register_craft({
+			type = "shapeless",
+			output = modname .. ":slab_" .. subname .. "_2",
+			recipe = {modname .. ":slab_" .. subname .. "_1", modname .. ":slab_" .. subname .. "_1"},
+		})
+
+		minetest.register_craft({
+			type = "shapeless",
+			output = modname .. ":slab_" .. subname .. "_three_quarter",
+			recipe = {modname .. ":slab_" .. subname, modname .. ":slab_" .. subname .. "_quarter"},
+		})
+
+		minetest.register_craft({
+			type = "shapeless",
+			output = modname .. ":slab_" .. subname .. "_three_quarter",
+			recipe = {modname .. ":slab_" .. subname .. "_quarter", modname .. ":slab_" .. subname .. "_quarter", modname .. ":slab_" .. subname .. "_quarter"},
+		})
+
+		minetest.register_craft({
+			type = "shapeless",
+			output = modname .. ":slab_" .. subname .. "_three_quarter",
+			recipe = {modname .. ":slab_" .. subname .. "_2", modname .. ":slab_" .. subname .. "_2", modname .. ":slab_" .. subname .. "_2", modname .. ":slab_" .. subname .. "_2", modname .. ":slab_" .. subname .. "_2", modname .. ":slab_" .. subname .. "_2"},
+		})
+
+		minetest.register_craft({
+			type = "shapeless",
+			output = modname .. ":slab_" .. subname .. "_14",
+			recipe = {modname .. ":slab_" .. subname .. "_three_quarter", modname .. ":slab_" .. subname .. "_2"},
+		})
+
+		minetest.register_craft({
+			type = "shapeless",
+			output = modname .. ":slab_" .. subname .. "_14",
+			recipe = {modname .. ":slab_" .. subname .. "_2", modname .. ":slab_" .. subname .. "_2", modname .. ":slab_" .. subname .. "_2", modname .. ":slab_" .. subname .. "_2", modname .. ":slab_" .. subname .. "_2", modname .. ":slab_" .. subname .. "_2", modname .. ":slab_" .. subname .. "_2"},
+		})
+
+		minetest.register_craft({
+			type = "shapeless",
+			output = modname .. ":slab_" .. subname .. "_15",
+			recipe = {modname .. ":slab_" .. subname .. "_14", modname .. ":slab_" .. subname .. "_1"},
 		})
 
 		minetest.register_craft({

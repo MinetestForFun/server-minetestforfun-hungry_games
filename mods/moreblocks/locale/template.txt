@@ -32,6 +32,7 @@ Coal Stone Bricks =
 Iron Stone Bricks = 
 Cactus Checker = 
 Cactus Brick = 
+Sweeper = 
 Jungle Stick = 
 Rope = 
 All-faces Tree = 

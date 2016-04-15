@@ -28,6 +28,7 @@ Coal Stone = Carbón y Piedra
 Iron Stone = Hierro y Piedra
 Cactus Checker = Cuadros de Cactus
 Cactus Brick = Ladrillos de Cactus
+Sweeper = Limpiador
 Jungle Stick = Varita de Madera de Jungla
 Horizontal Tree = Tronco de árbol horizontal
 Horizontal Jungle Tree = Tronco de árbol de la jungla horizontal

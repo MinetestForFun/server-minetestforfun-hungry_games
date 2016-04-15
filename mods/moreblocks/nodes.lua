@@ -353,6 +353,12 @@ end
 
 
 -- Items
+
+minetest.register_craftitem("moreblocks:sweeper", {
+	description = S("Sweeper"),
+	inventory_image = "moreblocks_sweeper.png",
+})
+
 minetest.register_craftitem("moreblocks:jungle_stick", {
 	description = S("Jungle Stick"),
 	inventory_image = "moreblocks_junglestick.png",
