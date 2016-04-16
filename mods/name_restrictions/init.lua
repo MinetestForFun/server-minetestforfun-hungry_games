@@ -36,6 +36,8 @@ local disallowed = {
 	                   " Please choose a proper name and try again.",
 	["[4a]dm[1il]n"] = "Misleading name." ..
 					   " Please choose a proper name and try again.",
+	["moder[4a]tor"] = "Misleading name." ..
+					   " Please choose a proper name and try again.",
 	["[0o]wn[e3]r"]  = "Misleading name." ..
 					   " Please choose a proper name and try again.",
 	["^[0-9]+$"]     = "All-numeric names are disallowed on this server." ..
@@ -52,7 +54,7 @@ minetest.register_on_prejoinplayer(function(name, ip)
 		end
 	end
 	if disallowed_names[lname] then
-		return "If you really are the youtuber you pretend to be, please contact Cyberpangolin via Youtube using private messages. Thanks for your understanding."
+		return "Sorry. This name is forbidden."
 	end
 end)
 
