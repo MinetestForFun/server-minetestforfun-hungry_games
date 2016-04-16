@@ -11,6 +11,7 @@ dofile(minetest.get_modpath("hungry_games").."/engine.lua")
 dofile(minetest.get_modpath("hungry_games").."/random_chests.lua")
 dofile(minetest.get_modpath("hungry_games").."/spawning.lua")
 -- dofile(minetest.get_modpath("hungry_games").."/arena.lua")
+minetest.register_alias("hungry_games:arena_node", "air")
 arena = {}
 
 ------------------------------------------------
