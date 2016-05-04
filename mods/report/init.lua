@@ -50,9 +50,12 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 				default.inventory_listcolors..
 				inventory_plus.get_tabheader(player, "report")..
 				"label[3.5,0;Report Tab.]"..
-				"label[2.5,1;You can report a abus or grief.]"..
-				"field[1,3;6,1;text;Text about what to report:;]" ..
-				"button[7,2.9;2,0.5;report;Send]"
+				"label[1,2;You can ask questions to moderators, report floods and spams,"..
+				"\nor report usebug from players."..
+				"\nDo not report grief because it's allowed on our server !"..
+				"\nDon't abuse/flood Report messages or you will be punished]"..
+				"field[1,5;6,1;text;Text about what to report:;]" ..
+				"button[7,4.9;2,0.5;report;Send]"
 		inventory_plus.set_inventory_formspec(player, formspec)
 	end
 
