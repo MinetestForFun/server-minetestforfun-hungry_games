@@ -11,7 +11,7 @@ function report.send(sender, message)
 			minetest.chat_send_player(name, "-!- " .. sender .. " reported: " .. message)
 		end
 	end
-	
+
 	if #mods > 0 then
 		local mod_list = table.concat(mods, ", ")
 		email.send_mail(sender, minetest.setting_get("name"),
@@ -49,18 +49,19 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 				default.inventory_background..
 				default.inventory_listcolors..
 				inventory_plus.get_tabheader(player, "report")..
-				"label[3.5,0;Report Tab.]"..
-				"label[1,2;You can ask questions to moderators, report floods and spams,"..
-				"\nor report usebug from players."..
-				"\nDo not report grief because it's allowed on our server !"..
-				"\nDon't abuse/flood Report messages or you will be punished]"..
-				"field[1,5;6,1;text;Text about what to report:;]" ..
-				"button[7,4.9;2,0.5;report;Send]"
+					"label[3,0;Report a Bug/Player]"..
+					"label[0,1.5;DO NOT report a player until you have read the rules posted"..
+					"\nat the spawn area! Don't report griefing, it's allowed on"..
+					"\nour server! You can ask questions to moderators and report"..
+					"\nflooding/spam, cheating, etc. Don't abuse/spam Report messages"..
+					"\nor you will be punished. LIMIT: One report per 5 minutes.]"..
+					"field[2,5;5,1;text;Type report here:;]" ..
+					"button[3,6;2,0.5;report;Send]"
 		inventory_plus.set_inventory_formspec(player, formspec)
 	end
 
 	-- Copied from src/builtin/game/chatcommands.lua (with little tweaks)
-	
+
 	if not fields.report or not fields.text or fields.text == "" then
 		return
 	end
@@ -75,4 +76,3 @@ end)
 minetest.register_on_joinplayer(function(player)
 	minetest.after(0.5, function() inventory_plus.register_button(player,"report","Report") end)
 end)
-
