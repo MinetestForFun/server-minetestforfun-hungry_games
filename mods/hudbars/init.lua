@@ -221,6 +221,7 @@ function hb.register_hudbar(identifier, text_color, label, textures, default_sta
 					number = hb.settings.statbar_length,
 					alignment = {x=-1,y=-1},
 					offset = { x = offset.x, y = offset.y },
+					size = ""
 				})
 			end
 		end
