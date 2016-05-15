@@ -6,6 +6,7 @@ Fields marked with [SAFE] are safe to modify after world has been generated.
 
 --load ranked
 ranked = {}
+hungry_games = {}
 dofile(minetest.get_modpath("hungry_games").."/ranked.lua")
 dofile(minetest.get_modpath("hungry_games").."/engine.lua")
 dofile(minetest.get_modpath("hungry_games").."/random_chests.lua")
@@ -40,8 +41,6 @@ glass_arena.replace({
 
 -----------------------------------------------
 -----Main Engine Configuration (engine.lua)----
-
-hungry_games = {}
 
 --Countdown (in seconds) during which players cannot leave their spawnpoint.
 hungry_games.countdown = 10

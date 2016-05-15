@@ -14,6 +14,10 @@ local skipers = {}
 local voters_hud = {}
 local currGame = {}
 
+function hungry_games.is_ingame()
+	return ingame or starting_game or grace or countdown
+end
+
 --[[
 Sequence number of current round, will be incremented each round.
 Used to determine whether minetest.after calls are still valid or should be discarded.
