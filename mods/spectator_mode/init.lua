@@ -146,6 +146,7 @@ minetest.register_chatcommand("watch", {
 				return false, "Player " .. param .. " is currently a spectator"
 			end
 
+			skip(name)
 			default.player_attached[name] = true
 			watcher:set_attach(target, "", {x=0, y=-5, z=-20}, {x=0, y=0, z=0})
 			watcher:set_eye_offset({x=0, y=-5, z=-20}, {x=0, y=0, z=0})

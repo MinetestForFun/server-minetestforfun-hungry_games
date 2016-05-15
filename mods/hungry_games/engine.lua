@@ -1056,8 +1056,7 @@ minetest.register_chatcommand("register", {
 
 function skip(name, param)
 	if ingame or countdown or grace or starting_game then
-		minetest.chat_send_player(name, "You cannot skip during games, even if you don't play. Please wait.")
-		return
+		return false, "You cannot skip during games, even if you don't play. Please wait."
 	end
 
 	if skipers[name] then return end
@@ -1075,7 +1074,6 @@ function skip(name, param)
 	end
 
 	minetest.chat_send_all(name .. " has chosen to skip next turn. Votes so far: ".. votes .. "; Votes needed: " .. needed_votes())
-	minetest.chat_send_player(name, "You will skip the next game. Vote or register to cancel.")
 
 	update_votebars()
 	check_votes()
@@ -1084,6 +1082,7 @@ function skip(name, param)
 		minetest.chat_send_all("Automatic game start has been aborted; there are less than 2 votes.")
 		force_init_warning = false
 	end
+	return true, "You will skip the next game. Vote or register to cancel."
 end
 
 minetest.register_chatcommand("skip", {
@@ -1091,7 +1090,7 @@ minetest.register_chatcommand("skip", {
   privs = {vote = true},
   func = function(name, param)
     if minetest.get_player_by_name(name) then
-      skip(name)
+      return skip(name)
     else
       return false, "You need to be ingame to skip"
     end
