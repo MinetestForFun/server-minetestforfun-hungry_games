@@ -1,0 +1,3 @@
+survival_thirst?
+survival_hunger?
+hbhunger?
