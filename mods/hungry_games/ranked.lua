@@ -23,20 +23,24 @@ end
 
 -- load ranked table
 function ranked.load_players_ranks()
-	local time = os.date("%d %H %M"):split(" ")
-	local day = tonumber(time[1])
-	local hour = tonumber(time[2])
-	local min = tonumber(time[3])
-	if day == 1 and hour == 4
-		and min >= 25 and min <= 40 then
-		ranked.save_players_ranks()
-		return ranked.players_ranks
-	end
+	local time = os.date("%m %d %H"):split(" ")
+	local month = tonumber(time[1])
+	local day = tonumber(time[2])
+	local hour = tonumber(time[3])
+
 	local file = io.open(ranked.players_ranking_file, "r")
 	if file then
 		local t = minetest.deserialize(file:read("*all"))
 		file:close()
 		if t and type(t) == "table" then
+			if day == 1 and hour >= 4 and hour <= 6 and (t["month"] and t["month"] ~= month) then
+				ranked.players_ranks["month"] = month
+				ranked.save_players_ranks()
+				return {["month"] = month, ["nb_games"] = {}, ["nb_wins"] = {}, ["nb_lost"] = {}, ["nb_quit"] = {}, ["nb_kills"] = {} }
+			end
+			if not t["month"] then
+				t["month"] = month
+			end
 			if not t["nb_games"] then
 				t["nb_games"] = {}
 			end
@@ -56,11 +60,10 @@ function ranked.load_players_ranks()
 			if not t["nb_kills"] then
 				t["nb_kills"] = {}
 			end
-
 			return t
 		end
 	end
-	return {["nb_games"] = {}, ["nb_wins"] = {}, ["nb_lost"] = {}, ["nb_quit"] = {}, ["nb_kills"] = {} }
+	return {["month"] = month, ["nb_games"] = {}, ["nb_wins"] = {}, ["nb_lost"] = {}, ["nb_quit"] = {}, ["nb_kills"] = {} }
 end
 ranked.players_ranks = ranked.load_players_ranks()
 
