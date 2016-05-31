@@ -5,7 +5,7 @@
    Based on a request of Darcidride/MinetestForFun
    Brought to you in WTFPL
 
-   Version: 00.00.0C
+   Version: 00.00.0D
    Status: WIP/Stable
    Last mod.: 17:59GMT+2 by Mg
 --]]
@@ -17,7 +17,7 @@ kill_history = {}
 
 -- Some metadata
 kill_history.authors = {"Mg/LeMagnesium"}
-kill_history.version = "00.00.0C"
+kill_history.version = "00.00.0D"
 kill_history.dev_status = "WIP/Stable"
 
 -- Event Index
@@ -55,8 +55,7 @@ kill_history.icons = {
 
 -- Kill History
 kill_history.buffer = {
-   raw = {}, -- Raw event tables
-   data = {}, -- The parsed data itself
+   data = {}, -- Raw event tables
    maximum = tonumber(minetest.setting_get("kill_history.maximum") or '7') -- Maximum number of kill events to be shown at all times
 }
 
@@ -83,24 +82,12 @@ function kill_history.buffer.add(self, event)
 
       if self:size() == self.maximum then -- Free the oldest element to make room for the newest one
 	 table.remove(self.data, #self.data)
-	 table.remove(self.raw, #self.raw)
       end
 
       event.index = kill_history.last_index + 1
       kill_history.last_index = event.index
-      -- Simply store and parse
-      table.insert(self.raw, 1, event)
-
-      -- Determine death and append the new event
-      if event.type == "murder" then
-	 table.insert(self.data, 1, ("%s was killed by %s"):format(event.victim, event.actor))
-      elseif event.type == "accidental" then
-	 table.insert(self.data, 1, ("%s met their end"):format(event.victim))
-      elseif event.type == "suicide" then -- NIY : Need to see how to distinguishly recognize a suicide
-	 table.insert(self.data, 1, ("%s committed suicide"):format(event.victim))
-      else
-	 table.insert(self.data, 1, ("%s died of a mysterious death"):format(event.victim))
-      end      
+      -- Simply store and parse later
+      table.insert(self.data, 1, event)
 
       -- Run an update of everyone's HUD
       kill_history.update_huds()
@@ -109,11 +96,6 @@ end
 -- .size : To get self's data size
 function kill_history.buffer.size(self)
    return #self.data
-end
-
--- .concat : Copy a table's concatenation method
-function kill_history.buffer.concat(self, str)
-   return table.concat(self.data, str)
 end
 
 
@@ -173,7 +155,7 @@ function kill_history.update_huds(players)
 
       -- Add <lag> elements
       for i = 1,lag do
-	 local data = kill_history.buffer.raw[i]
+	 local data = kill_history.buffer.data[i]
 
 	 table.insert(kill_history.huds[pname], 1, {})
 
