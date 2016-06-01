@@ -9,6 +9,8 @@ Current:
 00.00.0D: - Removal of legacy content causing crashs (cf. https://github.com/MinetestForFun/server-minetestforfun-hungry_games/issues/90#issuecomment-222704903)
 	  - "raw" field replaces "data" field in the kill history's buffer
 	  - The buffer's .concat method is removed
+	  - Add death queue and callbacks for survival_lib's hunger and thirst
+	  - Texture added for dehydration death
 
 Previous:
 00.00.0C: - Add starvation and thirst death icons and detection (Not fully tested yet)

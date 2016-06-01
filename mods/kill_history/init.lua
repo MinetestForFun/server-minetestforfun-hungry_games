@@ -7,7 +7,7 @@
 
    Version: 00.00.0D
    Status: WIP/Stable
-   Last mod.: 17:59GMT+2 by Mg
+   Last mod.: 20:51GMT+2 by Mg
 --]]
 
 -- This mod aims at providing PvP-oriented servers with a HUD kill history similar to what most First/Third Person Shooters feature
@@ -48,7 +48,7 @@ kill_history.icons = {
    ['drowning'] = "kill_history_drowning.png",
    ['fire'] = "kill_history_burnt.png",
    ['starvation'] = "kill_history_starvation.png",
-   ['thirst'] = "kill_history_thirst.png",
+   ['dehydration'] = "kill_history_dehydration.png",
    ['suicide'] = "kill_history_suicide.png", -- NIY
    ['unknown'] = "kill_history_unknown.png" -- NI
 }
@@ -58,6 +58,8 @@ kill_history.buffer = {
    data = {}, -- Raw event tables
    maximum = tonumber(minetest.setting_get("kill_history.maximum") or '7') -- Maximum number of kill events to be shown at all times
 }
+
+kill_history.death_queue = {}
 
 kill_history.punch_history = {}
 kill_history.blame_duration = tonumber(minetest.setting_get("kill_history.blame_duration") or '3') -- In seconds
@@ -200,33 +202,41 @@ end
    Those are very important. We need to be aware of a player's death
 --]]
 
+if minetest.get_modpath("survival_hunger") then
+   survival.register_on_event("hunger.death", function(name)
+				 kill_history.death_queue[name] = "starvation"
+   end)
+end
+
+if minetest.get_modpath("survival_thirst") then
+   survival.register_on_event("thirst.death", function(name)
+				 kill_history.death_queue[name] = "dehydration"
+   end)
+end
+
 minetest.register_on_dieplayer(function(player)
       local pname = player:get_player_name()
       local event = {type = "accidental", victim = pname}
 
-      if (minetest.get_modpath("survival_hunger") and survival.get_player_state(pname, "hunger").count == 100)
-      or (minetest.get_modpath("hbhunger") and hbhunger.get_hunger(player) == 0) then
-	 -- Maybe we starved
-	 event.type = "starvation"
-
-      elseif (minetest.get_modpath("survival_thirst") and survival.get_player_state(pname, "thirst").count == 100) then
-	 -- Maybe we died of thirst
-	 event.type = "thirst"
+      if kill_history.death_queue[pname] then
+	 -- Maybe we starved or died of dehydration
+	 event.type = kill_history.death_queue[pname]
+	 kill_history.death_queue[pname] = nil
 
       elseif player:get_breath() == 0 then
 	 -- Maybe we drowned
       	 event.type = "drowning"
       end
+
+      -- Determine if we're burning
+      -- Can override any of the above
+      if minetest.get_node(vector.round(player:getpos())).name == "fire:basic_flame" then
+	 event.type = "fire"
+      end
       
       -- Determine if we were punched in the last seconds of our blame duration
-      local match
-      for _, data in pairs(kill_history.punch_history) do
-	 if data.victim == pname then
-	    match = data.culprit
-	    break
-	 end
-      end
-
+      -- Can override any of the above
+      local match = kill_history.blame_puncher(pname)
       if match then
 	 event.type = "murder"
 	 event.murderer = match
@@ -235,8 +245,9 @@ minetest.register_on_dieplayer(function(player)
       kill_history.buffer:add(event)
 end)
 
-minetest.register_on_punchplayer(function(player, hitter)
+minetest.register_on_punchplayer(function(player, hitter, _, _, _, damage)
       local victim = player:get_player_name()
+      local vhp = player:get_hp()
       local culprit
 
       if not hitter:is_player() then
@@ -246,7 +257,7 @@ minetest.register_on_punchplayer(function(player, hitter)
 	 culprit = hitter:get_player_name()
       end
 
-      kill_history.punch_history[os.time()] = {victim = victim, culprit = culprit}
+      kill_history.punch_history[os.time()] = {victim = victim, culprit = culprit, lethal = (vhp - damage <= 0)}
 end)
 
 
@@ -271,3 +282,15 @@ local function kill_history_loop()
 end
 
 minetest.after(0, kill_history_loop)
+
+--[[
+   A function made to retrieve the name of the person (or nil) who punched someone during the blame interval
+--]]
+
+function kill_history.blame_puncher(pname)
+      for _, data in pairs(kill_history.punch_history) do
+	 if data.victim == pname then
+	    return data.culprit
+	 end
+      end
+end
