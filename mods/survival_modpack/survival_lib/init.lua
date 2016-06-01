@@ -210,12 +210,12 @@ survival.register_on_event = function ( event, func )
     if (not event_listeners[event]) then
         event_listeners[event] = { };
     end
-    event_listeners[event][#event_listeners[event]] = func;
+    event_listeners[event][#event_listeners[event]+1] = func;
 end
 
 survival.post_event = function ( event, ... )
-    if (not event_listeners[event]) then return; end
-    for _,func in ipairs(event_listeners[event]) do
+   if (not event_listeners[event]) then return; end
+   for _,func in ipairs(event_listeners[event]) do
         local r = func(...);
         if (r ~= nil) then return r; end
     end

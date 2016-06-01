@@ -181,7 +181,8 @@ survival.register_state("thirst", {
 		            state.count = 0;
 		            state.thirsty = false;
 		            if (player:get_hp() > 0) then
-		                minetest.chat_send_player(name, S("You died from dehydration."));
+			       minetest.chat_send_player(name, S("You died from dehydration."));
+			       survival.post_event("thirst.death", name)
 		            end
 		            player:set_hp(0);
 		            minetest.sound_play({ name="survival_thirst_pass_out" }, {
