@@ -26,8 +26,8 @@ kill_history.player_indexes = {}
 
 -- HUD indexes storage and related
 kill_history.huds = {}
-kill_history.base_pos = {x = 0.055, y = 0.9}
-kill_history.spacing = {x = 0.06, y = 0.025}
+kill_history.base_pos = {x = 0.02, y = 0.9}
+kill_history.spacing = {x = 0.065, y = 0.025}
 
 kill_history.colours = {["a mob"] = 1}
 kill_history.hud_colours = {
@@ -163,21 +163,21 @@ function kill_history.update_huds(players)
 
 	 local pos_y = kill_history.base_pos.y - (lag - i) * kill_history.spacing.y
 	 
-	 -- Victim's name
-	 kill_history.huds[pname][1][1] = pref:hud_add({
-	       hud_elem_type = "text",
-	       text = data.victim,
-	       position = {x = kill_history.base_pos.x, y = pos_y},
-	       number = kill_history.get_colour(kill_history.hud_colours[kill_history.colours[data.victim]])
-	 })
-
 	 -- Icon matching the death type
 	 local icon = kill_history.icons[data.type] or kill_history.icons["unknown"]
 	 kill_history.huds[pname][1][2] = pref:hud_add({
 	       hud_elem_type = "image",
 	       scale = {x = 1, y = 1},
 	       text = icon,
-	       position = {x = kill_history.base_pos.x + kill_history.spacing.x, y = pos_y},
+	       position = {x = kill_history.base_pos.x, y = pos_y},
+	 })
+
+	 -- Victim's name
+	 kill_history.huds[pname][1][1] = pref:hud_add({
+	       hud_elem_type = "text",
+	       text = data.victim,
+	       position = {x = kill_history.base_pos.x + 0.06, y = pos_y},
+	       number = kill_history.get_colour(kill_history.hud_colours[kill_history.colours[data.victim]])
 	 })
 
 	 -- Maybe, someone involved
@@ -186,7 +186,7 @@ function kill_history.update_huds(players)
 		  hud_elem_type = "text",
 		  text = "by " .. data.murderer,
 		  number = kill_history.get_colour(kill_history.hud_colours[kill_history.colours[data.murderer]]),
-		  position = {x = kill_history.base_pos.x + kill_history.spacing.x * 2, y = pos_y},
+		  position = {x = kill_history.base_pos.x + kill_history.spacing.x + 0.06, y = pos_y},
 	    })
 	 end
 	    
