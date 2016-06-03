@@ -5,9 +5,9 @@
    Based on a request of Darcidride/MinetestForFun
    Brought to you in WTFPL
 
-   Version: 00.00.0D
+   Version: 00.00.0E
    Status: WIP/Stable
-   Last mod.: 20:51GMT+2 by Mg
+   Last mod.: 19:05GMT+2 by Mg
 --]]
 
 -- This mod aims at providing PvP-oriented servers with a HUD kill history similar to what most First/Third Person Shooters feature
@@ -17,7 +17,7 @@ kill_history = {}
 
 -- Some metadata
 kill_history.authors = {"Mg/LeMagnesium"}
-kill_history.version = "00.00.0D"
+kill_history.version = "00.00.0E"
 kill_history.dev_status = "WIP/Stable"
 
 -- Event Index
@@ -27,7 +27,7 @@ kill_history.player_indexes = {}
 -- HUD indexes storage and related
 kill_history.huds = {}
 kill_history.base_pos = {x = 0.02, y = 0.9}
-kill_history.spacing = {x = 0.065, y = 0.025}
+kill_history.spacing = {x = {[1] = 0, [2] = 0.06, [3] = 0.13}, y = 0.025}
 
 kill_history.colours = {["a mob"] = 1}
 kill_history.hud_colours = {
@@ -45,13 +45,24 @@ kill_history.hud_colours = {
 kill_history.icons = {
    ['murder'] = "kill_history_murder.png",
    ['accidental'] = "kill_history_accident.png",
-   ['drowning'] = "kill_history_drowning.png",
-   ['fire'] = "kill_history_burnt.png",
-   ['starvation'] = "kill_history_starvation.png",
+   ['drowning'] = "bubble.png^kill_history_cross.png",
+   ['fire'] = "fire_basic_flame.png",
+   ['starvation'] = "farming_bread.png^kill_history_cross.png",
    ['dehydration'] = "kill_history_dehydration.png",
    ['suicide'] = "kill_history_suicide.png", -- NIY
    ['unknown'] = "kill_history_unknown.png" -- NI
 }
+
+-- Determine different icons if possible
+if not minetest.get_modpath("farming") then
+   if minetest.get_modpath("food") then
+      kill_history.icons['starvation'] = "food_bread.png^kill_history_cross.png"
+   else
+      kill_history.icons['starvation'] = "kill_history_starvation.png"
+   end
+else
+   kill_history.icons['starvation'] = "farming_bread.png^kill_history_cross.png"
+end
 
 -- Kill History
 kill_history.buffer = {
@@ -143,7 +154,7 @@ function kill_history.update_huds(players)
 	 if line + lag  <= kill_history.buffer.maximum then
 	    for id, elem in pairs(elems) do
 	       pref:hud_change(elem, "position", {
-				  x = kill_history.base_pos.x + (id - 1) * kill_history.spacing.x,
+				  x = kill_history.base_pos.x + kill_history.spacing.x[id],
 				  y = kill_history.base_pos.y - (line + lag - 1) * kill_history.spacing.y
 	       })
 	    end
@@ -165,7 +176,7 @@ function kill_history.update_huds(players)
 	 
 	 -- Icon matching the death type
 	 local icon = kill_history.icons[data.type] or kill_history.icons["unknown"]
-	 kill_history.huds[pname][1][2] = pref:hud_add({
+	 kill_history.huds[pname][1][1] = pref:hud_add({
 	       hud_elem_type = "image",
 	       scale = {x = 1, y = 1},
 	       text = icon,
@@ -173,10 +184,10 @@ function kill_history.update_huds(players)
 	 })
 
 	 -- Victim's name
-	 kill_history.huds[pname][1][1] = pref:hud_add({
+	 kill_history.huds[pname][1][2] = pref:hud_add({
 	       hud_elem_type = "text",
 	       text = data.victim,
-	       position = {x = kill_history.base_pos.x + 0.06, y = pos_y},
+	       position = {x = kill_history.base_pos.x + kill_history.spacing.x[2], y = pos_y},
 	       number = kill_history.get_colour(kill_history.hud_colours[kill_history.colours[data.victim]])
 	 })
 
@@ -186,7 +197,7 @@ function kill_history.update_huds(players)
 		  hud_elem_type = "text",
 		  text = "by " .. data.murderer,
 		  number = kill_history.get_colour(kill_history.hud_colours[kill_history.colours[data.murderer]]),
-		  position = {x = kill_history.base_pos.x + kill_history.spacing.x + 0.06, y = pos_y},
+		  position = {x = kill_history.base_pos.x + kill_history.spacing.x[3], y = pos_y},
 	    })
 	 end
 	    

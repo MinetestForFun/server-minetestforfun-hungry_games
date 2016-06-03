@@ -6,13 +6,17 @@ Kill History
 ## Changelogs
 
 Current:
+00.00.0E: - Use of default textures instead of ours
+	  - Reorganization of kill_history.spacing.x as an array of values
+	  - Add a system to determine the icon texture to use (for starvation)
+	  - Fix spacing of updated elements
+
+Previous:
 00.00.0D: - Removal of legacy content causing crashs (cf. https://github.com/MinetestForFun/server-minetestforfun-hungry_games/issues/90#issuecomment-222704903)
 	  - "raw" field replaces "data" field in the kill history's buffer
 	  - The buffer's .concat method is removed
 	  - Add death queue and callbacks for survival_lib's hunger and thirst
 	  - Texture added for dehydration death
-
-Previous:
 00.00.0C: - Add starvation and thirst death icons and detection (Not fully tested yet)
 00.00.0B: - Start writing logs (too late)
 	  - Fix crash if a mob punches a player by assigning a colour to all mobs
@@ -32,4 +36,4 @@ Previous:
 
 ## License
    - Code: By Mg / WTFPL (just don't be a j€rk with it)
-   - Media: By Mg / WTFPL (same)
+   - Media: (those in this texture folder) By Mg / WTFPL (same)
