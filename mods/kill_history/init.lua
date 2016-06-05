@@ -123,7 +123,11 @@ minetest.register_on_joinplayer(function(player)
 
       kill_history.huds[pname] = {}
       kill_history.player_indexes[pname] = kill_history.last_index
-      kill_history.colours[pname] = math.random(1, #kill_history.hud_colours)
+      local col = -1
+      repeat
+	 col = math.random(1, #kill_history.hud_colours+1)
+      until kill_history.hud_colours[col]
+      kill_history.colours[pname] = col
       minetest.log("info", ("Picked colour #%d for player %s"):format(kill_history.colours[pname], pname))
 end)
 

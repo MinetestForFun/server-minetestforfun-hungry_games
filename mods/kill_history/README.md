@@ -10,6 +10,7 @@ Current:
 	  - Reorganization of kill_history.spacing.x as an array of values
 	  - Add a system to determine the icon texture to use (for starvation)
 	  - Fix spacing of updated elements
+	  - Force verification of colour tables before assigning a colour
 
 Previous:
 00.00.0D: - Removal of legacy content causing crashs (cf. https://github.com/MinetestForFun/server-minetestforfun-hungry_games/issues/90#issuecomment-222704903)
