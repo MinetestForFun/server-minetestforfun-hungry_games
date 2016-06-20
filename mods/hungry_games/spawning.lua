@@ -39,6 +39,11 @@ function spawning.save_spawns()
 	io.close(output)
 end
 
+--Get spawn pos
+function spawning.get_spawn(place)
+   return (registered_spawns[place] or {pos = nil}).pos
+end
+
 --Set spawn pos
 function spawning.set_spawn(place, pos)
 	local spawn = registered_spawns[place]
@@ -68,8 +73,8 @@ function spawning.spawn(player, place)
 	if spawn then
 		player:setpos(pos)
 	end
-	for i,v in pairs(minetest.env:find_nodes_in_area({x=pos.x-20,y=pos.y-20,z=pos.z-20}, {x=pos.x+20,y=pos.y+20,z=pos.z+20}, "default:lava_source")) do
-		minetest.env:remove_node(v)
+	for i,v in pairs(minetest.find_nodes_in_area({x=pos.x-20,y=pos.y-20,z=pos.z-20}, {x=pos.x+20,y=pos.y+20,z=pos.z+20}, "default:lava_source")) do
+		minetest.remove_node(v)
 	end
 end
 

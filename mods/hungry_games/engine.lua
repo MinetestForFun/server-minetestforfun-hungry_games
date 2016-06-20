@@ -484,6 +484,18 @@ local start_game_now = function(input, arena_id)
 	return true
 end
 
+--[[Freeze Loop
+Keeps player at a specific spot for a specific time
+Used during pre start
+]]
+local function freeze_loop(pref, pos, countdown)
+   pref:setpos(pos)
+   countdown = countdown-0.5
+   if countdown > 0 then
+      minetest.after(0.5, freeze_loop, pref, pos, countdown)
+   end
+end
+
 --[[
 Starts the game.
 
@@ -569,6 +581,7 @@ local start_game = function(arena_id)
 				spawning.spawn(player, "player_" .. arena_id .. "_" .. spawn_id)
 				reset_player_state(player)
 				minetest.chat_send_player(name, "Get ready to fight!")
+				minetest.after(0, freeze_loop, player, spawning.get_spawn("player_" .. arena_id .. "_" .. spawn_id), hungry_games.countdown)
 			else
 				minetest.chat_send_player(name, "There are no spots for you to spawn!")
 			end
