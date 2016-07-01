@@ -77,7 +77,7 @@ kill_history.blame_duration = tonumber(minetest.setting_get("kill_history.blame_
 
 -- Little utility function to decode colors
 function kill_history.get_colour(coltab)
-   assert(coltab and coltab.red and coltab.green and coltab.blue)
+   assert(coltab and coltab.red ~= nil and coltab.green ~= nil and coltab.blue ~= nil)
 
    return coltab.blue + coltab.green * 255 + coltab.red * 255 * 255
 end
