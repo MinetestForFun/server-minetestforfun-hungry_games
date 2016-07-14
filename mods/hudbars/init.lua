@@ -238,7 +238,7 @@ function hb.register_hudbar(identifier, text_color, label, textures, default_sta
 			number = barnumber,
 			alignment = {x=-1,y=-1},
 			offset = offset,
-			size = {x = 2.5, y = 16},
+			size = "",
 		})
 		if hb.settings.bar_type == "progress_bar" then
 			ids.text = player:hud_add({
