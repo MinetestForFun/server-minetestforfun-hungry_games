@@ -146,8 +146,8 @@ minetest.register_on_leaveplayer(function(player)
 
       kill_history.huds[pname] = nil
 
-      -- We might need this for a few more seconds
-      minetest.after(kill_history.blame_duration, function(pname) kill_history.colours[pname] = nil end, pname)
+      -- We might need this for ~a few more seconds~ a while
+      -- minetest.after(kill_history.blame_duration, function(pname) kill_history.colours[pname] = nil end, pname)
 end)
 
 -- Update
