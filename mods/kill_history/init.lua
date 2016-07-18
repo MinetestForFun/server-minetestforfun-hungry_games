@@ -17,7 +17,7 @@ kill_history = {}
 
 -- Some metadata
 kill_history.authors = {"Mg/LeMagnesium"}
-kill_history.version = "00.00.0E"
+kill_history.version = "00.0A.03"
 kill_history.dev_status = "WIP/Stable"
 
 -- Event Index
@@ -197,6 +197,7 @@ function kill_history.update_huds(players)
 	 })
 
 	 -- Victim's name
+         minetest.log("action", "[KH] Victim data : " .. dump(data.victim))
 	 kill_history.huds[pname][1][2] = pref:hud_add({
 	       hud_elem_type = "text",
 	       text = data.victim,
