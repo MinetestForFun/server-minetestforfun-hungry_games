@@ -33,7 +33,7 @@ function ranked.load_players_ranks()
 		local t = minetest.deserialize(file:read("*all"))
 		file:close()
 		if t and type(t) == "table" then
-			if day == 1 and hour >= 4 and hour <= 6 and (t["month"] and t["month"] ~= month) then
+			if day >= 1 and hour >= 6 and (t["month"] and t["month"] ~= month) then
 				ranked.players_ranks["month"] = month
 				ranked.save_players_ranks()
 				return {["month"] = month, ["nb_games"] = {}, ["nb_wins"] = {}, ["nb_lost"] = {}, ["nb_quit"] = {}, ["nb_kills"] = {} }
