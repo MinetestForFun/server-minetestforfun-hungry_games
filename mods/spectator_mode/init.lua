@@ -98,7 +98,7 @@ local function unwatching(name)
 
 		local watched = spectator.register[name]
 		spectator.register[name] = nil
-		if minetest.get_player_by_name(watched) then
+		if watched and minetest.get_player_by_name(watched) then
 			spectator.update_hud(minetest.get_player_by_name(watched))
 			minetest.chat_send_player(watched, name .. " is no longer watching you")
 		end
