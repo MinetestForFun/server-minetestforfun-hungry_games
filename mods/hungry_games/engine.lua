@@ -715,6 +715,9 @@ minetest.register_on_joinplayer(function(player)
 	privs.ingame = nil
 	minetest.set_player_privs(name, privs)
 
+	-- Reset their stuff
+	drop_player_items(name, true)
+
 	if ingame then
 		player:set_nametag_attributes({color = {a=255, r=255, g=0, b=0}})
 		minetest.after(1, survival.player_hide_hudbar, name)
