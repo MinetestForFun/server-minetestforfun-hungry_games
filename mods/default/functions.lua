@@ -100,7 +100,7 @@ default.cool_lava_flowing = function(pos)
 		{pos = pos, max_hear_distance = 16, gain = 0.25})
 end
 
-minetest.register_abm({
+--[[minetest.register_abm({
 	nodenames = {"default:lava_flowing"},
 	neighbors = {"group:water"},
 	interval = 1,
@@ -118,7 +118,7 @@ minetest.register_abm({
 	action = function(...)
 		default.cool_lava_source(...)
 	end,
-})
+})]]
 
 
 --
@@ -172,7 +172,7 @@ function default.grow_papyrus(pos, node)
 	return true
 end
 
-minetest.register_abm({
+--[[minetest.register_abm({
 	nodenames = {"default:cactus"},
 	neighbors = {"group:sand"},
 	interval = 50,
@@ -190,7 +190,7 @@ minetest.register_abm({
 	action = function(...)
 		default.grow_papyrus(...)
 	end
-})
+})]]
 
 
 --
@@ -228,7 +228,7 @@ default.after_place_leaves = function(pos, placer, itemstack, pointed_thing)
 	minetest.set_node(pos, node)
 end
 
-minetest.register_abm({
+--[[minetest.register_abm({
 	nodenames = {"group:leafdecay"},
 	neighbors = {"air", "group:liquid"},
 	-- A low interval and a high inverse chance spreads the load
@@ -302,5 +302,5 @@ minetest.register_abm({
 			nodeupdate(p0)
 		end
 	end
-})
+})]]
 
