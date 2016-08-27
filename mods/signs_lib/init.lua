@@ -14,7 +14,7 @@
 local current_keyword = minetest.setting_get("interact_keyword") or "iaccept"
 
 signs_lib = {}
-screwdriver = screwdriver or {}
+screwdriver = rawget(_G, "screwdriver") or {}
 
 signs_lib.wallmounted_rotate = function(pos, node, user, mode, new_param2)
 	if mode ~= screwdriver.ROTATE_AXIS then return false end
