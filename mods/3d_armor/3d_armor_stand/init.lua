@@ -39,7 +39,7 @@ local function update_entity(pos)
 	local node = minetest.get_node(pos)
 	local object = get_stand_object(pos)
 	if object then
-		if not string.find(node.name, "3d_armor_stand:") then
+		if not string.find(node.name, "3d_armor_stand:") and object:get_luaentity() ~= "gauges:hp_bar" then
 			object:remove()
 			return
 		end
