@@ -77,7 +77,7 @@ kill_history.blame_duration = tonumber(minetest.setting_get("kill_history.blame_
 
 -- Little utility function to decode colors
 function kill_history.get_colour(coltab)
-   minetest.log("action", "[KillHistory] Assert debug : ")
+   --[[minetest.log("action", "[KillHistory] Assert debug : ")
    minetest.log("action", "[KillHistory] \t - R: " .. dump(coltab.red))
    minetest.log("action", "[KillHistory] \t - G: " .. dump(coltab.green))
    minetest.log("action", "[KillHistory] \t - B: " .. dump(coltab.blue))
@@ -86,7 +86,7 @@ function kill_history.get_colour(coltab)
    assert(coltab.green)
    assert(coltab.blue)
    assert(coltab)
---   assert(coltab and coltab.red ~= nil and coltab.green ~= nil and coltab.blue ~= nil)
+--   assert(coltab and coltab.red ~= nil and coltab.green ~= nil and coltab.blue ~= nil)]] -- Uncomment if color-related crashes happen again (Mg/Lymkwi|8th Oct. 2016)
 
    return coltab.blue + coltab.green * 255 + coltab.red * 255 * 255
 end
