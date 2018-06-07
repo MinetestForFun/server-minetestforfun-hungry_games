@@ -890,18 +890,26 @@ minetest.register_chatcommand("hg", {
 				local pos = {}
 				if parms[3] and parms[4] and parms[5] then
 					pos = {x=parms[3],y=parms[4],z=parms[5]}
-					local arnid = glass_arena.which_arena(pos)
-					if not arnid then
-						return false, "You must provide coordinates of a position in an arena"
+                                        if parms[2] == "lobby" or parms[2] == "spawn" then
+						spawning.set_spawn(parms[2], pos)
+					else
+						local arnid = glass_arena.which_arena(pos)
+						if not arnid then
+							return false, "You must provide coordinates of a position in an arena"
+						end
+						spawning.set_spawn("player_" .. arnid .. "_" .. parms[2]:split("_")[2], pos)
 					end
-					spawning.set_spawn("player_" .. arnid .. "_" .. parms[2]:split("_")[2], pos)
 				else
 					pos = minetest.get_player_by_name(name):getpos()
-					local arnid = glass_arena.which_arena(pos)
-					if not arnid then
-						return false, "You must be standing in an arena"
+					if parms[2] == "lobby" or parms[2] == "spawn" then
+						spawning.set_spawn(parms[2], pos)
+					else
+						local arnid = glass_arena.which_arena(pos)
+						if not arnid then
+							return false, "You must be standing in an arena"
+						end
+						spawning.set_spawn("player_" .. arnid .. "_" .. parms[2]:split("_")[2], pos)
 					end
-					spawning.set_spawn("player_" .. arnid .. "_" .. parms[2]:split("_")[2], pos)
 				end
 				minetest.chat_send_player(name, parms[2].." has been set to "..pos.x.." "..pos.y.." "..pos.z)
 			else
@@ -913,7 +921,11 @@ minetest.register_chatcommand("hg", {
 				return false, "You must be standing in an arena"
 			end
 			if parms[2] ~= nil and (parms[2] == "spawn" or parms[2] == "lobby" or parms[2]:match("player_%d")) then
-				spawning.unset_spawn("player_" .. arnid .. "_" .. parms[2]:match("player_%d"))
+				if parms[2] == "spawn" or parms[2] == "lobby" then
+					spawning.unset_spawn(parms[2])
+				else
+					spawning.unset_spawn("player_" .. arnid .. "_" .. parms[2]:match("player_%d"))
+				end
 				minetest.chat_send_player(name, parms[2].." has been unset.")
 			else
 				minetest.chat_send_player(name, "Unset what?")
